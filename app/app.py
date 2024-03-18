@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 from pymongo import MongoClient
 from flask import send_file
 
@@ -8,26 +8,34 @@ client = MongoClient("mongo:27017")
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    response = render_template('index.html')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
 
 @app.route('/static/style.css')
 def sendStyle():
-    return send_file('static/style.css')
+    response = send_file('static/style.css', mimetype='text/css')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
 
 @app.route('/static/functions.js')
 def sendFunctions():
-    return send_file('static/functions.js')
+    response = send_file('static/functions.js', mimetype='text/javascript')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
 
 @app.route('/static/image.jpeg')
-def sendWonwoo():
-    return send_file('static/image.jpg', mimetype='image/jpeg')
-
-@app.route('/signup')
-def signup():
-    return 'This is a sign up page!'
+def sendImage():
+    response = send_file('static/image.jpg', mimetype='image/jpeg')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
 
 if __name__ == '__main__':
