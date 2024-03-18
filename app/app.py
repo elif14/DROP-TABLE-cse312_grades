@@ -9,13 +9,9 @@ client = MongoClient("mongo:27017")
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    css_content = open('static/styles.css').read()
 
-
-@app.route('/style.css')
-def send_css():
-    return send_file('/public/style.css')
-
+    return css_content, 200, {'Content-Type': 'text/css'}
 
 @app.route('/signup')
 def signup():
