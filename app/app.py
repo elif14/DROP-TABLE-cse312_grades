@@ -21,7 +21,7 @@ def sendFunctions():
     return send_file('static/functions.js')
 
 
-@app.route('/static/wonwoo.jpeg')
+@app.route('/static/image.jpeg')
 def sendWonwoo():
     return send_file('static/image.jpg', mimetype='image/jpeg')
 
