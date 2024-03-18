@@ -1,4 +1,3 @@
-import os
 from flask import Flask, render_template
 from pymongo import MongoClient
 from flask import send_file
@@ -13,9 +12,18 @@ def home():
 
 
 @app.route('/static/style.css')
-def send_css():
+def sendStyle():
     return send_file('static/style.css')
 
+
+@app.route('/static/functions.js')
+def sendFunctions():
+    return send_file('static/functions.js')
+
+
+@app.route('/static/wonwoo.jpeg')
+def sendWonwoo():
+    return send_file('static/image.jpg', mimetype='image/jpeg')
 
 @app.route('/signup')
 def signup():
