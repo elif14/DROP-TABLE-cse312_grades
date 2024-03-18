@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -7,7 +7,7 @@ client = MongoClient("mongo:27017")
 
 @app.route('/')
 def home():
-	return "This is a homepage!"
+	return render_template('home.html')
 
 @app.route('/signup')
 def signup():
