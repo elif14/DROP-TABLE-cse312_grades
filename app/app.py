@@ -1,4 +1,4 @@
-from flask import Flask, render_template, make_response, request
+from flask import Flask, render_template, make_response, request, redirect
 from pymongo import MongoClient
 from flask import send_file
 
@@ -40,7 +40,7 @@ def sendImage():
     return response
 
 
-@app.route('/register')
+@app.route('/register', methods = ["POST"])
 def register():
     # get the form data
     username = request.form.get("username")
@@ -50,10 +50,7 @@ def register():
     if password != confirmPassword:
         return "passwords do not match!"
     # return back to homepage
-    response = render_template('index.html')
-    response = make_response(response)
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    return response
+    return redirect("http://localhost:8080/", code=302)
 
 
 if __name__ == '__main__':
