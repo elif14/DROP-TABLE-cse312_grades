@@ -4,9 +4,9 @@ services:
     ports:
       - '27017:27017'
   web: 
-    build:
-      context: app
-      target: builder
+    build: .
+    environment:
+      WAIT_HOSTS: mongo:27017
     # flask requires SIGINT to stop gracefully
     # (default stop signal from Compose is SIGTERM)
     stop_signal: SIGINT
