@@ -10,7 +10,9 @@ client = MongoClient("mongo")
 db = client["cse312-project"]
 TA_collection = db['TA_collection']
 
-@app.route('/')
+homepage = '/'
+
+@app.route(homepage)
 def home():
     response = render_template('index.html')
     response = make_response(response)
@@ -52,15 +54,15 @@ def register():
     # if not password_check(password):
     #     return "password must be of length 10 with at least 1 number, lowercase letter, and uppercase letter."
     if password != confirmPassword:
-        return redirect("http://localhost:8080/", code=302)
+        return redirect(homepage, code=302)
     if TA_collection.find_one({"username": username}) is not None:
-        return redirect("http://localhost:8080/", code=302)
+        return redirect(homepage, code=302)
     # salt/hash password, and store in DB
     salt = bcrypt.gensalt()
     password = bcrypt.hashpw(password.encode(), salt)
-    TA_collection.insert_one({"username": username, "password": password})
+    TA_collection.insert_one({"username": username, "salt": salt, "password": password})
     # return back to homepage
-    return redirect("http://localhost:8080/", code=302)
+    return redirect(homepage, code=302)
 
 
 def password_check(password: str):
