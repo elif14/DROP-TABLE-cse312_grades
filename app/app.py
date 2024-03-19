@@ -49,12 +49,12 @@ def register():
     password = request.form.get("password")
     confirmPassword = request.form.get("confirmPassword")
     # check if the password match
-    if not password_check(password):
-        return "password must be of length 10 with at least 1 number, lowercase letter, and uppercase letter."
+    # if not password_check(password):
+    #     return "password must be of length 10 with at least 1 number, lowercase letter, and uppercase letter."
     if password != confirmPassword:
-        return "Passwords do not match."
+        return redirect("http://localhost:8080/", code=302)
     if TA_collection.find_one({"username": username}) is not None:
-        return "username already taken."
+        return redirect("http://localhost:8080/", code=302)
     # salt/hash password, and store in DB
     salt = bcrypt.gensalt()
     password = bcrypt.hashpw(password.encode(), salt)
