@@ -1,15 +1,14 @@
 import string
-
 from flask import Flask, render_template, make_response, request, redirect
 from pymongo import MongoClient
 from flask import send_file
 import bcrypt
 
-app = Flask(__name__)
-mongo_client = MongoClient('localhost', 27017)
-db = mongo_client.flask_db
-TA_collection = db.todos
 
+app = Flask(__name__)
+client = MongoClient("mongo")
+db = client["cse312-project"]
+TA_collection = db['TA_collection']
 
 @app.route('/')
 def home():
