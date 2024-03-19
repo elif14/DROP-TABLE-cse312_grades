@@ -1,12 +1,13 @@
 from flask import Flask, render_template, make_response, request, redirect
 from pymongo import MongoClient
 from flask import send_file
+import bcrypt
 
 
 app = Flask(__name__)
-mongo_client = MongoClient("mongo")
-db = mongo_client["cse312-project"]
-user_collection = db["users"]
+mongo_client = MongoClient('localhost', 27017)
+db = mongo_client.flask_db
+TA_collection = db.todos
 
 @app.route('/')
 def home():
@@ -49,6 +50,10 @@ def register():
     # check if the password match
     if password != confirmPassword:
         return "passwords do not match!"
+    # salt/hash password, and store in DB
+    salt = bcrypt.gensalt()
+    password = bcrypt.hashpw(password.encode(), salt)
+    TA_collection.insert_one({"username": username, "password": password})
     # return back to homepage
     return redirect("http://localhost:8080/", code=302)
 
