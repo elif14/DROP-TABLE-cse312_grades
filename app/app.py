@@ -41,7 +41,7 @@ def sendImage():
 
 
 @app.route('/register')
-def home():
+def register():
     # get the form data
     username = request.form.get("username")
     password = request.form.get("password")
