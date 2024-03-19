@@ -42,10 +42,11 @@ def sendImage():
 
 @app.route('/register')
 def home():
+    # get the form data
     username = request.form.get("username")
     password = request.form.get("password")
     confirmPassword = request.form.get("confirmPassword")
-    #
+    # check if the password match
     if password != confirmPassword:
         return "passwords do not match!"
     # return back to homepage
