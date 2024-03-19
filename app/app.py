@@ -6,7 +6,7 @@ from flask import send_file
 app = Flask(__name__)
 mongo_client = MongoClient("mongo")
 db = mongo_client["cse312-project"]
-user_collection = db["chat"]
+user_collection = db["users"]
 
 @app.route('/')
 def home():
