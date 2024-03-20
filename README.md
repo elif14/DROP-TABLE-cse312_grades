@@ -61,6 +61,9 @@ from register.new import example_bp
 app.register_blueprint(example_bp)
 ```
 # Feature
+> [!NOTE]
+> - If you finished a feature in the checklist, test throughly and mark it off
+> - If there is a missing feature, please add it and let us know in the group chat
 ## Part 1
 ### Objective 1 Hosting a Static Page
 - [x] HTML hosted at the root path
