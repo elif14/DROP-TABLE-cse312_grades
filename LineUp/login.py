@@ -53,18 +53,24 @@ def user_exist(username: str):
         return False
     
 def correct_password(username, password):
-    user = TA_collection.find({"username": username}, {'_id': 0})[0]
+    user = TA_collection.find({"username": username})[0]
     hashed_password = bcrypt.hashpw(password.encode(), user["salt"])
     if hashed_password == user["hashed_password"]:
         return True
     else:
         return False
+    
+def get_username(auth_token):
+    hashed_auth_token = hashlib.sha256(auth_token.encode()).hexdigest()
+    current_app.logger.info(hashed_auth_token)
+    user = TA_collection.find({"auth_token": hashed_auth_token})[0]
+    if hashed_auth_token == user["auth_token"]:
+        return user["username"]
 
 def create_auth_token(username):
     auth_token = "".join(random.choices(string.ascii_letters + string.digits, k=20))
     hash_obj = hashlib.sha256()
     hash_obj.update(auth_token.encode())
-    hash_obj.digest()
     needed_token = hash_obj.hexdigest()
     TA_collection.update_one({"username": username}, {"$set": {"auth_token": needed_token}})
     return auth_token
