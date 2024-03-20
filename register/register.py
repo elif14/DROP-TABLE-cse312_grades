@@ -24,7 +24,7 @@ def home():
 
 @register_bp.route('/static/style.css')
 def sendStyle():
-    response = send_file('~/static/style.css', mimetype='text/css')
+    response = send_file('register/static/style.css', mimetype='text/css')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
@@ -32,15 +32,15 @@ def sendStyle():
 
 @register_bp.route('/static/functions.js')
 def sendFunctions():
-    response = send_file('static/functions.js', mimetype='text/javascript')
+    response = send_file('register/static/functions.js', mimetype='text/javascript')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
 
 
-@register_bp.route('/static/image.jpeg')
+@register_bp.route('/static/image.jpg')
 def sendImage():
-    response = send_file('static/image.jpg', mimetype='image/jpeg')
+    response = send_file('register/static/image.jpg', mimetype='image/jpeg')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
