@@ -70,15 +70,30 @@ app.register_blueprint(example_bp)
 - [ ] All files have correct MIME type
 - [ ] X-Content-Type-Options: nosniff header must be set
 > [!CAUTION]
-> All of these parts must be hosted by your server.
-> Must serve the image from your server using your framework of choice.
-> App should run on local port 8080
+> - All of these parts must be hosted by your server.
+> - Must serve the image from your server using your framework of choice.
+> - App should run on local port 8080
 
 ### Objective 2 Authentication
-- [x] Homepage has a registration form
-    - [ ] Registeration confirms password 
-- [x] Homepage has a login form
-- [x] User should still be on the homepage after registration or login (AJAX/redirect)
+- [x] Home page has a registration form
+    - [ ] User can register
+    - [x] User should still be on the home page after registration
+    - [ ] Registeration confirms password
+        - [ ] Verifying second confirmation password is done in server not the frontend
+    - [ ] User can not register with a taken username
+    - [x] Store user name and hashed password in the database
+- [x] Home page has a login form
+    - [x] User can login  
+    - [x] User should still be on the home page after login
+    - [ ] Username must be displayed on the home page after logging in
+    - [ ] User can logout
+        - [ ] Invalidate their auth token when log out
+    - [ ] Set an authentication token as a cookie
+        - [x] Must be a random value
+        - [ ] Store a **hash** of each token in the database
+        - [ ] **HttpOnly** directive set
+        - [ ] The auth token cookie must have an expiration time of 1 hour or longer 
+
 
 ### Objective 3 Making Interactive Posts
 - [ ]
