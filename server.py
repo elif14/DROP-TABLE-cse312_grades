@@ -9,7 +9,7 @@ Here is the resources on how to use print in Flask (also in Blueprint)
 """
 
 from flask import Flask
-from logging.config import dictConfig
+from logging.config import dictConfig 
 
 dictConfig({
     'version': 1,
@@ -27,11 +27,13 @@ dictConfig({
     }
 })
 
+from register.homepage import homepage_bp
 from register.register import register_bp
 from register.login import login_bp
 
 app = Flask(__name__)
 
+app.register_blueprint(homepage_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(login_bp)
 
