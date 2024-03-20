@@ -56,7 +56,7 @@ def foo():
 
 Go to server.py and add following 2 lines.
 ```
-from register.new import example_bp
+from LineUp.new import example_bp
 ```
 ```
 app.register_blueprint(example_bp)
