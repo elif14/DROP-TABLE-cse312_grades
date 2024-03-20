@@ -64,7 +64,7 @@ def correct_password(username, password):
 def create_auth_token(username):
     auth_token = "".join(random.choices(string.ascii_letters + string.digits, k=20))
     hash_obj = hashlib.sha256()
-    hash_obj.update(auth_token.encode)
+    hash_obj.update(auth_token.encode())
     hash_obj.digest()
     needed_token = hash_obj.hexdigest()
     filter = {"username": username}
