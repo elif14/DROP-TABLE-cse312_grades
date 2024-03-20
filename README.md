@@ -1,4 +1,4 @@
-# How to print
+# How to print in Flask
 Normal print() **does not** work in flask.
 Using standard error or flush in print() also **does not** work.
 ```
@@ -24,3 +24,9 @@ However, since we are using [Blueprint](https://flask.palletsprojects.com/en/2.3
 from flask import current_app
 current_app.logger.info('Hello world!')
 ```
+# Blueprint 101
+Blueprint is extremely powerful and useful. There are more to Blueprint but our main purpose is to encapsulate our code/file. 
+By separating one mega py file to many different py files, we'll be able to organize the code and functionality better.
+Easier to maintain, understand, and less likely to have merge conflicts.
+
+
