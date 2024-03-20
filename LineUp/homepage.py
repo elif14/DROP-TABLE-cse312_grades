@@ -1,5 +1,10 @@
-from flask import Blueprint, render_template, make_response, send_file
+from flask import Blueprint, render_template, make_response, send_file, request
+from pymongo import MongoClient
+from LineUp import login
 
+client = MongoClient("mongo")
+db = client["cse312-project"]
+TA_collection = db['TA_collection']
 
 homepage_bp = Blueprint('homepage_bp', __name__,
     template_folder='templates',
@@ -10,6 +15,9 @@ homepage = '/'
 @homepage_bp.route(homepage)
 def home():
     username = "Guest"
+    if 'auth_token' in request.cookies:
+        auth_token = request.cookies.get("auth_token")
+        username = login.get_username(auth_token)
     response = render_template('index.html', username = username)
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
