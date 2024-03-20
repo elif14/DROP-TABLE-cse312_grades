@@ -1,13 +1,3 @@
-"""
-Here are resources on how to use Blueprint in Flask
-    - https://flask.palletsprojects.com/en/2.3.x/blueprints/
-    - https://realpython.com/flask-blueprint/
-
-Here is the resources on how to use print in Flask (also in Blueprint)
-    - https://flask.palletsprojects.com/en/2.3.x/logging/
-    - https://stackoverflow.com/questions/16994174/in-flask-how-to-access-app-logger-within-blueprint
-"""
-
 from flask import Flask
 from logging.config import dictConfig 
 
@@ -27,9 +17,9 @@ dictConfig({
     }
 })
 
-from register.homepage import homepage_bp
-from register.register import register_bp
-from register.login import login_bp
+from LineUp.homepage import homepage_bp
+from LineUp.register import register_bp
+from LineUp.login import login_bp
 
 app = Flask(__name__)
 
