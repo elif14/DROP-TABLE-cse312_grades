@@ -24,9 +24,42 @@ However, since we are using [Blueprint](https://flask.palletsprojects.com/en/2.3
 from flask import current_app
 current_app.logger.info('Hello world!')
 ```
-# Blueprint 101
-Blueprint is extremely powerful and useful. There are more to Blueprint but our main purpose is to encapsulate our code/file. 
+# Blueprint
+## Why should we use Blueprint?
+Blueprint is extremely powerful and useful. There are more to Blueprint, but our main purpose is to _encapsulate_ our code/file.
 By separating one mega py file to many different py files, we'll be able to organize the code and functionality better.
-Easier to maintain, understand, and less likely to have merge conflicts.
+- Easier to understand
+- Easier to maintain
+- Less likelihood of merge conflicts
+## How to use Blueprint to separate files
+1. Create new python file.
+```
+new.py
+```
+2. Import Blueprint.
+```
+from flask import Blueprint
+```
+3. Add following line at the top of the file
+```
+example_bp = Blueprint('example_bp', __name__,
+    template_folder='templates',
+    static_folder='static')
+```
+4. Add route and functions like so
+```
+@example_bp.route('/baz.bar')
+def foo():
+    pass
+```
+5. Register Blueprint
+Go to server.py and add following 2 lines
+```
+from register.new import example_bp
+```
+```
+app.register_blueprint(example_bp)
+```
+
 
 
