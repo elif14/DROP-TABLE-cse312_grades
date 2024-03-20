@@ -24,7 +24,7 @@ def login():
         return redirect('/', code=302)
 
 def user_exist(username: str):
-    if TA_collection.find({"usernmae": username}) is not None:
+    if TA_collection.find({"username": username}) is not None:
         return True
     else:
         return False
