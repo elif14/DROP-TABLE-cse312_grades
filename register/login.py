@@ -8,6 +8,7 @@ import random
 login_bp = Blueprint('login_bp', __name__,
     template_folder='templates',
     static_folder='static')
+
  
 client = MongoClient("mongo")
 db = client["cse312-project"]
@@ -17,15 +18,15 @@ TA_collection = db['TA_collection']
 def login():
     username = request.form.get("login_username")
     password = request.form.get("login_password")
-    current_app.logger.info(username)
-    current_app.logger.info(password)
     if user_exist(username) and correct_password(username, password):
+        current_app.logger.info("CREATING AUTH_TOKEN")
         auth_token = create_auth_token(username)
         response = redirect('/', code=302)
         response.set_cookie("auth_token", value=auth_token, max_age=3600, httponly=True)
         response.headers["X-Content-Type-Options"] = "no-sniff"
         return response
     else:
+        current_app.logger.info("REDIRECTING TO HOMEPAGE")
         # maybe redirect them to wrong password or error page
         return redirect('/', code=302)
 
@@ -54,22 +55,23 @@ def user_exist(username: str):
         return False
     
 def correct_password(username, password):
-    user = TA_collection.find({"username": username})[0]
+    user = TA_collection.find({"username": username}, {'_id': 0})[0]
+    current_app.logger.info(user)
     hashed_password = bcrypt.hashpw(password.encode(), user["salt"])
-    if hashed_password is user["hashed_password"]:
+    current_app.logger.info(hashed_password)
+    current_app.logger.info(user["hashed_password"])
+    if hashed_password == user["hashed_password"]:
         return True
     else:
         return False
 
 def create_auth_token(username):
     auth_token = "".join(random.choices(string.ascii_letters + string.digits, k=20))
+    current_app.logger.info("ENTERED CREATE_AUTH_TOKEN")
+    current_app.logger.info(auth_token)
     hash_obj = hashlib.sha256()
     hash_obj.update(auth_token.encode())
     hash_obj.digest()
     needed_token = hash_obj.hexdigest()
-    filter = {"username": username}
-    update = {"$set": {"auth_token": auth_token}}
-    print(username)
-    print(auth_token)
-    TA_collection.update_one(filter, update)
+    TA_collection.update_one({"username": username}, {"$set": {"auth_token": auth_token}})
     return needed_token
