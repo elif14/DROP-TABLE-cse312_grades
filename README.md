@@ -24,9 +24,9 @@ However, since we are using [Blueprint](https://flask.palletsprojects.com/en/2.3
 from flask import current_app
 current_app.logger.info('Hello world!')
 ```
-# Blueprint
+# [Blueprint](https://realpython.com/flask-blueprint/)
 ## Why should we use Blueprint?
-Blueprint is extremely powerful and useful. There are more to Blueprint, but our main purpose is to _encapsulate_ our code/file.
+Blueprint is extremely powerful and useful. There are more to Blueprint, but our main purpose is to ***encapsulate*** our code/file.
 By separating one mega py file to many different py files, we'll be able to organize the code and functionality better.
 - Easier to understand
 - Easier to maintain
@@ -53,6 +53,7 @@ def foo():
     pass
 ```
 5. Register Blueprint
+
 Go to server.py and add following 2 lines.
 ```
 from register.new import example_bp
@@ -62,29 +63,30 @@ app.register_blueprint(example_bp)
 ```
 # Feature
 > [!NOTE]
-> - If you finished a feature in the checklist, test throughly and mark it off
-> - If there is a missing feature, please add it and let us know in the group chat
+> - If you finished a feature in the checklist, **test throughly** and mark it off
+> - If there is a missing feature, let us know in the group chat
 ## Part 1
-### Objective 1 Hosting a Static Page
+### Objective 1: Hosting a Static Page
 - [x] HTML hosted at the root path
 - [x] CSS hosted at a separate path
 - [x] JavaScript hosted at a separate path
 - [x] At least one image
 - [ ] All files have correct MIME type
 - [ ] X-Content-Type-Options: nosniff header must be set
+- [x] App is accessible with local port 8080
 > [!WARNING]
 > - All of these parts must be hosted by your server.
 > - Must serve the image from your server using your framework of choice.
 > - App should run on local port 8080.
 
-### Objective 2 Authentication
+### Objective 2: Authentication
 - [x] Home page has a registration form
-    - [ ] User can register
+    - [x] User can register
     - [x] User should still be on the home page after registration
     - [ ] Registeration confirms password
         - [ ] Verifying second confirmation password is done in server, not the frontend
     - [ ] User can not register with a taken username
-    - [x] Store user name and hashed password in the database
+    - [x] Store user name and **hashed password** in the database
 - [x] Home page has a login form
     - [x] User can login  
     - [x] User should still be on the home page after login
@@ -101,7 +103,7 @@ app.register_blueprint(example_bp)
 > - Only hashes of your auth tokens should be stored in your database.
 > - Set the HttpOnly directive on your cookie storing the authentication token.
 
-### Objective 3 Making Interactive Posts
+### Objective 3: Making Interactive Posts
 - [ ] User can make a post
     - [ ] Username must be displayed on that post
         - [ ] **Server** verifies author and add their username to the post, not the frontend
@@ -113,7 +115,7 @@ app.register_blueprint(example_bp)
 - [ ] All authenticated users interact with each post 
     - [ ] in a way that takes their username and the specific post into account
     - [ ] Your server must verify the user who made the interaction and take their username into account in some way
-    - [ ] You must escape any HTML supplied by your users
+    - [ ] You must **escape any HTML** supplied by your users
     - [ ] All interactions should be visible to **all authenticated** users
     - [ ] Interaction must be made on a per-post basis
 > [!WARNING]
