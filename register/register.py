@@ -1,5 +1,5 @@
 import string
-from flask import Flask, Blueprint, render_template, make_response, request, redirect, send_file
+from flask import Blueprint, render_template, make_response, request, redirect, send_file
 from pymongo import MongoClient
 import bcrypt
 
@@ -62,7 +62,10 @@ def register():
     # salt/hash password, and store in DB
     salt = bcrypt.gensalt()
     password = bcrypt.hashpw(password.encode(), salt)
-    TA_collection.insert_one({"username": username, "salt": salt, "hashed_password": password})
+    user = {"username": username, 
+            "salt": salt, 
+            "hashed_password": password}
+    TA_collection.insert_one(user)
     # return back to homepage
     return redirect(homepage, code=302)
 
