@@ -17,9 +17,9 @@ dictConfig({
     }
 })
 
-from register.homepage import homepage_bp
-from register.register import register_bp
-from register.login import login_bp
+from LineUp.homepage import homepage_bp
+from LineUp.register import register_bp
+from LineUp.login import login_bp
 
 app = Flask(__name__)
 

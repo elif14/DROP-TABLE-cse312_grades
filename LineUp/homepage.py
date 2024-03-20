@@ -17,7 +17,7 @@ def home():
 
 @homepage_bp.route('/static/style.css')
 def sendStyle():
-    response = send_file('register/static/style.css', mimetype='text/css')
+    response = send_file('LineUp/static/style.css', mimetype='text/css')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
@@ -25,7 +25,7 @@ def sendStyle():
 
 @homepage_bp.route('/static/functions.js')
 def sendFunctions():
-    response = send_file('register/static/functions.js', mimetype='text/javascript')
+    response = send_file('LineUp/static/functions.js', mimetype='text/javascript')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
@@ -33,7 +33,7 @@ def sendFunctions():
 
 @homepage_bp.route('/static/image.jpg')
 def sendImage():
-    response = send_file('register/static/image.jpg', mimetype='image/jpeg')
+    response = send_file('LineUp/static/image.jpg', mimetype='image/jpeg')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
