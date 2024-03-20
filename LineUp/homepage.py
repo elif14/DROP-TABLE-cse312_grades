@@ -9,7 +9,8 @@ homepage = '/'
 
 @homepage_bp.route(homepage)
 def home():
-    response = render_template('index.html')
+    username = "Guest"
+    response = render_template('index.html', username = username)
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
