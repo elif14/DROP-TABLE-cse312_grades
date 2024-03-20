@@ -19,8 +19,9 @@ def login():
     username = request.form.get("login_username")
     password = request.form.get("login_password")
     if user_exist(username) and correct_password(username, password):
-        current_app.logger.info("CREATING AUTH_TOKEN")
         auth_token = create_auth_token(username)
+        current_app.logger.info("GIVEN AUTH TOKEN AS A COOKIE")
+        current_app.logger.info(auth_token)
         response = redirect('/', code=302)
         response.set_cookie("auth_token", value=auth_token, max_age=3600, httponly=True)
         response.headers["X-Content-Type-Options"] = "no-sniff"
@@ -68,10 +69,9 @@ def correct_password(username, password):
 def create_auth_token(username):
     auth_token = "".join(random.choices(string.ascii_letters + string.digits, k=20))
     current_app.logger.info("ENTERED CREATE_AUTH_TOKEN")
-    current_app.logger.info(auth_token)
     hash_obj = hashlib.sha256()
     hash_obj.update(auth_token.encode())
     hash_obj.digest()
     needed_token = hash_obj.hexdigest()
-    TA_collection.update_one({"username": username}, {"$set": {"auth_token": auth_token}})
-    return needed_token
+    TA_collection.update_one({"username": username}, {"$set": {"auth_token": needed_token}})
+    return auth_token
