@@ -69,17 +69,17 @@ app.register_blueprint(example_bp)
 - [x] At least one image
 - [ ] All files have correct MIME type
 - [ ] X-Content-Type-Options: nosniff header must be set
-> [!CAUTION]
+> [!WARNING]
 > - All of these parts must be hosted by your server.
 > - Must serve the image from your server using your framework of choice.
-> - App should run on local port 8080
+> - App should run on local port 8080.
 
 ### Objective 2 Authentication
 - [x] Home page has a registration form
     - [ ] User can register
     - [x] User should still be on the home page after registration
     - [ ] Registeration confirms password
-        - [ ] Verifying second confirmation password is done in server not the frontend
+        - [ ] Verifying second confirmation password is done in server, not the frontend
     - [ ] User can not register with a taken username
     - [x] Store user name and hashed password in the database
 - [x] Home page has a login form
@@ -93,12 +93,26 @@ app.register_blueprint(example_bp)
         - [ ] Store a **hash** of each token in the database
         - [ ] **HttpOnly** directive set
         - [ ] The auth token cookie must have an expiration time of 1 hour or longer 
-
+> [!WARNING]
+> - Never store plain text passwords. You must only store salted hashes of your users' passwords.
+> - Only hashes of your auth tokens should be stored in your database.
+> - Set the HttpOnly directive on your cookie storing the authentication token.
 
 ### Objective 3 Making Interactive Posts
-- [ ]
-- [ ]
-- [ ]
-
-
+- [ ] User can make a post
+    - [ ] Username must be displayed on that post
+        - [ ] **Server** verifies author and add their username to the post, not the frontend
+    - [ ] Post must contain one more information
+    - [ ] Posts must be stored in a database
+- [ ] Guest can make a post
+    - [ ] Posts must be stored in a database
+- [ ] User can see all the posts when logged in
+- [ ] All authenticated users interact with each post 
+    - [ ] in a way that takes their username and the specific post into account
+    - [ ] Your server must verify the user who made the interaction and take their username into account in some way
+    - [ ] You must escape any HTML supplied by your users
+    - [ ] All interactions should be visible to **all authenticated** users
+    - [ ] Interaction must be made on a per-post basis
+> [!WARNING]
+> - Verify that HTML is escaped in all user supplied strings.
 
