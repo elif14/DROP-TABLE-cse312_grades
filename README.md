@@ -40,26 +40,50 @@ new.py
 ```
 from flask import Blueprint
 ```
-3. Add following line at the top of the file
+3. Add following line at the top of the file.
 ```
 example_bp = Blueprint('example_bp', __name__,
     template_folder='templates',
     static_folder='static')
 ```
-4. Add route and functions like so
+4. Add route and functions like so.
 ```
 @example_bp.route('/baz.bar')
 def foo():
     pass
 ```
 5. Register Blueprint
-Go to server.py and add following 2 lines
+Go to server.py and add following 2 lines.
 ```
 from register.new import example_bp
 ```
 ```
 app.register_blueprint(example_bp)
 ```
+# Feature
+## Part 1
+### Objective 1 Hosting a Static Page
+- [x] HTML hosted at the root path
+- [x] CSS hosted at a separate path
+- [x] JavaScript hosted at a separate path
+- [x] At least one image
+- [ ] All files have correct MIME type
+- [ ] X-Content-Type-Options: nosniff header must be set
+> [!CAUTION]
+> All of these parts must be hosted by your server.
+> Must serve the image from your server using your framework of choice.
+> App should run on local port 8080
+
+### Objective 2 Authentication
+- [x] Homepage has a registration form
+    - [ ] Registeration confirms password 
+- [x] Homepage has a login form
+- [x] User should still be on the homepage after registration or login (AJAX/redirect)
+
+### Objective 3 Making Interactive Posts
+- [ ]
+- [ ]
+- [ ]
 
 
 
