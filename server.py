@@ -1,13 +1,3 @@
-"""
-Here are resources on how to use Blueprint in Flask
-    - https://flask.palletsprojects.com/en/2.3.x/blueprints/
-    - https://realpython.com/flask-blueprint/
-
-Here is the resources on how to use print in Flask (also in Blueprint)
-    - https://flask.palletsprojects.com/en/2.3.x/logging/
-    - https://stackoverflow.com/questions/16994174/in-flask-how-to-access-app-logger-within-blueprint
-"""
-
 from flask import Flask
 from logging.config import dictConfig 
 
