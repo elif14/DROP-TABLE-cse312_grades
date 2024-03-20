@@ -90,14 +90,14 @@ app.register_blueprint(example_bp)
 - [x] Home page has a login form
     - [x] User can login  
     - [x] User should still be on the home page after login
-    - [ ] Username must be displayed on the home page after logging in
-    - [ ] User can logout
-        - [ ] Invalidate their auth token when log out
-    - [ ] Set an authentication token as a cookie
+    - [x] Username must be displayed on the home page after logging in
+    - [x] User can logout
+        - [x] Invalidate their auth token when log out
+    - [x] Set an authentication token as a cookie
         - [x] Must be a random value
-        - [ ] Store a **hash** of each token in the database
-        - [ ] **HttpOnly** directive set
-        - [ ] The auth token cookie must have an expiration time of 1 hour or longer 
+        - [x] Store a **hash** of each token in the database
+        - [x] **HttpOnly** directive set
+        - [x] The auth token cookie must have an expiration time of 1 hour or longer 
 > [!WARNING]
 > - Never store plain text passwords. You must only store salted hashes of your users' passwords.
 > - Only hashes of your auth tokens should be stored in your database.
