@@ -29,7 +29,7 @@ def login():
         # maybe redirect them to wrong password or error page
         return redirect('/', code=302)
 
-login_bp.route('/logout', methods=["POST"])
+@login_bp.route('/logout', methods=["POST"])
 def logout():
     curr_auth = request.cookies["auth_token"]
     new_user = ""
