@@ -7,10 +7,22 @@ function ta_display(){
         if(request.readyState == 4 && request.status == 200){
             const response = request.response
             let data_needed = JSON.parse(response)
-            console.log(data_needed)
-            for (let single_ta of ta_names){
-                document.getElementById("ta_names").innerHTML = single_ta
+            let needed_name = ""
+            let new_arr = []
+            for (let single_char of data_needed){
+                if (single_char == ' '){
+                    new_arr.push(needed_name)
+                    needed_name = ""
+                }
+                else if (single_char !== '['
+                    && single_char !== '"'
+                    && single_char !== ','
+                    && single_char !== ']'){
+                    needed_name += single_char
+                }
             }
+            for (const name of new_arr)
+                document.getElementById("ta_names").innerHTML = name
         }
     }
 }
