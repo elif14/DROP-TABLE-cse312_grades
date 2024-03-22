@@ -10,8 +10,8 @@ on_duty = db['on_duty']
 student_queue = db['student_queue']
 
 ta_bp = Blueprint('ta_bp', __name__,
-                  template_folder='templates',
-                  static_folder='static')
+    template_folder='templates',
+    static_folder='static')
 
 
 @ta_bp.route('/queue')
@@ -58,10 +58,14 @@ def ta_display():
 
 @ta_bp.route('/dequeue', methods=["POST"])
 def ta_dequeue():
-    pass
+    if 'auth_token' in request.cookies:
+        auth_token = request.cookies["auth_token"]
+        username = login.get_username(auth_token)
+        on_duty.delete_one({"username": username})
+    return redirect('/queue', code=302)
 
 
-@ta_bp.route('/dequeue_stud', methods=["POST"])
+@ta_bp.route('/dequeue_student', methods=["POST"])
 def student_dequeue():
     dummy_name = "" # filler variable
     student_queue.update_one({"student_name": dummy_name}, {'$set': {"status": False}})
