@@ -20,7 +20,7 @@ def login():
     password = request.form.get("login_password")
     if user_exist(username) and correct_password(username, password):
         auth_token = create_auth_token(username)
-        response = redirect('/', code=302)
+        response = redirect('/queue', code=302)
         response.set_cookie("auth_token", value=auth_token, max_age=3600, httponly=True)
         response.headers["X-Content-Type-Options"] = "no-sniff"
         return response
