@@ -16,7 +16,7 @@ def queue_page():
     return response
 
 @ta_bp.route('/static/queue.css')
-def queue_page():
+def queue_style():
     response = send_file('LineUp/static/queue.css', mimetype='text/css')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
