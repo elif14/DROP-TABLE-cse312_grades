@@ -7,7 +7,11 @@
 </head>
 <body>
     <script src="functions.js"></script>
-    
+    {% if username %}
+        <h1> Time to work! {{ username }} </h1>
+    {% else %}
+        <h1> Welcome! Guest </h1>
+    {% endif %}
     <h1> TAs On Duty: </h1>
     <form onsubmit="return(display_ta_name())">
         <input type="submit" value="On Duty">
