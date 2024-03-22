@@ -1,5 +1,11 @@
 from flask import Blueprint, render_template, send_file, make_response, request
+from pymongo import MongoClient
 from LineUp import login
+
+client = MongoClient("mongo")
+db = client["cse312-project"]
+on_duty = db['on_duty']
+
 
 ta_bp = Blueprint('ta_bp', __name__,
     template_folder='templates',
