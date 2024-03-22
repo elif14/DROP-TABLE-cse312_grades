@@ -13,8 +13,12 @@
         <h1> Welcome! Guest </h1>
     {% endif %}
     <h1> TAs On Duty: </h1>
-    <form action="/queue" method="post")">
+    <form action="/queue" method="post">
         <button onclick="submit">On Duty</button>
+    </form>
+    <br>
+    <form action="/dequeue" method="post">
+        <button onclick="submit">Off Duty</button>
     </form>
     <h3> Queue: </h3>
 

@@ -38,6 +38,11 @@ def ta_enqueue():
     return redirect('/queue', code=302)
 
 
-@ta_bp.route('/dequeue', methods=["DELETE"])
+@ta_bp.route('/dequeue', methods=["POST"])
 def ta_dequeue():
+    pass
+
+
+@ta_bp.route('/dequeue_stud', methods=["POST"])
+def stud_dequeue():
     pass
