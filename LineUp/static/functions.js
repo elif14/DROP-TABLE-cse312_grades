@@ -1,10 +1,15 @@
-const info = []
 
-function display_ta_name(e){
-    e.preventDefault();
-    var ta = document.getElementById("ta_name").value;
-    info.push(ta);
-    var name = document.createElement("h2");
-    name.innerHTML = name;
-    document.body.appendChild(name);
+function ta_display(){
+    const request = new XMLHttpRequest();
+    request.open("GET", '/ta_display');
+    request.send();
+    request.onload = () => {
+        if(request.readyState == 4 && request.status == 200){
+            const response = request.response
+            let data_needed = JSON.parse(response)
+            for (const[user, name] of data_needed){
+                document.getElementById("ta_names").innerHTML = name
+            }
+        }
+    }
 }

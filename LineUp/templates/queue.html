@@ -5,7 +5,7 @@
     <title>Line Up</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css"/>
 </head>
-<body>
+<body onload="ta_display()">
     <script src="/static/functions.js"></script>
     {% if username %}
         <h1> Time to work! {{ username }} </h1>
@@ -13,6 +13,7 @@
         <h1> Welcome! Guest </h1>
     {% endif %}
     <h1> TAs On Duty: </h1>
+    <h2 id="ta_names"></h2>
     <form action="/queue" method="post">
         <button onclick="submit">On Duty</button>
     </form>
