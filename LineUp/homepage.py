@@ -46,3 +46,4 @@ def sendImage():
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
+

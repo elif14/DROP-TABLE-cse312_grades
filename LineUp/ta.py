@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, make_response, send_file
+from flask import Blueprint, render_template
 
 ta_bp = Blueprint('ta_bp', __name__,
     template_folder='templates',
@@ -7,15 +7,6 @@ ta_bp = Blueprint('ta_bp', __name__,
 @ta_bp.route('/queue')
 def queue_page():
     response = render_template('queue.html')
-    response = make_response(response)
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    return response
-
-@ta_bp.route('/static/queue.css')
-def queue_style():
-    response = send_file('LineUp/static/queue.css', mimetype='text/css')
-    response = make_response(response)
-    response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
 
 @ta_bp.route('/queue', methods=["POST"])
