@@ -46,13 +46,14 @@ def ta_enqueue():
 @ta_bp.route('/ta_display', methods=["GET"])
 def ta_display():
     tas = on_duty.find({}, {'_id': 0})
-    all_tas = {}
+    all_tas = []
+    data = {}
     i = 1
     for single_ta in tas:
-        key = "user" + str(i)
-        all_tas[key] = single_ta["username"]
-    current_app.logger.info(all_tas)
-    needed_data = json.dumps(all_tas)
+        all_tas.append(single_ta["username"])
+    data["usernames"] = all_tas
+    current_app.logger.info(data)
+    needed_data = json.dumps(data)
     return jsonify(needed_data)
 
 
