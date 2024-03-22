@@ -7,8 +7,9 @@ function ta_display(){
         if(request.readyState == 4 && request.status == 200){
             const response = request.response
             let data_needed = JSON.parse(response)
-            for (let [key, value] of data_needed){
-                document.getElementById("ta_names").innerHTML = value
+            console.log(data_needed)
+            for (let single_ta of ta_names){
+                document.getElementById("ta_names").innerHTML = single_ta
             }
         }
     }

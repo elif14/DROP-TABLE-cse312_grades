@@ -51,9 +51,8 @@ def ta_display():
     i = 1
     for single_ta in tas:
         all_tas.append(single_ta["username"])
-    data["usernames"] = all_tas
-    current_app.logger.info(data)
-    needed_data = json.dumps(data)
+    needed_data = json.dumps(all_tas)
+    current_app.logger.info(needed_data)
     return jsonify(needed_data)
 
 
