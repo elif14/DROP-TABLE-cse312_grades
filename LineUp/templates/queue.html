@@ -13,8 +13,8 @@
         <h1> Welcome! Guest </h1>
     {% endif %}
     <h1> TAs On Duty: </h1>
-    <form onsubmit="return(display_ta_name())">
-        <input type="submit" value="On Duty">
+    <form action="/queue" method="post")">
+        <button onclick="submit">On Duty</button>
     </form>
     <h3> Queue: </h3>
 
