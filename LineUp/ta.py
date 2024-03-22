@@ -5,7 +5,7 @@ from LineUp import login
 client = MongoClient("mongo")
 db = client["cse312-project"]
 on_duty = db['on_duty']
-
+student_queue = db['student_queue']
 
 ta_bp = Blueprint('ta_bp', __name__,
     template_folder='templates',
@@ -49,4 +49,6 @@ def ta_dequeue():
 
 @ta_bp.route('/dequeue_student', methods=["POST"])
 def stud_dequeue():
+    dummy_name = "" # filler variable
+    student_queue.update_one({"student_name": dummy_name}, {'$set': {"status": False}})
     pass

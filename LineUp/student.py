@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
-on_duty = db['student_queue']
+student_queue = db['student_queue']
 
 student_bp = Blueprint('student_bp', __name__,
     template_folder='templates',
@@ -12,8 +12,11 @@ student_bp = Blueprint('student_bp', __name__,
 '''
 MEMO to Alex and Chris
 "student_queue" table should have at least 2 fields
-1. student name (either UBIT or any username)
+1. student_name (either UBIT or any username)
 2. True/False value (to indicate whether or not they have been dequeued)
+
+Example of what is going into database "student_queue" table:
+{"student_name": "Megan", "status": True}
 
 We can not actually delete student off the queue since handout states that 
 "All interactions should be visible to all [authenticated] users (You decide if guests can see interactions)."
