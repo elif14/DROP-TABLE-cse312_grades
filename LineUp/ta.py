@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, send_file, make_response, request
+from flask import Blueprint, render_template, send_file, make_response, request, redirect
 from pymongo import MongoClient
 from LineUp import login
 
@@ -30,7 +30,12 @@ def queue_style():
 
 @ta_bp.route('/queue', methods=["POST"])
 def ta_enqueue():
-    pass
+    if 'auth_token' in request.cookies:
+        auth_token = request.cookies["auth_token"]
+        username = login.get_username(auth_token)
+        TA = {"username": username}
+        on_duty.insert_one(TA)
+    return redirect('/queue', code=302)
 
 
 @ta_bp.route('/dequeue', methods=["DELETE"])
