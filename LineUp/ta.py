@@ -40,9 +40,13 @@ def ta_enqueue():
 
 @ta_bp.route('/dequeue', methods=["POST"])
 def ta_dequeue():
-    pass
+    if 'auth_token' in request.cookies:
+        auth_token = request.cookies["auth_token"]
+        username = login.get_username(auth_token)
+        on_duty.delete_one({"username": username})
+    return redirect('/queue', code=302)
 
 
-@ta_bp.route('/dequeue_stud', methods=["POST"])
+@ta_bp.route('/dequeue_student', methods=["POST"])
 def stud_dequeue():
     pass
