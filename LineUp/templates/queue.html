@@ -33,7 +33,7 @@
 
     <h3> Queue: </h3>
     {% for item in studentQ %}
-        <p><button onclick="submit">X</button>{{ item }}</p>
+        <p><button id="{{ item }}" onclick="submit">X</button>{{ item }}</p>
     {% endfor %}
 
 
