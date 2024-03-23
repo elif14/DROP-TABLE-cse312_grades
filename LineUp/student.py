@@ -14,9 +14,9 @@ student_queue = db['student_queue']
 
 @student_bp.route('/student', methods=["POST"])
 def student_enqueue():
-    student_name = request.form.get("student")
+    student_name = request.form.get("Name")
     if student_queue.find_one({"student": student_name}) is None:
-        student = {"student": student_name, "dequed": "False"}
+        student = {"student": student_name, "dequed": "True"}
         student_queue.insert_one(student)
     return redirect('/queue', code=302)
 
