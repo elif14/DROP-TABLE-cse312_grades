@@ -22,6 +22,7 @@ def student_queue():
 
 @student_bp.route('/student-display', methods=["GET"])
 def student_display():
+
     return redirect('/queue', code=302)
 
 # MEMO to Alex and Chris
