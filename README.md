@@ -83,9 +83,9 @@ app.register_blueprint(example_bp)
 - [x] Home page has a registration form
     - [x] User can register
     - [x] User should still be on the home page after registration
-    - [ ] Registeration confirms password
-        - [ ] Verifying second confirmation password is done in server, not the frontend
-    - [ ] User can not register with a taken username
+    - [x] Registeration confirms password
+        - [x] Verifying second confirmation password is done in server, not the frontend
+    - [x] User can not register with a taken username
     - [x] Store user name and **hashed password** in the database
 - [x] Home page has a login form
     - [x] User can login  
