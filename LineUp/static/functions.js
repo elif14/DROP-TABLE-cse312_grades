@@ -38,4 +38,6 @@ function studentDisplay(){
     const studentInfo = {"Student": studentName};
     request.open("POST", "/student");
     request.send(JSON.stringify(studentInfo));
+
+    
 }
