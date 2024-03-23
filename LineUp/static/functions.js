@@ -30,3 +30,12 @@ function ta_display(){
         }
     }
 }
+
+function studentDisplay(){
+    const getStudentName = document.getElementById("student");
+    const studentName = getStudentName.value;
+    getStudentName.value = "";
+    const studentInfo = {"Student": studentName};
+    request.open("POST", "/student");
+    request.send(JSON.stringify(studentInfo));
+}
