@@ -13,7 +13,7 @@ db = client["cse312-project"]
 student_queue = db['student_queue']
 
 @student_bp.route('/student', methods=["POST"])
-def student_queue():
+def student_enqueue():
     student_name = request.form.get("student")
     if student_queue.find_one({"student": student_name}) is None:
         student = {"student": student_name}
