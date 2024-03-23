@@ -25,4 +25,11 @@ a cross line to their name to show that interaction have made by TA (authenticat
 
 So when you guys insert a student into "student_queue" table, not only include their username
 but also include True value so that we can later updatae that field when TA dequeue student
+
+############################################################################
+Also, please make a delete button next to student's name in the queue so that
+it requests POST to /dequeue_student. 
+Then, our "student_dequeue" function in ta.py in line 68 will take care of deleting it.
+We didn't fully finished the function since there is no student's post yet.
+############################################################################
 '''
