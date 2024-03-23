@@ -10,14 +10,13 @@ function ta_display(){
             let needed_name = ""
             let new_arr = []
             for (let single_char of data_needed){
-                if (single_char == ' '){
+                if (single_char == ' ' || single_char == ']'){
                     new_arr.push(needed_name)
                     needed_name = ""
                 }
                 else if (single_char !== '['
                     && single_char !== '"'
-                    && single_char !== ','
-                    && single_char !== ']'){
+                    && single_char !== ','){
                     needed_name += single_char
                 }
             }
@@ -25,6 +24,7 @@ function ta_display(){
             for (const name of new_arr){
                 all_names = name + " "
             }
+            console.log(all_names)
             document.getElementById("ta_names").innerHTML = all_names
         }
     }

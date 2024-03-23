@@ -48,8 +48,6 @@ def ta_enqueue():
 def ta_display():
     tas = on_duty.find({}, {'_id': 0})
     all_tas = []
-    data = {}
-    i = 1
     for single_ta in tas:
         all_tas.append(single_ta["username"])
     needed_data = json.dumps(all_tas)
