@@ -29,11 +29,7 @@ def student_enqueue():
         if student_queue.find_one({"student": studentName}) is None:
             student = {"student": studentName, "dequeued": "False"}
             student_queue.insert_one(student)
-            listDictOfStudents.append(student)
-            listOfStudentNames= []
-            for i in listDictOfStudents:
-                listOfStudentNames.append(i.get("student"))
-            return redirect(url_for('ta_bp.queue_page', studentQ=listOfStudentNames))
+            return redirect(url_for('ta_bp.queue_page'))
 
 
 
