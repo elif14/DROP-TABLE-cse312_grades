@@ -70,6 +70,7 @@ def ta_dequeue():
 
 @ta_bp.route('/dequeue_student', methods=["POST"])
 def student_dequeue():
-    dummy_name = "" # filler variable
-    student_queue.update_one({"student_name": dummy_name}, {'$set': {"status": False}})
+    # CHANGE ME
+    put_student_name_here = ""
+    student_queue.update_one({"student": put_student_name_here}, {'$set': {"dequeue": True}})
     pass
