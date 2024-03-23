@@ -32,8 +32,8 @@
 
 
     <h3> Queue: </h3>
-    {% for item in studentQ %}
-        <p><button onclick="submit">X</button>{{ item }}</p>
+    {% for eachStudent in studentQ %}
+        <p id=""><button onclick="remove">X</button>{{ eachStudent }}</p>
     {% endfor %}
 
 
