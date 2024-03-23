@@ -22,7 +22,8 @@ function ta_display(){
             }
             let all_names = ""
             for (const name of new_arr){
-                all_names = name + " "
+                const singleName = name + " "
+                all_names += singleName
             }
             console.log(all_names)
             document.getElementById("ta_names").innerHTML = all_names
