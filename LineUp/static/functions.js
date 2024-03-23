@@ -21,8 +21,11 @@ function ta_display(){
                     needed_name += single_char
                 }
             }
-            for (const name of new_arr)
-                document.getElementById("ta_names").innerHTML = name
+            let all_names = ""
+            for (const name of new_arr){
+                all_names = name + " "
+            }
+            document.getElementById("ta_names").innerHTML = all_names
         }
     }
 }
