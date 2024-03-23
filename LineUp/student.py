@@ -20,6 +20,10 @@ def student_queue():
         student_queue.insert_one(student)
     return redirect('/queue', code=302)
 
+@student_bp.route('/student-display', methods=["GET"])
+def student_display():
+    return redirect('/queue', code=302)
+
 # MEMO to Alex and Chris
 # student_queue table should have at least 2 fields
 # 1. student_name (either UBIT or any username)
