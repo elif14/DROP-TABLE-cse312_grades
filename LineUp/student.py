@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app
 from pymongo import MongoClient
 from LineUp import login
+import html
 
 student_bp = Blueprint('student_bp', __name__,
                        template_folder='templates',
@@ -21,8 +22,11 @@ def student_enqueue():
     return redirect('/queue', code=302)
 
 @student_bp.route('/student-display', methods=["GET"])
-def student_display():
-
+def student_display(): # need to figure out a way to access json
+    student = json.loads(something)
+    student = student["message"]
+    # security; prevents people from typing in code
+    student = html.escape(student)
     return redirect('/queue', code=302)
 
 # MEMO to Alex and Chris
