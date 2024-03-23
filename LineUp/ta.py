@@ -38,8 +38,9 @@ def ta_enqueue():
     if 'auth_token' in request.cookies:
         auth_token = request.cookies["auth_token"]
         username = login.get_username(auth_token)
-        TA = {"username": username}
-        on_duty.insert_one(TA)
+        if on_duty.find_one({"username": username}) is None:
+            TA = {"username": username}
+            on_duty.insert_one(TA)
     return redirect('/queue', code=302)
 
 
