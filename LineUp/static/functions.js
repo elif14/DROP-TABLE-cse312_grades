@@ -58,7 +58,7 @@ function studentDisplay(){
                 all_names += singleName
             }
             console.log(all_names)
-            document.getElementById("ta_names").innerHTML = all_names
+            document.getElementById("student_names").innerHTML = all_names
         }
     }
 }
