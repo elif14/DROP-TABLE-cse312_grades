@@ -23,10 +23,7 @@ def student_enqueue():
 
 @student_bp.route('/student-display', methods=["GET"])
 def student_display(): # need to figure out a way to access json
-    student = json.loads(something)
-    student = student["message"]
-    # security; prevents people from typing in code
-    student = html.escape(student)
+
     return redirect('/queue', code=302)
 
 # MEMO to Alex and Chris
