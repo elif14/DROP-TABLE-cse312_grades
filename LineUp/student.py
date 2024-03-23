@@ -13,7 +13,7 @@ db = client["cse312-project"]
 student_queue = db['student_queue']
 
 @student_bp.route('/student', methods=["POST"])
-def register():
+def student_queue():
 
 
 # MEMO to Alex and Chris
