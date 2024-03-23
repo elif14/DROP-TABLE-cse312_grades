@@ -22,18 +22,19 @@
         <button onclick="submit">Off Duty</button>
     </form>
     <br>
-    <form action="/student" method="post">
+    <form action="/student" method="POST">
         <label>
             Student:
-            <input id="student" type="text" name="Name" onclick="studentDisplay()">
+            <input id="student" type="text" name="Name">
         </label>
     </form>
-    <button id="join-button" onclick="studentDisplay()">Join Queue</button>
     <h2 id="student_names"></h2>
 
 
     <h3> Queue: </h3>
-
+    {% for item in studentQ %}
+        <p>{{ item }}</p>
+    {% endfor %}
 
 
 </body>

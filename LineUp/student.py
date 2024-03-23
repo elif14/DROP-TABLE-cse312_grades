@@ -1,9 +1,17 @@
 import json
+import queue
 
-from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app
+import flask
+from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
+    request, url_for
 from pymongo import MongoClient
 from LineUp import login
 import html
+
+from LineUp.ta import ta_bp, queue_page
+
+listDictOfStudents = []
+
 
 student_bp = Blueprint('student_bp', __name__,
                        template_folder='templates',
@@ -13,18 +21,23 @@ client = MongoClient("mongo")
 db = client["cse312-project"]
 student_queue = db['student_queue']
 
-@student_bp.route('/student', methods=["POST"])
+@student_bp.route('/student', methods=["GET", "POST"])
 def student_enqueue():
-    student_name = request.form.get("Name")
-    if student_queue.find_one({"student": student_name}) is None:
-        student = {"student": student_name, "dequeued": "False"}
-        student_queue.insert_one(student)
-    return redirect('/queue', code=302)
 
-@student_bp.route('/student-display', methods=["GET"])
-def student_display(): # need to figure out a way to access json
+    if flask.request.method == 'POST':
+        studentName = request.form.get("Name")
+        print("student enqueue test")
+        print(studentName)
+        if student_queue.find_one({"student": studentName}) is None:
+            student = {"student": studentName, "dequeued": "False"}
+            student_queue.insert_one(student)
+            listDictOfStudents.append(student)
+            listOfStudentNames= []
+            for i in listDictOfStudents:
+                listOfStudentNames.append(i.get("student"))
+            return redirect(url_for('ta_bp.queue_page', studentQ=listOfStudentNames))
 
-    return redirect('/queue', code=302)
+
 
 # MEMO to Alex and Chris
 # student_queue table should have at least 2 fields

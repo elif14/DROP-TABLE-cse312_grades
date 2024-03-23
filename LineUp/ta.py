@@ -16,12 +16,14 @@ ta_bp = Blueprint('ta_bp', __name__,
 
 @ta_bp.route('/queue')
 def queue_page():
-    response = render_template('queue.html')
     username = "Guest"
+    studentQ = request.args.getlist('studentQ')
+    print("this is a test")
+    print(studentQ)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
         username = login.get_username(auth_token)
-    response = render_template('queue.html', username=username)
+    response = render_template('queue.html', username=username, studentQ=studentQ)
     return response
 
 
