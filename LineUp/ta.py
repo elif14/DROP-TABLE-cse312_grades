@@ -18,8 +18,6 @@ ta_bp = Blueprint('ta_bp', __name__,
 def queue_page():
     username = "Guest"
     studentQ = request.args.getlist('studentQ')
-    print("this is a test")
-    print(studentQ)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
         username = login.get_username(auth_token)
