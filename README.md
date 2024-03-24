@@ -104,14 +104,14 @@ app.register_blueprint(example_bp)
 > - Set the HttpOnly directive on your cookie storing the authentication token.
 
 ### Objective 3: Making Interactive Posts
-- [ ] User can make a post
-    - [ ] Username must be displayed on that post
-        - [ ] **Server** verifies author and add their username to the post, not the frontend
+- [x] User can make a post
+    - [x] Username must be displayed on that post
+        - [x] **Server** verifies author and add their username to the post, not the frontend
     - [ ] Post must contain one more information
-    - [ ] Posts must be stored in a database
-- [ ] Guest can make a post
-    - [ ] Posts must be stored in a database
-- [ ] User can see all the posts when logged in
+    - [x] Posts must be stored in a database
+- [x] Guest can make a post
+    - [x] Posts must be stored in a database
+- [x] User can see all the posts when logged in
 - [ ] All authenticated users interact with each post 
     - [ ] in a way that takes their username and the specific post into account
     - [ ] Your server must verify the user who made the interaction and take their username into account in some way
