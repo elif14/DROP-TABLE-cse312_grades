@@ -24,9 +24,9 @@ def home():
     return response
 
 
-@user_bp.route('/static/style.css')
+@user_bp.route('/static/user.css')
 def sendStyle():
-    response = send_file('LineUp/static/style.css', mimetype='text/css')
+    response = send_file('LineUp/static/user.css', mimetype='text/css')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
