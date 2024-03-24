@@ -20,7 +20,7 @@ def queue_page():
     lstOfAllStudents = []
     allStudents = student_queue.find({})
     for eachStudent in allStudents:
-        if eachStudent["dequeued"] == "False":
+        if eachStudent["dequeued"] == False:
             lstOfAllStudents.append(eachStudent["student"])
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
@@ -55,7 +55,6 @@ def ta_display():
     for single_ta in tas:
         all_tas.append(single_ta["username"])
     needed_data = json.dumps(all_tas)
-    current_app.logger.info(needed_data)
     return jsonify(needed_data)
 
 
@@ -74,6 +73,7 @@ def ta_dequeue():
 
 @ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
-    name = request.path.split("/")[-1]
-    student_queue.update_one({"student": name}, {'$set': {"dequeue": True}})
-    pass
+    name = request.json['student_name']
+    current_app.logger.info(name)
+    student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
+    return redirect('/queue', code=302)
