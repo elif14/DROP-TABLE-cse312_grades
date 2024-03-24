@@ -27,15 +27,11 @@ function ta_display(){
 }
 
 function dequeue(item){//funciton to dequeue student, this is called by onclick button
-    const request = new XMLHttpRequest();  
-    console.log(item)
+    const request = new XMLHttpRequest();
     const name = item
+    console.log(name)
     const body = JSON.stringify({student_name: name});
-    request.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            console.log(this.response);
-        }
-    }
+    console.log(body)
     request.open("POST", "/dequeue_student");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(body);

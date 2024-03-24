@@ -36,8 +36,8 @@
 
 
     <h3> Queue: </h3>
-    {% for item in studentQ %}
-        <p><button id="{{ item }}" onclick=dequeue({{ item }})>X</button>{{ item }}</p>
+    {% for student in studentQ %}
+        <p><button id="{{ student }}" onclick="dequeue('{{ student }}')">X</button> {{ student }}</p>
     {% endfor %}
 
 
