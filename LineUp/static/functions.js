@@ -21,6 +21,7 @@ function ta_display(){
                 }
             }
         }
+        console.log(newArr)
         addNames(newArr)
     }
 }
