@@ -59,6 +59,11 @@ def ta_display():
     return jsonify(needed_data)
 
 
+
+
+#quick question, what do i when someone press the delete button?
+#im assuming /dequeue will call /dequeue_student if its authenticated?
+
 @ta_bp.route('/dequeue', methods=["POST"])
 def ta_dequeue():
     if 'auth_token' in request.cookies:
@@ -67,10 +72,8 @@ def ta_dequeue():
         on_duty.delete_one({"username": username})
     return redirect('/queue', code=302)
 
-
-@ta_bp.route('/dequeue_student', methods=["POST"])
+@ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
-    # CHANGE ME
-    put_student_name_here = ""
-    student_queue.update_one({"student": put_student_name_here}, {'$set': {"dequeue": True}})
+    name = request.path.split("/")[-1]
+    student_queue.update_one({"student": name}, {'$set': {"dequeue": True}})
     pass

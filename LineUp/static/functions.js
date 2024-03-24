@@ -31,3 +31,14 @@ function ta_display(){
         }
     }
 }
+
+function dequeue(name){//funciton to dequeue student, this is called by onclick button
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            console.log(this.response);
+        }
+    }
+    request.open("POST", "/dequeue_student" + name);//appends the name of tudnet to dequeue
+    request.send();
+}
