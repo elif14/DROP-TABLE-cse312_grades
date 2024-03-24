@@ -27,7 +27,7 @@ def student_enqueue():
     if flask.request.method == 'POST':
         studentName = request.form.get("Name")
         if student_queue.find_one({"student": studentName}) is None:
-            student = {"student": studentName, "dequeued": "False"}
+            student = {"student": studentName, "dequeued": False}
             student_queue.insert_one(student)
         return redirect(url_for('ta_bp.queue_page'))
 
