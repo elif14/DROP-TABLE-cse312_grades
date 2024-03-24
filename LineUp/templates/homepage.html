@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Line Up</title>
-    <link rel="stylesheet" type="text/css" href="/static/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/homepage.css"/>
 </head>
 <body onload="ta_display()">
     <script src="/static/functions.js"></script>
@@ -14,6 +14,9 @@
     {% endif %}
     <h1> TAs On Duty: </h1>
     <h2 id="ta_names"></h2>
+    <form action="/user" method="get">
+        <button onclick="submit">Register/Login</button>
+    </form>
     <form action="/queue" method="post">
         <button onclick="submit">On Duty</button>
     </form>
