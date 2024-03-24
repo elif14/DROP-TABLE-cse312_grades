@@ -107,17 +107,17 @@ app.register_blueprint(example_bp)
 - [x] User can make a post
     - [x] Username must be displayed on that post
         - [x] **Server** verifies author and add their username to the post, not the frontend
-    - [ ] Post must contain one more information
+    - [x] Post must contain one more information
     - [x] Posts must be stored in a database
 - [x] Guest can make a post
     - [x] Posts must be stored in a database
 - [x] User can see all the posts when logged in
-- [ ] All authenticated users interact with each post 
+- [x] All authenticated users interact with each post 
     - [ ] in a way that takes their username and the specific post into account
     - [ ] Your server must verify the user who made the interaction and take their username into account in some way
     - [ ] You must **escape any HTML** supplied by your users
-    - [ ] All interactions should be visible to **all authenticated** users
-    - [ ] Interaction must be made on a per-post basis
+    - [x] All interactions should be visible to **all authenticated** users
+    - [x] Interaction must be made on a per-post basis
 > [!WARNING]
 > - Verify that HTML is escaped in all user supplied strings.
 
