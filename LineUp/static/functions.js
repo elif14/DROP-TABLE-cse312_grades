@@ -34,11 +34,15 @@ function ta_display(){
 
 function dequeue(item){//funciton to dequeue student, this is called by onclick button
     const request = new XMLHttpRequest();
+    console.log(item.attributes.id)
+    const name = item.attributes.id.textContent
+    const body = JSON.stringify({student_name: name});
     request.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             console.log(this.response);
         }
     }
-    request.open("POST", "/dequeue_student" + item.name);//appends the name of tudnet to dequeue
-    request.send();
+    request.open("POST", "/dequeue_student");
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(body);
 }
