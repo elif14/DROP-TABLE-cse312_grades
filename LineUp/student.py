@@ -1,6 +1,6 @@
 import json
 import queue
-
+from datetime import datetime
 from flask import Blueprint, request, redirect, request, url_for
 from pymongo import MongoClient
 
@@ -17,9 +17,10 @@ student_queue = db['student_queue']
 
 @student_bp.route('/student', methods=["GET", "POST"])
 def student_enqueue():
-
+    date = datetime.now()
     if request.method == 'POST':
-        studentName = request.form.get("Name")
+        studentName = request.form.get("Name") + date.strftime(" %H:%M")
+        studentName = json.dumps(studentName)
         if student_queue.find_one({"student": studentName}) is None:
             student = {"student": studentName, "dequeued": False}
             student_queue.insert_one(student)
