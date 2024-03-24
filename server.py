@@ -32,4 +32,4 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(student_bp)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True, TEMPLATES_AUTO_RELOAD=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
