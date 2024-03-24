@@ -47,9 +47,11 @@ def logout():
     return response
 
 def user_exist(username: str):
-    if TA_collection.find({"username": username}) is not None:
+    if TA_collection.find_one({"username": username}):
+        current_app.logger.info("USER EXIST")
         return True
     else:
+        current_app.logger.info("USER DOES NOT EXIST")
         return False
     
 def correct_password(username, password):
