@@ -24,7 +24,7 @@ def queue_page():
             lstOfAllStudents.append(eachStudent["student"])
         elif eachStudent["dequeued"] == True:
             lstOfAllStudents.append(eachStudent["student"] + " has been helped")
-    current_app.logger.info(lstOfAllStudents)
+    #current_app.logger.info(lstOfAllStudents)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
         username = login.get_username(auth_token)
@@ -77,7 +77,9 @@ def ta_dequeue():
 
 @ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
-    name = request.json['student_name']
+    name = '"' + request.json['student_name'] + '"'
     current_app.logger.info(name)
     student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
+    user = student_queue.find_one({"student": name})
+    current_app.logger.info(user["dequeued"])
     return redirect('/', code=302)

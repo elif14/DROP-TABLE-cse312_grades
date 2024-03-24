@@ -27,9 +27,9 @@ function ta_display(){
 }
 
 function dequeue(item){//funciton to dequeue student, this is called by onclick button
-    const request = new XMLHttpRequest();
-    console.log(item.attributes.id)
-    const name = item.attributes.id.textContent
+    const request = new XMLHttpRequest();  
+    console.log(item)
+    const name = item
     const body = JSON.stringify({student_name: name});
     request.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
