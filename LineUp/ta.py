@@ -14,7 +14,7 @@ ta_bp = Blueprint('ta_bp', __name__,
     static_folder='static')
 
 
-@ta_bp.route('/queue')
+@ta_bp.route('/')
 def queue_page():
     username = "Guest"
     lstOfAllStudents = []
@@ -28,13 +28,13 @@ def queue_page():
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
         username = login.get_username(auth_token)
-    response = render_template('queue.html', username=username, studentQ=lstOfAllStudents)
+    response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents)
     return response
 
 
-@ta_bp.route('/static/queue.css')
+@ta_bp.route('/static/homepage.css')
 def queue_style():
-    response = send_file('LineUp/static/queue.css', mimetype='text/css')
+    response = send_file('LineUp/static/homepage.css', mimetype='text/css')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
@@ -48,7 +48,7 @@ def ta_enqueue():
         if on_duty.find_one({"username": username}) is None:
             TA = {"username": username}
             on_duty.insert_one(TA)
-    return redirect('/queue', code=302)
+    return redirect('/', code=302)
 
 
 @ta_bp.route('/ta_display', methods=["GET"])
@@ -72,11 +72,11 @@ def ta_dequeue():
         auth_token = request.cookies["auth_token"]
         username = login.get_username(auth_token)
         on_duty.delete_one({"username": username})
-    return redirect('/queue', code=302)
+    return redirect('/', code=302)
 
 @ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
     name = request.json['student_name']
     current_app.logger.info(name)
     student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
-    return redirect('/queue', code=302)
+    return redirect('/', code=302)

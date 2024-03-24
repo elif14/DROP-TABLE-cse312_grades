@@ -1,14 +1,8 @@
 import json
 import queue
 
-import flask
-from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
-    request, url_for
+from flask import Blueprint, request, redirect, request, url_for
 from pymongo import MongoClient
-from LineUp import login
-import html
-
-from LineUp.ta import ta_bp, queue_page
 
 listDictOfStudents = []
 
@@ -24,7 +18,7 @@ student_queue = db['student_queue']
 @student_bp.route('/student', methods=["GET", "POST"])
 def student_enqueue():
 
-    if flask.request.method == 'POST':
+    if request.method == 'POST':
         studentName = request.form.get("Name")
         if student_queue.find_one({"student": studentName}) is None:
             student = {"student": studentName, "dequeued": False}
