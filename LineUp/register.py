@@ -12,8 +12,6 @@ client = MongoClient("mongo")
 db = client["cse312-project"]
 TA_collection = db['TA_collection']
 
-homepage = '/'
-
 
 @register_bp.route('/register', methods=["POST"])
 def register():
@@ -25,9 +23,9 @@ def register():
     # if not password_check(password):
     #     return "password must be of length 10 with at least 1 number, lowercase letter, and uppercase letter."
     if password != confirmPassword:
-        return redirect(homepage, code=302)
+        return redirect('/user', code=302)
     if TA_collection.find_one({"username": username}) is not None:
-        return redirect(homepage, code=302)
+        return redirect('/user', code=302)
     # salt/hash password, and store in DB
     salt = bcrypt.gensalt()
     password = bcrypt.hashpw(password.encode(), salt)
@@ -35,8 +33,7 @@ def register():
             "salt": salt, 
             "hashed_password": password}
     TA_collection.insert_one(user)
-    # return back to homepage
-    return redirect(homepage, code=302)
+    return redirect('/user', code=302)
 
 
 def password_check(password: str):
