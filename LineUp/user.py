@@ -47,3 +47,9 @@ def sendImage():
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
 
+@user_bp.route('/static/picture.jpg')
+def sendPicture():
+    response = send_file('LineUp/static/picture.jpg', mimetype='image/jpeg')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
