@@ -4,30 +4,24 @@ function ta_display(){
     const request = new XMLHttpRequest();
     request.open("GET", '/ta_display');
     request.send();
+    let newArr = []
     request.onload = () => {
         if(request.readyState == 4 && request.status == 200){
             const response = request.response
-            let data_needed = JSON.parse(response)
-            let needed_name = ""
-            let new_arr = []
-            for (let single_char of data_needed){
-                if (single_char == ' ' || single_char == ']'){
-                    new_arr.push(needed_name)
-                    needed_name = ""
-                }
-                else if (single_char !== '['
-                    && single_char !== '"'
-                    && single_char !== ','){
-                    needed_name += single_char
+            let dataNeeded = JSON.parse(response)
+            let neededName = ""
+            for (let singleChar of dataNeeded) {
+                if (singleChar == ' ' || singleChar == ']') {
+                    newArr.push(neededName)
+                    neededName = ""
+                } else if (singleChar !== '['
+                    && singleChar !== '"'
+                    && singleChar !== ',') {
+                    neededName += singleChar
                 }
             }
-            let all_names = ""
-            for (const name of new_arr){
-                const singleName = name + " "
-                all_names += singleName
-            }
-            document.getElementById("ta_names").innerHTML = all_names
         }
+        addNames(newArr)
     }
 }
 
@@ -44,4 +38,16 @@ function dequeue(item){//funciton to dequeue student, this is called by onclick 
     request.open("POST", "/dequeue_student");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(body);
+}
+
+function addNames(taNames){
+    let elementNum = 3
+    const currElem = document.getElementById("ta_names")
+    for (const name of taNames){
+        let newElemID = "h" + elementNum.toString()
+        const newElem = document.createElement(newElemID)
+        const newName = document.createTextNode(name)
+        newElem.appendChild(newName)
+        document.body.insertBefore(newElem, currElem)
+    }
 }
