@@ -26,7 +26,6 @@ function ta_display(){
                 const singleName = name + " "
                 all_names += singleName
             }
-            console.log(all_names)
             document.getElementById("ta_names").innerHTML = all_names
         }
     }

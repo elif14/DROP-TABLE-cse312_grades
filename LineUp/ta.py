@@ -22,6 +22,9 @@ def queue_page():
     for eachStudent in allStudents:
         if eachStudent["dequeued"] == False:
             lstOfAllStudents.append(eachStudent["student"])
+        elif eachStudent["dequeued"] == True:
+            lstOfAllStudents.append(eachStudent["student"] + " has been helped")
+    current_app.logger.info(lstOfAllStudents)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
         username = login.get_username(auth_token)
