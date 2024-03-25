@@ -48,7 +48,7 @@
 
     <h4> TA Chat </h4>
     {% for chat in TA_chat %}
-        <p> {{ chat }} </p>
+        <p><button id ="{{ chat }}" onclick="delete_chat('{{ chat }}')">X</button> {{ chat }}</p>
     {% endfor %}
 
 
