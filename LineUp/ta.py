@@ -30,10 +30,7 @@ def queue_page():
     #current_app.logger.info(lstOfAllStudents)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
-        hash_obj = hashlib.sha256()
-        hash_obj.update(auth_token.encode())
-        needed_token = hash_obj.hexdigest()
-        if TA_collection.find_one({"auth_token": needed_token}):
+        if user_exist(auth_token):
             username = login.get_username(auth_token)
     response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents)
     return response
@@ -51,10 +48,11 @@ def queue_style():
 def ta_enqueue():
     if 'auth_token' in request.cookies:
         auth_token = request.cookies["auth_token"]
-        username = login.get_username(auth_token)
-        if on_duty.find_one({"username": username}) is None:
-            TA = {"username": username}
-            on_duty.insert_one(TA)
+        if user_exist(auth_token):
+            username = login.get_username(auth_token)
+            if on_duty.find_one({"username": username}) is None:
+                TA = {"username": username}
+                on_duty.insert_one(TA)
     return redirect('/', code=302)
 
 
@@ -78,8 +76,9 @@ def ta_display():
 def ta_dequeue():
     if 'auth_token' in request.cookies:
         auth_token = request.cookies["auth_token"]
-        username = login.get_username(auth_token)
-        on_duty.delete_one({"username": username})
+        if user_exist(auth_token):
+            username = login.get_username(auth_token)
+            on_duty.delete_one({"username": username})
     return redirect('/', code=302)
 
 @ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
@@ -91,3 +90,13 @@ def student_dequeue():
     student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
     print(student_queue.find_one({"student": name}))
     return redirect('/', code=302)
+
+
+def user_exist(auth_token):
+    hash_obj = hashlib.sha256()
+    hash_obj.update(auth_token.encode())
+    needed_token = hash_obj.hexdigest()
+    if TA_collection.find_one({"auth_token": needed_token}):
+        return True
+    else:
+        return False
