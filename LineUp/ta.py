@@ -138,12 +138,10 @@ def removeChat():
             hash_obj.digest()
             hash_token = hash_obj.hexdigest()
             if TA_collection.find_one({"auth_token": hash_token}) is not None:
-                print(TA_collection.find_one({"auth_token": hash_token}))
                 TA_name = TA_collection.find_one({"auth_token": hash_token})["username"]
                 TA_chat_search = TA_chat_collection.find_one({"chat": name})
                 TA_name_in_chat = TA_chat_search.get("chat").split(":")[0]
                 if TA_name_in_chat == TA_name:
-                    print(name)
                     TA_chat_collection.update_one({"chat": name}, {'$set': {"removed": True}})
     return redirect('/', code=302)
 
