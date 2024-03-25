@@ -32,6 +32,7 @@
             <input id="student" type="text" name="Name">
         </label>
     </form>
+    <br>
     <form action="/TA-chat" method="POST">
         <label>
             TA Chat:
@@ -46,9 +47,9 @@
         <p><button id="{{ student }}" onclick="dequeue('{{ student }}')">X</button> {{ student }}</p>
     {% endfor %}
 
-    <h4> TA Chat </h4>
+    <h4> TA Announcements </h4>
     {% for chat in TA_chat %}
-        <p> {{ chat }} </p>
+        <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
     {% endfor %}
 
 

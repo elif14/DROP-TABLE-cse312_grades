@@ -33,7 +33,8 @@ def queue_page():
             lstOfAllStudents.append(eachStudent["student"] + " has been helped")
     all_TA_chats = TA_chat_collection.find({})
     for each_chat in all_TA_chats:
-        lstOfAllTAChats.append(each_chat.get("chat"))
+        if each_chat.get("removed") is False:
+            lstOfAllTAChats.append(each_chat.get("chat"))
     #current_app.logger.info(lstOfAllStudents)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
@@ -86,7 +87,7 @@ def TA_chat():
                     print(TA_collection.find_one({"auth_token": hash_token}))
                     TA_info = TA_collection.find({"auth_token": hash_token})[0]
                     if TA_info is not None:
-                        TA_chat = {"chat": TA_info["username"] + ": " + htmlescape(request.form.get("TA-chat"))}
+                        TA_chat = {"chat": TA_info["username"] + ": " + htmlescape(request.form.get("TA-chat")), "removed": False}
                         TA_chat_collection.insert_one(TA_chat)
         return redirect(url_for('ta_bp.queue_page'))
 
@@ -116,6 +117,26 @@ def student_dequeue():
         auth_token = request.cookies["auth_token"]
         if user_exist(auth_token):
             student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
+    return redirect('/', code=302)
+
+@ta_bp.route('/remove_TA_chat', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
+def removeChat():
+    name = request.json['chat']
+    if 'auth_token' in request.cookies:
+        curr_auth = request.cookies.get("auth_token")
+        if curr_auth is not None:
+            hash_obj = hashlib.sha256()
+            hash_obj.update(curr_auth.encode())
+            hash_obj.digest()
+            hash_token = hash_obj.hexdigest()
+            if TA_collection.find_one({"auth_token": hash_token}) is not None:
+                print(TA_collection.find_one({"auth_token": hash_token}))
+                TA_name = TA_collection.find_one({"auth_token": hash_token})["username"]
+                TA_chat_search = TA_chat_collection.find_one({"chat": name})
+                TA_name_in_chat = TA_chat_search.get("chat").split(":")[0]
+                if TA_name_in_chat == TA_name:
+                    print(name)
+                    TA_chat_collection.update_one({"chat": name}, {'$set': {"removed": True}})
     return redirect('/', code=302)
 
 

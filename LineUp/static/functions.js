@@ -37,6 +37,16 @@ function dequeue(studentName){//funciton to dequeue student, this is called by o
     request.send(body);
 }
 
+function dequeueChat(chatMessage){//funciton to dequeue student, this is called by onclick button
+    const request = new XMLHttpRequest();
+    console.log(chatMessage)
+    const body = JSON.stringify({chat: chatMessage});
+    console.log(body)
+    request.open("POST", "/remove_TA_chat");
+    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    request.send(body);
+}
+
 function addNames(taNames){
     let elementNum = 3
     const currElem = document.getElementById("ta_names")
