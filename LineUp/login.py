@@ -6,6 +6,7 @@ from pymongo import MongoClient
 import bcrypt
 import hashlib
 import string
+import html
 import random
 
 
@@ -20,8 +21,8 @@ TA_collection = db['TA_collection']
 
 @login_bp.route('/login', methods=["POST"])
 def login():
-    username = htmlescape(request.form.get("login_username"))
-    password = htmlescape(request.form.get("login_password"))
+    username = html.escape(request.form.get("login_username"))
+    password = html.escape(request.form.get("login_password"))
     if user_exist(username) and correct_password(username, password):
         auth_token = create_auth_token(username)
         response = make_response(redirect('/', code=302))

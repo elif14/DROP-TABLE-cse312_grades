@@ -93,7 +93,7 @@ def TA_chat():
                     print(TA_collection.find_one({"auth_token": hash_token}))
                     TA_info = TA_collection.find({"auth_token": hash_token})[0]
                     if TA_info is not None:
-                        TA_chat = {"chat": TA_info["username"] + ": " + htmlescape(request.form.get("TA-chat")), "removed": False}
+                        TA_chat = {"chat": TA_info["username"] + ": " + html.escape(request.form.get("TA-chat")), "removed": False}
                         TA_chat_collection.insert_one(TA_chat)
         response = make_response(redirect(url_for('ta_bp.queue_page')))
         response.headers["X-Content-Type-Options"] = "nosniff"
