@@ -20,10 +20,11 @@ student_queue = db['student_queue']
 def student_enqueue():
     date = datetime.now()
     if request.method == 'POST':
-        studentName = htmlescape(request.form.get("Name")) + date.strftime(" %H:%M")
-        if student_queue.find_one({"student": studentName}) is None:
-            student = {"student": studentName, "dequeued": False}
-            student_queue.insert_one(student)
+        if (request.form.get("Name").isalnum()):
+            studentName = htmlescape(request.form.get("Name")) + date.strftime(" %H:%M")
+            if student_queue.find_one({"student": studentName}) is None:
+                student = {"student": studentName, "dequeued": False}
+                student_queue.insert_one(student)
         return redirect(url_for('ta_bp.queue_page'))
 
 def htmlescape(word):
