@@ -1,7 +1,7 @@
 import html
 import json
 from datetime import datetime, timedelta
-from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app
+from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, url_for
 from pymongo import MongoClient
 from LineUp import login
 import hashlib
@@ -13,6 +13,7 @@ db = client["cse312-project"]
 on_duty = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
+TA_chat_collection = db['TA_chat_collection']
 
 ta_bp = Blueprint('ta_bp', __name__,
     template_folder='templates',
@@ -23,18 +24,22 @@ ta_bp = Blueprint('ta_bp', __name__,
 def queue_page():
     username = "Guest"
     lstOfAllStudents = []
+    lstOfAllTAChats = []
     allStudents = student_queue.find({})
     for eachStudent in allStudents:
         if eachStudent["dequeued"] == False:
             lstOfAllStudents.append(eachStudent["student"])
         elif eachStudent["dequeued"] == True:
             lstOfAllStudents.append(eachStudent["student"] + " has been helped")
+    all_TA_chats = TA_chat_collection.find({})
+    for each_chat in all_TA_chats:
+        lstOfAllTAChats.append(each_chat.get("chat"))
     #current_app.logger.info(lstOfAllStudents)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
         if user_exist(auth_token):
             username = login.get_username(auth_token)
-    response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents)
+    response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents, TA_chat=lstOfAllTAChats)
     return response
 
 
@@ -67,8 +72,30 @@ def ta_display():
     needed_data = json.dumps(all_tas)
     return jsonify(needed_data)
 
+@ta_bp.route('/TA-chat', methods=["GET", "POST"])
+def TA_chat():
+    if request.method == 'POST':
+        if (request.form.get("TA-chat").isalnum()):
+            curr_auth = request.cookies.get("auth_token")
+            if curr_auth is not None:
+                hash_obj = hashlib.sha256()
+                hash_obj.update(curr_auth.encode())
+                hash_obj.digest()
+                hash_token = hash_obj.hexdigest()
+                if TA_collection.find_one({"auth_token": hash_token}) is not None:
+                    print(TA_collection.find_one({"auth_token": hash_token}))
+                    TA_info = TA_collection.find({"auth_token": hash_token})[0]
+                    if TA_info is not None:
+                        TA_chat = {"chat": TA_info["username"] + ": " + htmlescape(request.form.get("TA-chat"))}
+                        TA_chat_collection.insert_one(TA_chat)
+        return redirect(url_for('ta_bp.queue_page'))
 
 
+def htmlescape(word):
+    word = word.replace('&', '&amp')
+    word = word.replace('<', '&lt')
+    word = word.replace('>', '&gt')
+    return word
 
 #quick question, what do i when someone press the delete button?
 #im assuming /dequeue will call /dequeue_student if its authenticated?

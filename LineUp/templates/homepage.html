@@ -32,12 +32,23 @@
             <input id="student" type="text" name="Name">
         </label>
     </form>
+    <form action="/TA-chat" method="POST">
+        <label>
+            TA Chat:
+            <input id="TA-chat" type="text" name="TA-chat">
+        </label>
+    </form>
     <h2 id="student_names"></h2>
 
 
     <h3> Queue: </h3>
     {% for student in studentQ %}
         <p><button id="{{ student }}" onclick="dequeue('{{ student }}')">X</button> {{ student }}</p>
+    {% endfor %}
+
+    <h4> TA Chat </h4>
+    {% for chat in TA_chat %}
+        <p> {{ chat }} </p>
     {% endfor %}
 
 
