@@ -1,10 +1,12 @@
 import html
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app
 from pymongo import MongoClient
 from LineUp import login
 import hashlib
+import datetime
+
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
@@ -60,9 +62,8 @@ def ta_enqueue():
 def ta_display():
     tas = on_duty.find({}, {'_id': 0})
     all_tas = []
-    date = datetime.now()
     for single_ta in tas:
-        all_tas.append(single_ta["username"] + "(" + date.strftime("%d/%m/%y") + ")")
+        all_tas.append(single_ta["username"] + "(" + str(datetime.date.today() - timedelta(days=1)) + ")")
     needed_data = json.dumps(all_tas)
     return jsonify(needed_data)
 
