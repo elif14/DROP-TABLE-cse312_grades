@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, make_response, send_file, request
 from pymongo import MongoClient
 from LineUp import login
+from LineUp import ta
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
@@ -17,7 +18,8 @@ def home():
     username = "Student"
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
-        username = login.get_username(auth_token)
+        if ta.user_exist(auth_token):
+            username = login.get_username(auth_token)
     response = render_template('user.html', username = username)
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
