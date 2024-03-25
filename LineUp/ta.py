@@ -4,11 +4,13 @@ from datetime import datetime
 from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app
 from pymongo import MongoClient
 from LineUp import login
+import hashlib
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
 on_duty = db['on_duty']
 student_queue = db['student_queue']
+TA_collection = db['TA_collection']
 
 ta_bp = Blueprint('ta_bp', __name__,
     template_folder='templates',
@@ -28,7 +30,11 @@ def queue_page():
     #current_app.logger.info(lstOfAllStudents)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
-        username = login.get_username(auth_token)
+        hash_obj = hashlib.sha256()
+        hash_obj.update(auth_token.encode())
+        needed_token = hash_obj.hexdigest()
+        if TA_collection.find_one({"auth_token": needed_token}):
+            username = login.get_username(auth_token)
     response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents)
     return response
 
@@ -79,5 +85,9 @@ def ta_dequeue():
 @ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
     name = request.json['student_name']
+    print("TEST")
+    print(name)
+    print("<p> cooll <\p> 23:42")
     student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
+    print(student_queue.find_one({"student": name}))
     return redirect('/', code=302)
