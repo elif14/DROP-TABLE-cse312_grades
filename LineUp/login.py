@@ -1,3 +1,5 @@
+import secrets
+
 from flask import Blueprint, request, redirect, current_app, make_response
 from pymongo import MongoClient
 
@@ -74,7 +76,7 @@ def get_username(auth_token):
         return user["username"]
 
 def create_auth_token(username):
-    auth_token = "".join(random.choices(string.ascii_letters + string.digits, k=20))
+    auth_token = secrets.token_urlsafe(80)
     hash_obj = hashlib.sha256()
     hash_obj.update(auth_token.encode())
     needed_token = hash_obj.hexdigest()
