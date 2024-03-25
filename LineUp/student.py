@@ -29,7 +29,7 @@ def student_enqueue():
 
 def htmlescape(word):
     word = word.replace('&', '&amp')
-    word = word.repalce('<', '&lt')
+    word = word.replace('<', '&lt')
     word = word.replace('>', '&gt')
     return word
 
