@@ -40,6 +40,7 @@ def queue_page():
         if user_exist(auth_token):
             username = login.get_username(auth_token)
     response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents, TA_chat=lstOfAllTAChats)
+    response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
 
