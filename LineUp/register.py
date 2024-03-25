@@ -3,6 +3,7 @@ from flask import Blueprint, request, redirect
 from pymongo import MongoClient
 import bcrypt
 
+
 register_bp = Blueprint('register_bp', __name__,
     template_folder='templates',
     static_folder='static')
@@ -16,9 +17,9 @@ TA_collection = db['TA_collection']
 @register_bp.route('/register', methods=["POST"])
 def register():
     # get the form data
-    username = request.form.get("username")
-    password = request.form.get("password")
-    confirmPassword = request.form.get("confirmPassword")
+    username = htmlescape(request.form.get("username"))
+    password = htmlescape(request.form.get("password"))
+    confirmPassword = htmlescape(request.form.get("confirmPassword"))
     # check if the password match
     # if not password_check(password):
     #     return "password must be of length 10 with at least 1 number, lowercase letter, and uppercase letter."
@@ -35,6 +36,11 @@ def register():
     TA_collection.insert_one(user)
     return redirect('/user', code=302)
 
+def htmlescape(word):
+    word = word.replace('&', '&amp')
+    word = word.repalce('<', '&lt')
+    word = word.replace('>', '&gt')
+    return word
 
 def password_check(password: str):
     if len(password) < 10:
