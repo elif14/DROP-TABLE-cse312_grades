@@ -60,7 +60,9 @@ def ta_enqueue():
             if on_duty.find_one({"username": username}) is None:
                 TA = {"username": username}
                 on_duty.insert_one(TA)
-    return redirect('/', code=302)
+    response = redirect('/', code=302)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
 
 
 @ta_bp.route('/ta_display', methods=["GET"])
@@ -88,7 +90,9 @@ def TA_chat():
                     if TA_info is not None:
                         TA_chat = {"chat": TA_info["username"] + ": " + htmlescape(request.form.get("TA-chat"))}
                         TA_chat_collection.insert_one(TA_chat)
-        return redirect(url_for('ta_bp.queue_page'))
+        response = redirect(url_for('ta_bp.queue_page'))
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
 
 
 def htmlescape(word):
@@ -107,7 +111,9 @@ def ta_dequeue():
         if user_exist(auth_token):
             username = login.get_username(auth_token)
             on_duty.delete_one({"username": username})
-    return redirect('/', code=302)
+    response = redirect('/', code=302)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
 
 @ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
@@ -116,7 +122,9 @@ def student_dequeue():
         auth_token = request.cookies["auth_token"]
         if user_exist(auth_token):
             student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
-    return redirect('/', code=302)
+    response = redirect('/', code=302)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
 
 
 def user_exist(auth_token):

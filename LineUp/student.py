@@ -25,7 +25,9 @@ def student_enqueue():
             if student_queue.find_one({"student": studentName}) is None:
                 student = {"student": studentName, "dequeued": False}
                 student_queue.insert_one(student)
-        return redirect(url_for('ta_bp.queue_page'))
+        response = redirect(url_for('ta_bp.queue_page'))
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
 
 def htmlescape(word):
     word = word.replace('&', '&amp')
