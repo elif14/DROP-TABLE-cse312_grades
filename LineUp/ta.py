@@ -63,7 +63,7 @@ def ta_enqueue():
             if on_duty.find_one({"username": username}) is None:
                 TA = {"username": username}
                 on_duty.insert_one(TA)
-    response = redirect('/', code=302)
+    response = make_response(redirect('/', code=302))
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
@@ -75,7 +75,9 @@ def ta_display():
     for single_ta in tas:
         all_tas.append(single_ta["username"] + "(" + str(datetime.date.today() - timedelta(days=1)) + ")")
     needed_data = json.dumps(all_tas)
-    return jsonify(needed_data)
+    response = make_response(jsonify(needed_data))
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
 
 @ta_bp.route('/TA-chat', methods=["GET", "POST"])
 def TA_chat():
@@ -93,7 +95,7 @@ def TA_chat():
                     if TA_info is not None:
                         TA_chat = {"chat": TA_info["username"] + ": " + htmlescape(request.form.get("TA-chat")), "removed": False}
                         TA_chat_collection.insert_one(TA_chat)
-        response = redirect(url_for('ta_bp.queue_page'))
+        response = make_response(redirect(url_for('ta_bp.queue_page')))
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
@@ -114,7 +116,7 @@ def ta_dequeue():
         if user_exist(auth_token):
             username = login.get_username(auth_token)
             on_duty.delete_one({"username": username})
-    response = redirect('/', code=302)
+    response = make_response(redirect('/', code=302))
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
@@ -125,7 +127,7 @@ def student_dequeue():
         auth_token = request.cookies["auth_token"]
         if user_exist(auth_token):
             student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
-    response = redirect('/', code=302)
+    response = make_response(redirect('/', code=302))
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
@@ -145,7 +147,9 @@ def removeChat():
                 TA_name_in_chat = TA_chat_search.get("chat").split(":")[0]
                 if TA_name_in_chat == TA_name:
                     TA_chat_collection.update_one({"chat": name}, {'$set': {"removed": True}})
-    return redirect('/', code=302)
+    response = make_response(redirect('/', code=302))
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
 
 
 def user_exist(auth_token):

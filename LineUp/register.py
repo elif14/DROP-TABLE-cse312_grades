@@ -1,5 +1,5 @@
 import string
-from flask import Blueprint, request, redirect
+from flask import Blueprint, request, redirect, make_response
 from pymongo import MongoClient
 import bcrypt
 
@@ -34,7 +34,7 @@ def register():
             "salt": salt, 
             "hashed_password": password}
     TA_collection.insert_one(user)
-    response = redirect('/user', code=302)
+    response = make_response(redirect('/user', code=302))
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 

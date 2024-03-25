@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, current_app
+from flask import Blueprint, request, redirect, current_app, make_response
 from pymongo import MongoClient
 
 import bcrypt
@@ -22,13 +22,15 @@ def login():
     password = htmlescape(request.form.get("login_password"))
     if user_exist(username) and correct_password(username, password):
         auth_token = create_auth_token(username)
-        response = redirect('/', code=302)
+        response = make_response(redirect('/', code=302))
         response.set_cookie("auth_token", value=auth_token, max_age=3600, httponly=True)
         response.headers["X-Content-Type-Options"] = "no-sniff"
         return response
     else:
         # maybe redirect them to wrong password or error page
-        return redirect('/user', code=302)
+        response = make_response(redirect('/user', code=302))
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
 
 @login_bp.route('/logout', methods=["POST"])
 def logout():
@@ -43,7 +45,7 @@ def logout():
         # probably what's of objectID type
         new_user = str(info["username"])
     new_auth = create_auth_token(new_user)
-    response = redirect("/", code=302)
+    response = make_response(redirect("/", code=302))
     response.delete_cookie("auth_token", path="/", domain=None)
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
