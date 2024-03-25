@@ -79,9 +79,5 @@ def ta_dequeue():
 @ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
     name = request.json['student_name']
-    print("TEST")
-    print(name)
-    print("<p> cooll <\p> 23:42")
     student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
-    print(student_queue.find_one({"student": name}))
     return redirect('/', code=302)
