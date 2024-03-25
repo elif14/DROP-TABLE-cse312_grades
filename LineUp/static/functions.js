@@ -26,9 +26,9 @@ function ta_display(){
     }
 }
 
-function dequeue(item){//funciton to dequeue student, this is called by onclick button
+function dequeue(studentName){//funciton to dequeue student, this is called by onclick button
     const request = new XMLHttpRequest();
-    const name = item
+    const name = studentName
     console.log(name)
     const body = JSON.stringify({student_name: name});
     console.log(body)

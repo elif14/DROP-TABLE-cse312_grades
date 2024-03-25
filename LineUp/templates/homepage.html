@@ -40,6 +40,19 @@
         <p><button id="{{ student }}" onclick="dequeue('{{ student }}')">X</button> {{ student }}</p>
     {% endfor %}
 
+    <script>
+        function dequeue(studentName){//funciton to dequeue student, this is called by onclick button
+            const request = new XMLHttpRequest();
+            const name = studentName
+            console.log(name)
+            const body = JSON.stringify({student_name: name});
+            console.log(body)
+            request.open("POST", "/dequeue_student");
+            request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            request.send(body);
+        }
+    </script>
+
 
 </body>
 </html>
