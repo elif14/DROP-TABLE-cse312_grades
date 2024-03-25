@@ -34,7 +34,9 @@ def register():
             "salt": salt, 
             "hashed_password": password}
     TA_collection.insert_one(user)
-    return redirect('/user', code=302)
+    response = redirect('/user', code=302)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
 
 def htmlescape(word):
     word = word.replace('&', '&amp')
