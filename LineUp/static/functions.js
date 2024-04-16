@@ -21,16 +21,17 @@ function updateTAChat() {
     request.send();
 }
 
-function chatMessageHTML(messageJSON) {
-    const username = messageJSON.username;
-    const message = messageJSON.message;
-    return "<b>" + username + "</b>: " + message;
+function chatMessageHTML(chatJSON) {
+    const username = chatJSON.username;
+    const chatMessage = chatJSON.message;
+    return "<b>" + username + "</b>: " + chatMessage;
 }
 
 function clearTAChat() {
     const chatMessages = document.getElementById("TA-chat");
     chatMessages.innerHTML = "";
 }
+
 function addMessageToChat(messageJSON) {
     const chatMessages = document.getElementById("TA-chat");
     chatMessages.innerHTML += chatMessageHTML(messageJSON);
