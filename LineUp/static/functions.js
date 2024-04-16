@@ -31,7 +31,6 @@ function clearTAChat() {
     const chatMessages = document.getElementById("TA-chat");
     chatMessages.innerHTML = "";
 }
-//comment to create branch
 function addMessageToChat(messageJSON) {
     const chatMessages = document.getElementById("TA-chat");
     chatMessages.innerHTML += chatMessageHTML(messageJSON);
