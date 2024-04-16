@@ -99,13 +99,6 @@ def TA_chat():
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
-
-def htmlescape(word):
-    word = word.replace('&', '&amp')
-    word = word.replace('<', '&lt')
-    word = word.replace('>', '&gt')
-    return word
-
 #quick question, what do i when someone press the delete button?
 #im assuming /dequeue will call /dequeue_student if its authenticated?
 

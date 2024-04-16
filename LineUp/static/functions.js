@@ -6,8 +6,45 @@ function initWS() {
     }
 }
 
+function updateTAChat() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            clearTAChat();
+            const messages = JSON.parse(this.response);
+            for (const message of messages) {
+                addMessageToChat(message);
+            }
+        }
+    }
+    request.open("GET", "/TA-chat");
+    request.send();
+}
+
+function chatMessageHTML(messageJSON) {
+    const username = messageJSON.username;
+    const message = messageJSON.message;
+    return "<b>" + username + "</b>: " + message;
+}
+
+function clearTAChat() {
+    const chatMessages = document.getElementById("TA-chat");
+    chatMessages.innerHTML = "";
+}
+
+function addMessageToChat(messageJSON) {
+    const chatMessages = document.getElementById("TA-chat");
+    chatMessages.innerHTML += chatMessageHTML(messageJSON);
+}
+
 function ta_display(){
     initWS();
+    document.addEventListener("keypress", function (event) {
+        if (event.code === "Enter") {
+            updateTAChat();
+        }
+    });
+
     const request = new XMLHttpRequest();
     request.open("GET", '/ta_display');
     request.send();
