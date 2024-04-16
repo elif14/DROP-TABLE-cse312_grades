@@ -1,6 +1,13 @@
+function initWS() {
+    socket = new WebSocket('ws://' + window.location.host + '/websocket');
+    socket.onmessage = function (ws_message) {
+        const message = JSON.parse(ws_message.data);
+        addMessageToChat(message);
+    }
+}
 
 function ta_display(){
-
+    initWS();
     const request = new XMLHttpRequest();
     request.open("GET", '/ta_display');
     request.send();
