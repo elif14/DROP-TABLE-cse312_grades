@@ -3,43 +3,29 @@ function initWS() {
         transports: ['websocket']
     });
 
-    socket.on('open', function() {
+    socket.on('connect', function() {
+        clearTAChat();
+        socket.emit('TA-chat');
         console.log('connected to websocket');
     });
 
-    socket.on('closed', function() {
+    socket.on('disconnect', function() {
         console.log('No longer connected to websocket');
     });
 
-    socket.on('TAChat', function(chat) {
+    socket.on('TA-chat', function(chat) {
         console.log('message: ', chat);
         addMessageToChat(chat);
     });
 }
 
-
-function updateTAChat() {
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            clearTAChat();
-            const messages = JSON.parse(this.response);
-            for (const message of messages) {
-                addMessageToChat(message);
-            }
-        }
-    }
-    request.open("GET", "/TA-chat");
-    request.send();
-}
-
 function clearTAChat() {
-    const chatMessages = document.getElementById("TA-chat");
+    const chatMessages = document.getElementById("TA-Announcements");
     chatMessages.innerHTML = "";
 }
 
 function addMessageToChat(chatJSON) {
-    const chatMessages = document.getElementById("TA-chat");
+    const chatMessages = document.getElementById("TA-Announcements");
     const username = chatJSON.username;
     const chatMessage = chatJSON.message;
     chatMessages.innerHTML += "<b>" + username + "</b>: " + chatMessage;
@@ -47,7 +33,6 @@ function addMessageToChat(chatJSON) {
 
 function ta_display(){
     initWS();
-    updateTAChat();
 
     const request = new XMLHttpRequest();
     request.open("GET", '/ta_display');
