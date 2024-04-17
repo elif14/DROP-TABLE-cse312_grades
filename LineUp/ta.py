@@ -7,7 +7,7 @@ from pymongo import MongoClient
 from LineUp import login
 import hashlib
 import datetime
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 client = MongoClient("mongo")
@@ -16,7 +16,7 @@ on_duty = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
-socketio = SocketIO(app)
+socketio = SocketIO(app, transports=['websocket'])
 
 ta_bp = Blueprint('ta_bp', __name__,
                   template_folder='templates',
@@ -85,25 +85,24 @@ def ta_display():
 
 @ta_bp.route('/TA-chat', methods=["GET", "POST"])
 def TA_chat():
-    # without websockets
-    # if request.method == 'POST':
-    #     if (request.form.get("TA-chat").isalnum()):
-    #         curr_auth = request.cookies.get("auth_token")
-    #         if curr_auth is not None:
-    #             hash_obj = hashlib.sha256()
-    #             hash_obj.update(curr_auth.encode())
-    #             hash_obj.digest()
-    #             hash_token = hash_obj.hexdigest()
-    #             if TA_collection.find_one({"auth_token": hash_token}) is not None:
-    #                 print(TA_collection.find_one({"auth_token": hash_token}))
-    #                 TA_info = TA_collection.find({"auth_token": hash_token})[0]
-    #                 if TA_info is not None:
-    #                     TA_chat = {"chat": TA_info["username"] + ": " + html.escape(request.form.get("TA-chat")),
-    #                                "removed": False}
-    #                     TA_chat_collection.insert_one(TA_chat)
-    #     response = make_response(redirect(url_for('ta_bp.queue_page')))
-    #     response.headers["X-Content-Type-Options"] = "nosniff"
-    #     return response
+    if request.method == 'POST':
+        if (request.form.get("TA-chat").isalnum()):
+            curr_auth = request.cookies.get("auth_token")
+            if curr_auth is not None:
+                hash_obj = hashlib.sha256()
+                hash_obj.update(curr_auth.encode())
+                hash_obj.digest()
+                hash_token = hash_obj.hexdigest()
+                if TA_collection.find_one({"auth_token": hash_token}) is not None:
+                    print(TA_collection.find_one({"auth_token": hash_token}))
+                    TA_info = TA_collection.find({"auth_token": hash_token})[0]
+                    if TA_info is not None:
+                        TA_chat = {"chat": TA_info["username"] + ": " + html.escape(request.form.get("TA-chat")),
+                                   "removed": False}
+                        TA_chat_collection.insert_one(TA_chat)
+        response = make_response(redirect(url_for('ta_bp.queue_page')))
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
 
     # with websockets
     if request.method == 'GET':
@@ -116,6 +115,7 @@ def TA_chat():
         # may need to set the content type to application/json?
         response = make_response(jsonify(chatJSON))
         response.headers["X-Content-Type-Options"] = "nosniff"
+        emit('TAChat', chatJSON, broadcast=True)
         return response
 
 
