@@ -71,8 +71,8 @@ app.register_blueprint(example_bp)
 - [x] CSS hosted at a separate path
 - [x] JavaScript hosted at a separate path
 - [x] At least one image
-- [ ] All files have correct MIME type
-- [ ] X-Content-Type-Options: nosniff header must be set
+- [x] All files have correct MIME type
+- [x] X-Content-Type-Options: nosniff header must be set
 - [x] App is accessible with local port 8080
 > [!WARNING]
 > - All of these parts must be hosted by your server.
@@ -113,9 +113,9 @@ app.register_blueprint(example_bp)
     - [x] Posts must be stored in a database
 - [x] User can see all the posts when logged in
 - [x] All authenticated users interact with each post 
-    - [ ] in a way that takes their username and the specific post into account
-    - [ ] Your server must verify the user who made the interaction and take their username into account in some way
-    - [ ] You must **escape any HTML** supplied by your users
+    - [x] in a way that takes their username and the specific post into account
+    - [x] Your server must verify the user who made the interaction and take their username into account in some way
+    - [x] You must **escape any HTML** supplied by your users
     - [x] All interactions should be visible to **all authenticated** users
     - [x] Interaction must be made on a per-post basis
 > [!WARNING]
