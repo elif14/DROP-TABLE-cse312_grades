@@ -99,6 +99,18 @@ def TA_chat():
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
+    if request.method == 'GET':
+        chatList = []
+        allChats = TA_chat_collection.find({})
+        for chat in allChats:
+            chat.pop("_id")
+            chatList.append(chat)
+        chatJSON = json.dumps(chatList)
+        # may need to set the content type to application/json?
+        response = make_response(jsonify(chatJSON))
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
+
 #quick question, what do i when someone press the delete button?
 #im assuming /dequeue will call /dequeue_student if its authenticated?
 
