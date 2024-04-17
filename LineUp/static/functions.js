@@ -1,10 +1,20 @@
 function initWS() {
-    socket = new WebSocket('ws://' + window.location.host + '/websocket');
-    socket.onmessage = function (ws_message) {
-        const message = JSON.parse(ws_message.data);
-        addMessageToChat(message);
-    }
+    var socket = io.connect('ws://' + window.location.host + '/websocket');
+
+    socket.on('open', function() {
+        console.log('connected to websocket');
+    });
+
+    socket.on('closed', function() {
+        console.log('No longer connected to websocket');
+    });
+
+    socket.on('TAChat', function(data) {
+        console.log('message: ', data);
+        addMessageToChat(data);
+    });
 }
+
 
 function updateTAChat() {
     const request = new XMLHttpRequest();
@@ -35,11 +45,7 @@ function addMessageToChat(chatJSON) {
 
 function ta_display(){
     initWS();
-    document.addEventListener("keypress", function (event) {
-        if (event.code === "Enter") {
-            updateTAChat();
-        }
-    });
+    updateTAChat();
 
     const request = new XMLHttpRequest();
     request.open("GET", '/ta_display');

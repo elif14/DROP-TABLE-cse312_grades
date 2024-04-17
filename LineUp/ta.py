@@ -1,23 +1,26 @@
 import html
 import json
 from datetime import datetime, timedelta
-from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, url_for
+from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
+    url_for, Flask
 from pymongo import MongoClient
 from LineUp import login
 import hashlib
 import datetime
+from flask_socketio import SocketIO
 
-
+app = Flask(__name__)
 client = MongoClient("mongo")
 db = client["cse312-project"]
 on_duty = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
+socketio = SocketIO(app)
 
 ta_bp = Blueprint('ta_bp', __name__,
-    template_folder='templates',
-    static_folder='static')
+                  template_folder='templates',
+                  static_folder='static')
 
 
 @ta_bp.route('/')
@@ -35,7 +38,7 @@ def queue_page():
     for each_chat in all_TA_chats:
         if each_chat.get("removed") is False:
             lstOfAllTAChats.append(each_chat.get("chat"))
-    #current_app.logger.info(lstOfAllStudents)
+    # current_app.logger.info(lstOfAllStudents)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
         if user_exist(auth_token):
@@ -79,26 +82,30 @@ def ta_display():
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
+
 @ta_bp.route('/TA-chat', methods=["GET", "POST"])
 def TA_chat():
-    if request.method == 'POST':
-        if (request.form.get("TA-chat").isalnum()):
-            curr_auth = request.cookies.get("auth_token")
-            if curr_auth is not None:
-                hash_obj = hashlib.sha256()
-                hash_obj.update(curr_auth.encode())
-                hash_obj.digest()
-                hash_token = hash_obj.hexdigest()
-                if TA_collection.find_one({"auth_token": hash_token}) is not None:
-                    print(TA_collection.find_one({"auth_token": hash_token}))
-                    TA_info = TA_collection.find({"auth_token": hash_token})[0]
-                    if TA_info is not None:
-                        TA_chat = {"chat": TA_info["username"] + ": " + html.escape(request.form.get("TA-chat")), "removed": False}
-                        TA_chat_collection.insert_one(TA_chat)
-        response = make_response(redirect(url_for('ta_bp.queue_page')))
-        response.headers["X-Content-Type-Options"] = "nosniff"
-        return response
+    # without websockets
+    # if request.method == 'POST':
+    #     if (request.form.get("TA-chat").isalnum()):
+    #         curr_auth = request.cookies.get("auth_token")
+    #         if curr_auth is not None:
+    #             hash_obj = hashlib.sha256()
+    #             hash_obj.update(curr_auth.encode())
+    #             hash_obj.digest()
+    #             hash_token = hash_obj.hexdigest()
+    #             if TA_collection.find_one({"auth_token": hash_token}) is not None:
+    #                 print(TA_collection.find_one({"auth_token": hash_token}))
+    #                 TA_info = TA_collection.find({"auth_token": hash_token})[0]
+    #                 if TA_info is not None:
+    #                     TA_chat = {"chat": TA_info["username"] + ": " + html.escape(request.form.get("TA-chat")),
+    #                                "removed": False}
+    #                     TA_chat_collection.insert_one(TA_chat)
+    #     response = make_response(redirect(url_for('ta_bp.queue_page')))
+    #     response.headers["X-Content-Type-Options"] = "nosniff"
+    #     return response
 
+    # with websockets
     if request.method == 'GET':
         chatList = []
         allChats = TA_chat_collection.find({})
@@ -111,8 +118,24 @@ def TA_chat():
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
-#quick question, what do i when someone press the delete button?
-#im assuming /dequeue will call /dequeue_student if its authenticated?
+
+@socketio.on('open')
+def socketConnect():
+    print("connected to websocket")
+    response = make_response()
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
+@socketio.on('closed')
+def socketDisconnect():
+    print("no longer connected to websocket")
+    response = make_response()
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
+
+# quick question, what do i when someone press the delete button?
+# im assuming /dequeue will call /dequeue_student if its authenticated?
 
 @ta_bp.route('/dequeue', methods=["POST"])
 def ta_dequeue():
@@ -125,7 +148,9 @@ def ta_dequeue():
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
-@ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
+
+@ta_bp.route('/dequeue_student', methods=[
+    "POST"])  # not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
     name = request.json['student_name']
     if 'auth_token' in request.cookies:
@@ -136,7 +161,9 @@ def student_dequeue():
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
-@ta_bp.route('/remove_TA_chat', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
+
+@ta_bp.route('/remove_TA_chat', methods=[
+    "POST"])  # not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def removeChat():
     name = request.json['chat']
     if 'auth_token' in request.cookies:
