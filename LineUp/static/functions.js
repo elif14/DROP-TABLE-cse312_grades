@@ -9,9 +9,9 @@ function initWS() {
         console.log('No longer connected to websocket');
     });
 
-    socket.on('TAChat', function(data) {
-        console.log('message: ', data);
-        addMessageToChat(data);
+    socket.on('TAChat', function(chat) {
+        console.log('message: ', chat);
+        addMessageToChat(chat);
     });
 }
 
