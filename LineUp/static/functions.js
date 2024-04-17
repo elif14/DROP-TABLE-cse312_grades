@@ -1,5 +1,5 @@
 function initWS() {
-    var socket = io.connect('ws://' + window.location.host + '/websocket');
+    var socket = io.connect('ws://localhost:8080');
 
     socket.on('open', function() {
         console.log('connected to websocket');
