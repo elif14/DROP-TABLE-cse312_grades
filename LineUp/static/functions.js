@@ -19,7 +19,7 @@ function initWS() {
     });
 
     socket.on('connect_error', (error) => {
-        console.log('xxxxConnection Error:', error);
+        console.log('Connection Error:', error);
     });
 }
 
