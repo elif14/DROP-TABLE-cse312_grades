@@ -5,20 +5,7 @@
     <title>Line Up</title>
     <link rel="stylesheet" type="text/css" href="/static/homepage.css"/>
     <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        document.addEventListener('DOMContentLoaded', function () {
-            var socket = io();
-
-            socket.on('connect', function() {
-                socket.send('test connection chrisfsjfalsjdlfkj');
-            });
-
-            socket.on('connect_error', (error) => {
-            console.log('xxxxyyyyyyyConnection Error:', error);
-            });
-
-        });
-    </script>
+    
 </head>
 
 <body onload="ta_display()">
