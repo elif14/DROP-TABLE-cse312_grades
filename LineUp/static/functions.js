@@ -23,6 +23,10 @@ function initWS() {
     socket.on('connect_error', (error) => {
         console.log('xxxxConnection Error:', error);
     });
+
+    socket.on('connect_error', (error) => {
+        console.log('xxxxConnection Error:', error);
+    });
 }
 
 function clearTAChat() {
