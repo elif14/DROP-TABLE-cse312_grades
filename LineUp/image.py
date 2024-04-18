@@ -28,6 +28,8 @@ def foo():
             data_info = TA_collection.find({"auth_token": hash_token}, {"_id": 0})
             for single_ta in data_info:
                 TA_collection.update_one({"username": single_ta["username"]}, {"$set": {"image_tag": new_image}})
+        with open(filename, "wb") as pro_img:
+            pro_img.write(request.files["upload"].read())
         response = redirect('/user', code=302)
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
