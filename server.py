@@ -45,4 +45,4 @@ app.register_blueprint(student_bp)
 
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=8080, debug=True)
-    socketio.run(app, allow_unsafe_werkzeug=True, host='0.0.0.0', port=8080)
+    socketio.run(app, host='0.0.0.0', port=8080)

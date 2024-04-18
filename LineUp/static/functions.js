@@ -3,8 +3,6 @@ function initWS() {
         transports: ['websocket']
     });
 
-
-
     socket.on('connect', function() {
         console.log('connected to websocket');
         clearTAChat();
