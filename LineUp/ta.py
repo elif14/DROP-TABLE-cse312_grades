@@ -1,6 +1,7 @@
 import html
 import json
 from datetime import datetime, timedelta
+import logging
 from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
     url_for, Flask
 from pymongo import MongoClient
@@ -10,6 +11,7 @@ import datetime
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+
 client = MongoClient("mongo")
 db = client["cse312-project"]
 on_duty = db['on_duty']
@@ -21,9 +23,6 @@ socketio = SocketIO(app, transports=['websocket'])
 ta_bp = Blueprint('ta_bp', __name__,
                   template_folder='templates',
                   static_folder='static')
-
-if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=8080)
 
 @ta_bp.route('/')
 def queue_page():
@@ -84,8 +83,22 @@ def ta_display():
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
+@ta_bp.route('/static/functions.js')
+def sendFunctions():
+    response = send_file('LineUp/static/functions.js', mimetype='text/javascript')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
 
-@socketio.on('TA-chat')
+
+@ta_bp.route('/node_modules/socket.io-client/dist/socket.io.js')
+def sendSocket():
+    response = send_file('node_modules/socket.io-client/dist/socket.io.js', mimetype='text/javascript')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
+
+@socketio.on('TA-chat', namespace='/websocket')
 def TA_chat():
     # without websockets
     # if request.method == 'POST':
@@ -117,15 +130,15 @@ def TA_chat():
     # may need to set the content type to application/json?
     response = make_response(jsonify(chatJSON))
     response.headers["X-Content-Type-Options"] = "nosniff"
-    emit('TAChat', chatJSON, namespace='/TA-chat-namespace', broadcast=True)
+    emit('TAChat', chatJSON, namespace='/websocket', broadcast=True)
 
 
-@socketio.on('connect')
+@socketio.on('connect', namespace='/websocket')
 def socketConnect():
     print("connected to websocket")
 
 
-@socketio.on('disconnect')
+@socketio.on('disconnect', namespace='/websocket')
 def socketDisconnect():
     print("no longer connected to websocket")
 
@@ -188,3 +201,4 @@ def user_exist(auth_token):
         return True
     else:
         return False
+

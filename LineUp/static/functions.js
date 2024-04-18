@@ -1,12 +1,12 @@
 function initWS() {
-    var socket = io.connect('ws://localhost:8080', {
+    var socket = io.connect('ws://localhost:8080/websocket', {
         transports: ['websocket']
     });
 
     socket.on('connect', function() {
+        console.log('connected to websocket');
         clearTAChat();
         socket.emit('TA-chat');
-        console.log('connected to websocket');
     });
 
     socket.on('disconnect', function() {
