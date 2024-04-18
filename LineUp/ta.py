@@ -100,7 +100,6 @@ def sendSocket():
 
 @socketio.on('TA-chat1')
 
-
 def TA_chat():
     # with websockets
     app.logger.info("this part ran 23456789")
