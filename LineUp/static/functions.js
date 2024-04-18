@@ -1,5 +1,5 @@
 function initWS() {
-    var socket = io.connect('ws://localhost:8080/websocket', {
+    var socket = io.connect('ws://localhost:8080', {
         transports: ['websocket']
     });
 
@@ -16,10 +16,6 @@ function initWS() {
     socket.on('TA-chat', function(chat) {
         console.log('message: ', chat);
         addMessageToChat(chat);
-    });
-
-    socket.on('connect_error', (error) => {
-        console.log('xxxxConnection Error:', error);
     });
 
     socket.on('connect_error', (error) => {
