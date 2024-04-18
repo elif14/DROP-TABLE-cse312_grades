@@ -98,10 +98,13 @@ def sendSocket():
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
 
-@socketio.on('TA-chat', namespace='/websocket')
-def TA_chat():
+@socketio.on('TA-chat1')
 
+
+def TA_chat():
     # with websockets
+    app.logger.info("this part ran 23456789")
+    print("testttt2")
     chatList = []
     allChats = TA_chat_collection.find({})
     for chat in allChats:
@@ -111,7 +114,8 @@ def TA_chat():
     # may need to set the content type to application/json?
     response = make_response(jsonify(chatJSON))
     response.headers["X-Content-Type-Options"] = "nosniff"
-    emit('TAChat', chatJSON, namespace='/websocket', broadcast=True)
+    app.logger.info("this part ran 23456789")
+    emit('TAChat', chatJSON, broadcast=True)
 
 
 @socketio.on('connect', namespace='/websocket')

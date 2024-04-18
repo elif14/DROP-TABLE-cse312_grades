@@ -5,8 +5,10 @@ function initWS() {
 
     socket.on('connect', function() {
         console.log('connected to websocket');
+        console.log('gopint to ta-chat');
         clearTAChat();
-        socket.emit('TA-chat');
+        console.log('actually gopint to ta-chat');
+        socket.emit('TA-chat1');
     });
 
     socket.on('disconnect', function() {
@@ -14,6 +16,7 @@ function initWS() {
     });
 
     socket.on('TA-chat', function(chat) {
+        console.log('in ta chat');
         console.log('message: ', chat);
         addMessageToChat(chat);
     });
