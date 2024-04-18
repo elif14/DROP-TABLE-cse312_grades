@@ -3,6 +3,8 @@ function initWS() {
         transports: ['websocket']
     });
 
+
+
     socket.on('connect', function() {
         clearTAChat();
         socket.emit('TA-chat');
@@ -16,6 +18,10 @@ function initWS() {
     socket.on('TA-chat', function(chat) {
         console.log('message: ', chat);
         addMessageToChat(chat);
+    });
+
+    socket.on('connect_error', (error) => {
+        console.log('xxxxConnection Error:', error);
     });
 }
 
