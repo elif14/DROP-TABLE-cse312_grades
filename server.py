@@ -2,6 +2,8 @@ import hashlib
 import os
 import json
 import html
+from datetime import datetime, timedelta
+
 from flask import Flask
 from logging.config import dictConfig
 
@@ -47,20 +49,18 @@ app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
 app.register_blueprint(student_bp)
 
-
-@socketio.on('ClientTAChat')
-def socketConnect():
-    chatList = []
-    allChats = TA_chat_collection.find({})
-    for chat in allChats:
-        chat.pop("_id")
-        chatList.append(chat.get("chat"))
-    chatJSON = json.dumps(chatList)
-    emit('TAChat', chatJSON, broadcast=True)
-
+@socketio.on('StudentQueue')
+def student_enqueue(studentName):
+    if studentName.isalnum():
+        studentName = html.escape(studentName + " " + str(datetime.now() - timedelta(days=1) + timedelta(hours=20)))
+        if student_queue.find_one({"student": studentName}) is None:
+            student_queue.insert_one({"student": studentName, "dequeued": False})
+            student = [studentName]
+            student = json.dumps(student)
+            emit('studentQueue', student, broadcast=True)
 
 @socketio.on('ReceiveTAChat')
-def socketConnect2(chat):
+def receive_TA_annoucement(chat):
     if chat.isalnum():
         curr_auth = request.cookies.get("auth_token")
         if curr_auth is not None:
@@ -76,6 +76,29 @@ def socketConnect2(chat):
                     TA_chat = [str(TA_info["username"]) + ":" + str(html.escape(chat))]
                     TA_chat = json.dumps(TA_chat)
                     emit('TAChat', TA_chat, broadcast=True)
+
+
+@socketio.on('populateStudentQueue')
+def populate_queue():
+    Queue = []
+    allStudentsInQueue = student_queue.find({})
+    for students in allStudentsInQueue:
+        students.pop("_id")
+        Queue.append(students.get("student"))
+    QueueJSON = json.dumps(Queue)
+    emit('studentQueue', QueueJSON, broadcast=True)
+
+
+@socketio.on('ClientTAChat')
+def populate_TA_chat():
+    chatList = []
+    allChats = TA_chat_collection.find({})
+    for chat in allChats:
+        chat.pop("_id")
+        chatList.append(chat.get("chat"))
+    chatJSON = json.dumps(chatList)
+    emit('TAChat', chatJSON, broadcast=True)
+
 
 
 if __name__ == '__main__':

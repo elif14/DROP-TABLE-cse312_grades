@@ -6,7 +6,9 @@ function initWS() {
     socket.on('connect', function() {
         console.log('connected to websocket');
         clearTAChat();
+        clearStudentQueue();
         socket.emit('ClientTAChat');
+        socket.emit('populateStudentQueue');
     });
 
     socket.on('disconnect', function() {
@@ -15,6 +17,10 @@ function initWS() {
 
     socket.on('TAChat', function(chat) {
         addMessageToChat(chat);
+    });
+
+    socket.on('studentQueue', function(student) {
+        addStudentToQueue(student);
     });
 
     socket.on('connect_error', (error) => {
@@ -30,11 +36,25 @@ function initWS() {
         }
     });
 
+    const StudentEnqueue = document.getElementById('student-queue');
+    StudentEnqueue.addEventListener("keypress", function (event) {
+        if (event.code === "Enter") {
+            let Student = StudentEnqueue.value;
+            StudentEnqueue.value = "";
+            socket.emit('StudentQueue', Student);
+        }
+    });
+
 }
 
 function clearTAChat() {
     const chatMessages = document.getElementById("TA-Announcements");
     chatMessages.innerHTML = "";
+}
+
+function clearStudentQueue() {
+    const studentQueue = document.getElementById("student-queue");
+    studentQueue.innerHTML = "";
 }
 
 function addMessageToChat(chatJSON) {
@@ -44,6 +64,15 @@ function addMessageToChat(chatJSON) {
         const username = TA_chat[i].split(":")[0];
         const chatMessage = TA_chat[i].split(":")[1];
         chatMessages.innerHTML += "<div style='margin-top: 7px'><b>" + username + "</b>: " + chatMessage + "</div>";
+    }
+}
+
+function addStudentToQueue(student) {
+    const Queue = document.getElementById("student-enqueue");
+    let students = JSON.parse(student)
+    for (let i = 0; i < students.length; i++) {
+        const username = students[i];
+        Queue.innerHTML += "<div style='margin-top: 7px'><b>" + username + "</div>";
     }
 }
 

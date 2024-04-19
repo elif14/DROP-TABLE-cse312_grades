@@ -27,12 +27,10 @@
         <button onclick="submit">Off Duty</button>
     </form>
     <br>
-    <form action="/student" method="POST">
-        <label>
-            Student:
-            <input id="student" type="text" name="Name">
-        </label>
-    </form>
+    <label>
+        Student Queue:
+        <input id="student-queue" type="text" name="student-queue">
+    </label>
     <br>
     <label>
         TA Announcements:
@@ -41,10 +39,10 @@
     <h2 id="student_names"></h2>
 
 
-    <h3> Queue: </h3>
-    {% for student in studentQ %}
-        <p><button id="{{ student }}" onclick="dequeue('{{ student }}')">X</button> {{ student }}</p>
-    {% endfor %}
+    <h4> Queue </h4>
+    <div id="student-enqueue">
+
+    </div>
 
     <h4> TA Announcements </h4>
     <div id="TA-Announcements">
