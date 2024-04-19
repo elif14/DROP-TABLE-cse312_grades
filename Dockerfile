@@ -9,7 +9,7 @@ RUN pip3 install -r requirements.txt
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
 RUN chmod +x /wait
 
-RUN pip3 install --upgrade pip setuptools
+RUN pip install --only-binary :all: greenlet \
 
 RUN pip3 install --upgrade gevent==1.4.0
 
