@@ -117,14 +117,14 @@ def TA_chat():
     emit('TAChat', chatJSON, broadcast=True)
 
 
-@socketio.on('connect', namespace='/websocket')
-def socketConnect():
-    print("connected to websocket")
+# @socketio.on('connect', namespace='/websocket')
+# def socketConnect():
+#     print("connected to websocket")
 
 
-@socketio.on('disconnect', namespace='/websocket')
-def socketDisconnect():
-    print("no longer connected to websocket")
+# @socketio.on('disconnect', namespace='/websocket')
+# def socketDisconnect():
+#     print("no longer connected to websocket")
 
 
 # quick question, what do i when someone press the delete button?
