@@ -57,6 +57,35 @@ def student_enqueue(studentName):
             student = json.dumps(student)
             emit('studentQueue', student, broadcast=True)
 
+
+@socketio.on('StudentDequeue')
+def student_dequeue(id):
+    curr_auth = request.cookies.get("auth_token")
+    if curr_auth is not None:
+        hash_obj = hashlib.sha256()
+        hash_obj.update(curr_auth.encode())
+        hash_obj.digest()
+        hash_token = hash_obj.hexdigest()
+        if TA_collection.find_one({"auth_token": hash_token}) is not None:
+            TA_info = TA_collection.find({"auth_token": hash_token})[0]
+            if TA_info is not None:
+                allStudents = student_queue.find({})
+                idFinder = 0
+                for student in allStudents:
+                    app.logger.info("Test")
+                    app.logger.info(student)
+                    if idFinder == int(id):
+                        student_queue.delete_one({"student": student.get("student")})
+                    idFinder += 1
+                Queue = []
+                allStudentsInQueue = student_queue.find({})
+                for students in allStudentsInQueue:
+                    students.pop("_id")
+                    Queue.append(students.get("student"))
+                QueueJSON = json.dumps(Queue)
+                emit('studentQueue', QueueJSON, broadcast=True)
+
+
 @socketio.on('ReceiveTAChat')
 def receive_TA_annoucement(chat):
     if chat.isalnum():

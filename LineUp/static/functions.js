@@ -1,12 +1,12 @@
+let socket = null
 function initWS() {
-    var socket = io.connect('http://localhost:8080/', {
+    socket = io.connect('http://localhost:8080/', {
         transports: ['websocket']
     });
 
     socket.on('connect', function() {
         console.log('connected to websocket');
         clearTAChat();
-        clearStudentQueue();
         socket.emit('ClientTAChat');
         socket.emit('populateStudentQueue');
     });
@@ -20,6 +20,7 @@ function initWS() {
     });
 
     socket.on('studentQueue', function(student) {
+        clearStudentQueue();
         addStudentToQueue(student);
     });
 
@@ -47,13 +48,17 @@ function initWS() {
 
 }
 
+function dequeueStudent(id) {
+    socket.emit('StudentDequeue', id);
+}
+
 function clearTAChat() {
     const chatMessages = document.getElementById("TA-Announcements");
     chatMessages.innerHTML = "";
 }
 
 function clearStudentQueue() {
-    const studentQueue = document.getElementById("student-queue");
+    const studentQueue = document.getElementById("student-enqueue");
     studentQueue.innerHTML = "";
 }
 
@@ -72,7 +77,7 @@ function addStudentToQueue(student) {
     let students = JSON.parse(student)
     for (let i = 0; i < students.length; i++) {
         const username = students[i];
-        Queue.innerHTML += "<div style='margin-top: 7px'><b>" + username + "</div>";
+        Queue.innerHTML += "<div style='margin-top: 7px'><b>" + username + "</b><button onclick='dequeueStudent(" + i + ")'>X</button></div>";
     }
 }
 
