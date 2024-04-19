@@ -20,6 +20,15 @@ function initWS() {
     socket.on('connect_error', (error) => {
         console.log('Connection Error:', error);
     });
+
+    const TAChatInput = document.getElementById('TA-chat');
+    TAChatInput.addEventListener("keypress", function (event) {
+        if (event.code === "Enter") {
+            console.log("test", TAChatInput.value);
+            socket.emit('ReceiveTAChat', TAChatInput.value);
+        }
+    });
+
 }
 
 function clearTAChat() {
@@ -33,7 +42,7 @@ function addMessageToChat(chatJSON) {
     for (let i = 0; i < TA_chat.length; i++) {
         const username = TA_chat[i].split(":")[0];
         const chatMessage = TA_chat[i].split(":")[1];
-        chatMessages.innerHTML += "<div style='margin-top: 5px'><b>" + username + "</b>: " + chatMessage + "</div>";
+        chatMessages.innerHTML += "<div style='margin-top: 7px'><b>" + username + "</b>: " + chatMessage + "</div>";
     }
 }
 
