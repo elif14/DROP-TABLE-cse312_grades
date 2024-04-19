@@ -59,7 +59,6 @@ def socketConnect():
 
 @socketio.on('ReceiveTAChat')
 def socketConnect(chat):
-    app.logger.info("test", chat)
     if (chat.isalnum()):
         curr_auth = request.cookies.get("auth_token")
         if curr_auth is not None:
@@ -70,7 +69,7 @@ def socketConnect(chat):
             if TA_collection.find_one({"auth_token": hash_token}) is not None:
                 TA_info = TA_collection.find({"auth_token": hash_token})[0]
                 if TA_info is not None:
-                    TA_chat = {"chat": TA_info["username"] + ": " + html.escape(request.form.get("TA-chat")),
+                    TA_chat = {"chat": TA_info["username"] + ": " + html.escape(chat),
                                "removed": False}
                     TA_chat_collection.insert_one(TA_chat)
                     chatJSON = json.dumps(TA_chat)

@@ -24,7 +24,6 @@ function initWS() {
     const TAChatInput = document.getElementById('TA-chat');
     TAChatInput.addEventListener("keypress", function (event) {
         if (event.code === "Enter") {
-            console.log("test", TAChatInput.value);
             socket.emit('ReceiveTAChat', TAChatInput.value);
         }
     });
