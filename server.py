@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask import Flask
 from logging.config import dictConfig
@@ -45,6 +46,17 @@ app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
 app.register_blueprint(student_bp)
 
+@socketio.on('ClientTAChat')
+def socketConnect():
+    app.logger.info("TESTT")
+    chatList = []
+    allChats = TA_chat_collection.find({})
+    for chat in allChats:
+        chat.pop("_id")
+        chatList.append(chat)
+    chatJSON = json.dumps(chatList)
+    emit('TAChat', chatJSON)
+
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=8080, debug=True)
-    socketio.run(app, host='0.0.0.0', port=8080, debug=True)
+    socketio.run(app, allow_unsafe_werkzeug=True, host='0.0.0.0', port=8080, debug=True)

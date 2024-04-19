@@ -100,18 +100,6 @@ def sendSocket():
     return response
 
 
-@socketio.on('ClientTAChat')
-def socketConnect():
-    chatList = []
-    allChats = TA_chat_collection.find({})
-    for chat in allChats:
-        chat.pop("_id")
-        chatList.append(chat)
-    chatJSON = json.dumps(chatList)
-    app.logger.info("TESTT")
-    emit('TAChat', chatJSON)
-
-
 
 # quick question, what do i when someone press the delete button?
 # im assuming /dequeue will call /dequeue_student if its authenticated?
