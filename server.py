@@ -47,6 +47,7 @@ app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
 app.register_blueprint(student_bp)
 
+
 @socketio.on('ClientTAChat')
 def socketConnect():
     chatList = []
@@ -55,11 +56,12 @@ def socketConnect():
         chat.pop("_id")
         chatList.append(chat.get("chat"))
     chatJSON = json.dumps(chatList)
-    emit('TAChat', chatJSON)
+    emit('TAChat', chatJSON, broadcast=True)
+
 
 @socketio.on('ReceiveTAChat')
-def socketConnect(chat):
-    if (chat.isalnum()):
+def socketConnect2(chat):
+    if chat.isalnum():
         curr_auth = request.cookies.get("auth_token")
         if curr_auth is not None:
             hash_obj = hashlib.sha256()
@@ -69,12 +71,13 @@ def socketConnect(chat):
             if TA_collection.find_one({"auth_token": hash_token}) is not None:
                 TA_info = TA_collection.find({"auth_token": hash_token})[0]
                 if TA_info is not None:
-                    TA_chat = {"chat": TA_info["username"] + ": " + html.escape(chat),
-                               "removed": False}
-                    TA_chat_collection.insert_one(TA_chat)
-                    chatJSON = json.dumps(TA_chat)
-                    emit('TAChat', chatJSON)
+                    TA_chat_collection.insert_one({"chat": str(TA_info["username"]) + ": " + str(html.escape(chat)),
+                                                   "removed": str(False)})
+                    TA_chat = [str(TA_info["username"]) + ":" + str(html.escape(chat))]
+                    TA_chat = json.dumps(TA_chat)
+                    emit('TAChat', TA_chat, broadcast=True)
+
 
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=8080, debug=True)
-    socketio.run(app, allow_unsafe_werkzeug=True, host='0.0.0.0', port=8080, debug=True)
+    socketio.run(app, host='0.0.0.0', port=8080, debug=True)
