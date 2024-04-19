@@ -7,6 +7,14 @@ from datetime import datetime, timedelta
 from flask import Flask
 from logging.config import dictConfig
 
+import sys
+
+from twisted.python import log
+from twisted.internet import reactor
+log.startLogging(sys.stdout)
+
+from autobahn.twisted.websocket import WebSocketServerFactory
+
 dictConfig({
     'version': 1,
     'formatters': {'default': {
@@ -153,3 +161,4 @@ def populate_TA_chat():
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=8080, debug=True)
     socketio.run(app, host='0.0.0.0', port=8080, debug=True)
+

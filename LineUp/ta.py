@@ -100,7 +100,6 @@ def sendSocket():
     return response
 
 
-
 # quick question, what do i when someone press the delete button?
 # im assuming /dequeue will call /dequeue_student if its authenticated?
 
