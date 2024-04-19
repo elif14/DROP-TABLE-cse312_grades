@@ -58,3 +58,12 @@ function addNames(taNames){
         document.body.insertBefore(newElem, currElem)
     }
 }
+
+function ta_pic_display(){
+    const request = new XMLHttpRequest();
+    request.open("GET", '/LineUp/profile-images');
+    request.send();
+    request.onload = () => {
+
+    }
+}

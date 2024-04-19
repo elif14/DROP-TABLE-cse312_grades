@@ -12,12 +12,12 @@ db = client["cse312-project"]
 TA_collection = db['TA_collection']
 
 @image_bp.route('/profile-upload', methods=['POST'])
-def foo():
+def image_upload():
     if request.method == 'POST':
         filename = request.files["upload"].filename
         new_image = ""
         if "jpg" in filename:
-            filename = "LineUp/profile-images/new_image" + str(random.randint(0, 100)) + ".jpg"
+            filename = "new_image" + str(random.randint(0, 100)) + ".jpg"
             new_image = "<img src=" + filename + ">"
         curr_auth = request.cookies.get("auth_token")
         if curr_auth is not None:
@@ -33,3 +33,6 @@ def foo():
         response = redirect('/user', code=302)
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
+
+@image_bp.route('/LineUp/profile-images', methods=["GET"])
+def serve_image():
