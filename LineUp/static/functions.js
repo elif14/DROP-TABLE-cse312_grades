@@ -1,49 +1,45 @@
 function initWS() {
-    socket = new WebSocket('ws://' + window.location.host + '/websocket');
-    socket.onmessage = function (ws_message) {
-        const message = JSON.parse(ws_message.data);
-        addMessageToChat(message);
-    }
-}
+    var socket = io.connect('ws://localhost:8080', {
+        transports: ['websocket']
+    });
 
-function updateTAChat() {
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            clearTAChat();
-            const messages = JSON.parse(this.response);
-            for (const message of messages) {
-                addMessageToChat(message);
-            }
-        }
-    }
-    request.open("GET", "/TA-chat");
-    request.send();
-}
+    socket.on('connect', function() {
+        console.log('connected to websocket');
+        console.log('gopint to ta-chat');
+        clearTAChat();
+        console.log('actually gopint to ta-chat');
+        socket.emit('TA-chat1');
+    });
 
-function chatMessageHTML(messageJSON) {
-    const username = messageJSON.username;
-    const message = messageJSON.message;
-    return "<b>" + username + "</b>: " + message;
+    socket.on('disconnect', function() {
+        console.log('No longer connected to websocket');
+    });
+
+    socket.on('TA-chat', function(chat) {
+        console.log('in ta chat');
+        console.log('message: ', chat);
+        addMessageToChat(chat);
+    });
+
+    socket.on('connect_error', (error) => {
+        console.log('Connection Error:', error);
+    });
 }
 
 function clearTAChat() {
-    const chatMessages = document.getElementById("TA-chat");
+    const chatMessages = document.getElementById("TA-Announcements");
     chatMessages.innerHTML = "";
 }
 
-function addMessageToChat(messageJSON) {
-    const chatMessages = document.getElementById("TA-chat");
-    chatMessages.innerHTML += chatMessageHTML(messageJSON);
+function addMessageToChat(chatJSON) {
+    const chatMessages = document.getElementById("TA-Announcements");
+    const username = chatJSON.username;
+    const chatMessage = chatJSON.message;
+    chatMessages.innerHTML += "<b>" + username + "</b>: " + chatMessage;
 }
 
 function ta_display(){
     initWS();
-    document.addEventListener("keypress", function (event) {
-        if (event.code === "Enter") {
-            updateTAChat();
-        }
-    });
 
     const request = new XMLHttpRequest();
     request.open("GET", '/ta_display');

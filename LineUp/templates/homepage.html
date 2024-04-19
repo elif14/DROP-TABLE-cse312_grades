@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>Line Up</title>
     <link rel="stylesheet" type="text/css" href="/static/homepage.css"/>
+    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
 </head>
+
 <body onload="ta_display()">
     <script src="/static/functions.js"></script>
     {% if username %}
@@ -48,9 +50,9 @@
     {% endfor %}
 
     <h4> TA Announcements </h4>
-    {% for chat in TA_chat %}
-        <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
-    {% endfor %}
+    <div id="TA-Announcements">
+
+    </div>
 
 
 </body>
