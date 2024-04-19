@@ -72,8 +72,6 @@ def student_dequeue(id):
                 allStudents = student_queue.find({})
                 idFinder = 0
                 for student in allStudents:
-                    app.logger.info("Test")
-                    app.logger.info(student)
                     if idFinder == int(id):
                         student_queue.delete_one({"student": student.get("student")})
                     idFinder += 1
@@ -85,6 +83,30 @@ def student_dequeue(id):
                 QueueJSON = json.dumps(Queue)
                 emit('studentQueue', QueueJSON, broadcast=True)
 
+
+@socketio.on('TADequeue')
+def TA_dequeue(id):
+    curr_auth = request.cookies.get("auth_token")
+    if curr_auth is not None:
+        hash_obj = hashlib.sha256()
+        hash_obj.update(curr_auth.encode())
+        hash_obj.digest()
+        hash_token = hash_obj.hexdigest()
+        if TA_collection.find_one({"auth_token": hash_token}) is not None:
+            TA_info = TA_collection.find({"auth_token": hash_token})[0]
+            if TA_info is not None:
+                TAChats = TA_chat_collection.find({})
+                TAChat = []
+                idFinder = 0
+                for TAMessage in TAChats:
+                    if idFinder == int(id):
+                        TA_chat_collection.delete_one({"chat": TAMessage.get("chat")})
+                    else:
+                        TAMessage.pop("_id")
+                        TAChat.append(TAMessage.get("chat"))
+                    idFinder += 1
+                TAChatJSON = json.dumps(TAChat)
+                emit('TAChat', TAChatJSON, broadcast=True)
 
 @socketio.on('ReceiveTAChat')
 def receive_TA_annoucement(chat):
@@ -102,7 +124,7 @@ def receive_TA_annoucement(chat):
                                                    "removed": str(False)})
                     TA_chat = [str(TA_info["username"]) + ":" + str(html.escape(chat))]
                     TA_chat = json.dumps(TA_chat)
-                    emit('TAChat', TA_chat, broadcast=True)
+                    emit('TAChatReceive', TA_chat, broadcast=True)
 
 
 @socketio.on('populateStudentQueue')

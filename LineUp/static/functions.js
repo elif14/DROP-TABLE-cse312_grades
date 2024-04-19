@@ -6,7 +6,6 @@ function initWS() {
 
     socket.on('connect', function() {
         console.log('connected to websocket');
-        clearTAChat();
         socket.emit('ClientTAChat');
         socket.emit('populateStudentQueue');
     });
@@ -16,6 +15,11 @@ function initWS() {
     });
 
     socket.on('TAChat', function(chat) {
+        clearTAChat();
+        addMessageToChat(chat);
+    });
+
+    socket.on('TAChatReceive', function(chat) {
         addMessageToChat(chat);
     });
 
@@ -52,6 +56,10 @@ function dequeueStudent(id) {
     socket.emit('StudentDequeue', id);
 }
 
+function dequeueTA(id) {
+    socket.emit('TADequeue', id);
+}
+
 function clearTAChat() {
     const chatMessages = document.getElementById("TA-Announcements");
     chatMessages.innerHTML = "";
@@ -68,7 +76,7 @@ function addMessageToChat(chatJSON) {
     for (let i = 0; i < TA_chat.length; i++) {
         const username = TA_chat[i].split(":")[0];
         const chatMessage = TA_chat[i].split(":")[1];
-        chatMessages.innerHTML += "<div style='margin-top: 7px'><b>" + username + "</b>: " + chatMessage + "</div>";
+        chatMessages.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueTA(" + i + ")'>X</button><b>" + username + "</b>: " + chatMessage + "</div>";
     }
 }
 
