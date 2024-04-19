@@ -48,11 +48,9 @@ function dequeueChat(chatMessage){//funciton to dequeue student, this is called 
 }
 
 function addNames(taNames){
-    let elementNum = 3
     const currElem = document.getElementById("ta_names")
     for (const name of taNames){
-        let newElemID = "h" + elementNum.toString()
-        const newElem = document.createElement(newElemID)
+        const newElem = document.createElement("h3")
         const newName = document.createTextNode(name)
         newElem.appendChild(newName)
         document.body.insertBefore(newElem, currElem)
