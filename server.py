@@ -55,7 +55,7 @@ def student_enqueue(studentName):
             student_queue.insert_one({"student": studentName, "dequeued": False})
             student = [studentName]
             student = json.dumps(student)
-            emit('studentQueue', student, broadcast=True)
+            emit('studentQueue2', student, broadcast=True)
 
 
 @socketio.on('StudentDequeue')

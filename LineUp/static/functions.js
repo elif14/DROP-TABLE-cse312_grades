@@ -28,6 +28,10 @@ function initWS() {
         addStudentToQueue(student);
     });
 
+    socket.on('studentQueue2', function(student) {
+        addStudentToQueue(student);
+    });
+
     socket.on('connect_error', (error) => {
         console.log('Connection                                                                                                                                                                                                                                                                                                                                                             Error:', error);
     });
