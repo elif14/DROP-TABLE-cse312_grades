@@ -77,7 +77,7 @@ function addStudentToQueue(student) {
     let students = JSON.parse(student)
     for (let i = 0; i < students.length; i++) {
         const username = students[i];
-        Queue.innerHTML += "<div style='margin-top: 7px'><b>" + username + "</b><button onclick='dequeueStudent(" + i + ")'>X</button></div>";
+        Queue.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueStudent(" + i + ")'>X</button><b>" + username + "</b></div>";
     }
 }
 
