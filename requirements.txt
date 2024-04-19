@@ -3,3 +3,4 @@ pymongo~=4.6.2
 bcrypt~=4.1.2
 Flask-PyMongo
 Flask-SocketIO==5.3.6
+gevent==1.4.0
