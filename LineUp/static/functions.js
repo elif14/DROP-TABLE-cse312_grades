@@ -50,19 +50,22 @@ function dequeueChat(chatMessage){//funciton to dequeue student, this is called 
 function addNames(taNames){
     const currElem = document.getElementById("ta_names")
     for (const name of taNames){
+        let newArr = name.split('(')
+        const newImage = new Image ()
         const newElem = document.createElement("h3")
         const newName = document.createTextNode(name)
+        newImage.src = "LineUp/static/" + newArr[0] + ".jpg"
         newElem.appendChild(newName)
-        document.body.insertBefore(newElem, currElem)
+        newImage.appendChild(newElem)
+        document.body.insertBefore(newImage, currElem)
     }
 }
 
 function ta_pic_display(taList){
+    const profileDisplayElem = document.getElementById("ta-pics")
     for (const singleTa in taList){
-        const newElem = new Image ()
-        newElem.src = "LineUp/static" + singleTa + ".jpg"
-        const newName = document.createTextNode(name)
-        newElem.appendChild(newName)
-        document.body.insertBefore(newElem, currElem)
+        const newImage = new Image ()
+        newElem.src = "LineUp/static/" + singleTa + ".jpg"
+        document.body.insertBefore(newElem, profileDisplayElem)
     }
 }
