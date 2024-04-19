@@ -45,6 +45,14 @@ function dequeueChat(chatMessage){//funciton to dequeue student, this is called 
     request.open("POST", "/remove_TA_chat");
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(body);
+    let ta = ""
+    for (let singleChar of chatMessage){
+        if (singleChar != " " || singleChar !="'" || singleChar != ":" || singleChar != "[" || singleChar != "]"){
+            ta += singleChar;
+        }
+    }
+    const profile_img = document.getElementById(ta);
+    profile_img.src = "LineUp/static/"+ ta + ".jpg";
 }
 
 function addNames(taNames){
@@ -61,11 +69,3 @@ function addNames(taNames){
     }
 }
 
-function ta_pic_display(taList){
-    const profileDisplayElem = document.getElementById("ta-pics")
-    for (const singleTa in taList){
-        const newImage = new Image ()
-        newElem.src = "LineUp/static/" + singleTa + ".jpg"
-        document.body.insertBefore(newElem, profileDisplayElem)
-    }
-}
