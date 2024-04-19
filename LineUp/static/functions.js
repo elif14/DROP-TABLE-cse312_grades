@@ -5,26 +5,20 @@ function initWS() {
 
     socket.on('connect', function() {
         console.log('connected to websocket');
-        socket.emit('ClientTAChat');
         clearTAChat();
+        socket.emit('ClientTAChat');
     });
 
     socket.on('disconnect', function() {
-
-        console.log('No longer connected to websocket');
-    });
-
-    socket.addEventListener('message', function (event) {
-        console.log('Received message:', event.data);
+        console.log('disconnected from websocket');
     });
 
     socket.on('TAChat', function(chat) {
-        console.log('message: ', chat);
         addMessageToChat(chat);
     });
 
     socket.on('connect_error', (error) => {
-        console.log('xxxxConnection Error:', error);
+        console.log('Connection Error:', error);
     });
 }
 
@@ -34,11 +28,13 @@ function clearTAChat() {
 }
 
 function addMessageToChat(chatJSON) {
-    console.log("passed through here")
     const chatMessages = document.getElementById("TA-Announcements");
-    const username = chatJSON.username;
-    const chatMessage = chatJSON.message;
-    chatMessages.innerHTML += "<b>" + username + "</b>: " + chatMessage;
+    TA_chat = JSON.parse(chatJSON)
+    for (let i = 0; i < TA_chat.length; i++) {
+        const username = TA_chat[i].split(":")[0];
+        const chatMessage = TA_chat[i].split(":")[1];
+        chatMessages.innerHTML += "<div style='margin-top: 5px'><b>" + username + "</b>: " + chatMessage + "</div>";
+    }
 }
 
 function ta_display(){

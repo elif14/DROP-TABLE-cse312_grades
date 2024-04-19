@@ -48,12 +48,11 @@ app.register_blueprint(student_bp)
 
 @socketio.on('ClientTAChat')
 def socketConnect():
-    app.logger.info("TESTT")
     chatList = []
     allChats = TA_chat_collection.find({})
     for chat in allChats:
         chat.pop("_id")
-        chatList.append(chat)
+        chatList.append(chat.get("chat"))
     chatJSON = json.dumps(chatList)
     emit('TAChat', chatJSON)
 
