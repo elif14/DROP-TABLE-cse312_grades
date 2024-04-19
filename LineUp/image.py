@@ -25,7 +25,7 @@ def image_upload():
                 filename = request.files["upload"].filename
                 new_image = ""
                 if "jpg" in filename:
-                    filename = "LineUp/static/new_image" + single_ta["username"] + ".jpg"
+                    filename = "LineUp/static/" + single_ta["username"] + ".jpg"
                     new_image = "<img src=" + filename + ">"
                 TA_collection.update_one({"username": single_ta["username"]}, {"$set": {"image_tag": new_image}})
                 with open(filename, "wb") as pro_img:

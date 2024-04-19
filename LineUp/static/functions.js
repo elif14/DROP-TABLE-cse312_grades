@@ -59,21 +59,8 @@ function addNames(taNames){
 
 function ta_pic_display(taList){
     for (const singleTa in taList){
-        const request = new XMLHttpRequest();
-        request.open("GET", '/LineUp/static');
-        const body = JSON.stringify({user: singleTa})
-        request.send(body);
-        request.onload = () => {
-
-        }
-    }
-}
-
-function createImageTag(taNames){
-    let elementNum = 3
-    const currElem = document.getElementById("ta_names")
-    for (const name of taNames){
         const newElem = new Image ()
+        newElem.src = "LineUp/static" + singleTa + ".jpg"
         const newName = document.createTextNode(name)
         newElem.appendChild(newName)
         document.body.insertBefore(newElem, currElem)
