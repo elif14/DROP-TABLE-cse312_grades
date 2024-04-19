@@ -1,5 +1,7 @@
+import os
+
 from flask import Flask
-from logging.config import dictConfig 
+from logging.config import dictConfig
 
 dictConfig({
     'version': 1,
@@ -35,7 +37,7 @@ on_duty = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
-socketio = SocketIO(app, transports=['websocket'])
+socketio = SocketIO(app, cors_allowed_origins="*", message_queue=os.environ.get('REDIS_URL'), transports=['websocket'])
 
 app.register_blueprint(user_bp)
 app.register_blueprint(register_bp)
@@ -44,5 +46,5 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(student_bp)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
-    # socketio.run(app, allow_unsafe_werkzeug=True, host='0.0.0.0', port=8080)
+    # app.run(host='0.0.0.0', port=8080, debug=True)
+    socketio.run(app, allow_unsafe_werkzeug=True, host='0.0.0.0', port=8080, debug=True)

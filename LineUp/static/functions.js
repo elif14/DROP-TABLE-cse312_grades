@@ -1,19 +1,24 @@
 function initWS() {
-    var socket = io.connect('ws://localhost:8080', {
+    var socket = io.connect('http://localhost:8080', {
         transports: ['websocket']
     });
 
     socket.on('connect', function() {
         console.log('connected to websocket');
+        socket.emit('ClientTAChat');
         clearTAChat();
-        socket.emit('TA-chat');
     });
 
     socket.on('disconnect', function() {
+
         console.log('No longer connected to websocket');
     });
 
-    socket.on('TA-chat', function(chat) {
+    socket.addEventListener('message', function (event) {
+        console.log('Received message:', event.data);
+    });
+
+    socket.on('TAChat', function(chat) {
         console.log('message: ', chat);
         addMessageToChat(chat);
     });
@@ -29,6 +34,7 @@ function clearTAChat() {
 }
 
 function addMessageToChat(chatJSON) {
+    console.log("passed through here")
     const chatMessages = document.getElementById("TA-Announcements");
     const username = chatJSON.username;
     const chatMessage = chatJSON.message;
