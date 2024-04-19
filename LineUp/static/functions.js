@@ -56,8 +56,8 @@ function addNames(taNames){
         const newName = document.createTextNode(name)
         newImage.src = "LineUp/static/" + newArr[0] + ".jpg"
         newElem.appendChild(newName)
-        newImage.appendChild(newElem)
         document.body.insertBefore(newImage, currElem)
+        document.body.insertBefore(newElem, newImage)
     }
 }
 
