@@ -60,7 +60,6 @@ def user_exist(username: str):
     else:
         current_app.logger.info("USER DOES NOT EXIST")
         return False
-
 def correct_password(username, password):
     user = TA_collection.find({"username": username})[0]
     hashed_password = bcrypt.hashpw(password.encode(), user["salt"])
@@ -71,7 +70,6 @@ def correct_password(username, password):
 
 def get_username(auth_token):
     hashed_auth_token = hashlib.sha256(auth_token.encode()).hexdigest()
-    current_app.logger.info(hashed_auth_token)
     user = TA_collection.find({"auth_token": hashed_auth_token})[0]
     if hashed_auth_token == user["auth_token"]:
         return user["username"]

@@ -42,6 +42,15 @@ def sendFunctions():
     return response
 
 
+@user_bp.route('/node_modules/socket.io-client/dist/socket.io.js')
+def sendSocket():
+    response = send_file('node_modules/socket.io-client/dist/socket.io.js', mimetype='text/javascript')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
+
+
+
 @user_bp.route('/static/image.jpg')
 def sendImage():
     response = send_file('LineUp/static/image.jpg', mimetype='image/jpeg')
@@ -55,3 +64,4 @@ def sendPicture():
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
+

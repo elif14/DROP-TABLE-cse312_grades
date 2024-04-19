@@ -1,49 +1,100 @@
+let socket = null
 function initWS() {
-    socket = new WebSocket('ws://' + window.location.host + '/websocket');
-    socket.onmessage = function (ws_message) {
-        const message = JSON.parse(ws_message.data);
-        addMessageToChat(message);
-    }
-}
+    socket = io.connect('https://wonwoojeong.com/', {
+        transports: ['websocket']
+    });
 
-function updateTAChat() {
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            clearTAChat();
-            const messages = JSON.parse(this.response);
-            for (const message of messages) {
-                addMessageToChat(message);
-            }
+    socket.on('connect', function() {
+        console.log('connected to websocket');
+        socket.emit('ClientTAChat');
+        socket.emit('populateStudentQueue');
+    });
+
+    socket.on('disconnect', function() {
+        console.log('disconnected from websocket');
+    });
+
+    socket.on('TAChat', function(chat) {
+        clearTAChat();
+        addMessageToChat(chat);
+    });
+
+    socket.on('TAChatReceive', function(chat) {
+        addMessageToChat(chat);
+    });
+
+    socket.on('studentQueue', function(student) {
+        clearStudentQueue();
+        addStudentToQueue(student);
+    });
+
+    socket.on('studentQueue2', function(student) {
+        addStudentToQueue(student);
+    });
+
+    socket.on('connect_error', (error) => {
+        console.log('Connection                                                                                                                                                                                                                                                                                                                                                             Error:', error);
+    });
+
+    const TAChatInput = document.getElementById('TA-chat');
+    TAChatInput.addEventListener("keypress", function (event) {
+        if (event.code === "Enter") {
+            let TAChat = TAChatInput.value;
+            TAChatInput.value = "";
+            socket.emit('ReceiveTAChat', TAChat);
         }
-    }
-    request.open("GET", "/TA-chat");
-    request.send();
+    });
+
+    const StudentEnqueue = document.getElementById('student-queue');
+    StudentEnqueue.addEventListener("keypress", function (event) {
+        if (event.code === "Enter") {
+            let Student = StudentEnqueue.value;
+            StudentEnqueue.value = "";
+            socket.emit('StudentQueue', Student);
+        }
+    });
+
 }
 
-function chatMessageHTML(messageJSON) {
-    const username = messageJSON.username;
-    const message = messageJSON.message;
-    return "<b>" + username + "</b>: " + message;
+function dequeueStudent(id) {
+    socket.emit('StudentDequeue', id);
+}
+
+function dequeueTA(id) {
+    socket.emit('TADequeue', id);
 }
 
 function clearTAChat() {
-    const chatMessages = document.getElementById("TA-chat");
+    const chatMessages = document.getElementById("TA-Announcements");
     chatMessages.innerHTML = "";
 }
 
-function addMessageToChat(messageJSON) {
-    const chatMessages = document.getElementById("TA-chat");
-    chatMessages.innerHTML += chatMessageHTML(messageJSON);
+function clearStudentQueue() {
+    const studentQueue = document.getElementById("student-enqueue");
+    studentQueue.innerHTML = "";
+}
+
+function addMessageToChat(chatJSON) {
+    const chatMessages = document.getElementById("TA-Announcements");
+    let TA_chat = JSON.parse(chatJSON)
+    for (let i = 0; i < TA_chat.length; i++) {
+        const username = TA_chat[i].split(":")[0];
+        const chatMessage = TA_chat[i].split(":")[1];
+        chatMessages.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueTA(" + i + ")'>X</button><b>" + username + "</b>: " + chatMessage + "</div>";
+    }
+}
+
+function addStudentToQueue(student) {
+    const Queue = document.getElementById("student-enqueue");
+    let students = JSON.parse(student)
+    for (let i = 0; i < students.length; i++) {
+        const username = students[i];
+        Queue.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueStudent(" + i + ")'>X</button><b>" + username + "</b></div>";
+    }
 }
 
 function ta_display(){
     initWS();
-    document.addEventListener("keypress", function (event) {
-        if (event.code === "Enter") {
-            updateTAChat();
-        }
-    });
 
     const request = new XMLHttpRequest();
     request.open("GET", '/ta_display');
@@ -68,27 +119,6 @@ function ta_display(){
         console.log(newArr)
         addNames(newArr)
     }
-}
-
-function dequeue(studentName){//funciton to dequeue student, this is called by onclick button
-    const request = new XMLHttpRequest();
-    const name = studentName
-    console.log(name)
-    const body = JSON.stringify({student_name: name});
-    console.log(body)
-    request.open("POST", "/dequeue_student");
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    request.send(body);
-}
-
-function dequeueChat(chatMessage){//funciton to dequeue student, this is called by onclick button
-    const request = new XMLHttpRequest();
-    console.log(chatMessage)
-    const body = JSON.stringify({chat: chatMessage});
-    console.log(body)
-    request.open("POST", "/remove_TA_chat");
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    request.send(body);
 }
 
 function addNames(taNames){
