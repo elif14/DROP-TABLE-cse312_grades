@@ -1,4 +1,4 @@
-from flask import Blueprint, request, current_app, redirect
+from flask import Blueprint, request, current_app, redirect, send_file, make_response
 from pymongo import MongoClient
 import random
 import hashlib
@@ -33,3 +33,10 @@ def image_upload():
         response = redirect('/user', code=302)
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
+
+@image_bp.route('/static/<file_name>')
+def serve_profile_image(file_name):
+    response = send_file('LineUp/static/'+file_name, mimetype='image/jpeg')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
