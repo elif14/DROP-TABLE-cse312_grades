@@ -1,5 +1,6 @@
 import html
 import json
+import os
 from datetime import datetime, timedelta
 import logging
 from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
@@ -18,7 +19,7 @@ on_duty = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
-socketio = SocketIO(app, transports=['websocket'])
+socketio = SocketIO(app, cors_allowed_origins="*", message_queue=os.environ.get('REDIS_URL'), transports=['websocket'])
 
 ta_bp = Blueprint('ta_bp', __name__,
                   template_folder='templates',
@@ -98,34 +99,6 @@ def sendSocket():
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
 
-@socketio.on('TA-chat1')
-
-def TA_chat():
-    # with websockets
-    app.logger.info("this part ran 23456789")
-    print("testttt2")
-    chatList = []
-    allChats = TA_chat_collection.find({})
-    for chat in allChats:
-        chat.pop("_id")
-        chatList.append(chat)
-    chatJSON = json.dumps(chatList)
-    # may need to set the content type to application/json?
-    response = make_response(jsonify(chatJSON))
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    app.logger.info("this part ran 23456789")
-    emit('TAChat', chatJSON, broadcast=True)
-
-
-# @socketio.on('connect', namespace='/websocket')
-# def socketConnect():
-#     print("connected to websocket")
-
-
-# @socketio.on('disconnect', namespace='/websocket')
-# def socketDisconnect():
-#     print("no longer connected to websocket")
-
 
 # quick question, what do i when someone press the delete button?
 # im assuming /dequeue will call /dequeue_student if its authenticated?
@@ -185,4 +158,3 @@ def user_exist(auth_token):
         return True
     else:
         return False
-

@@ -1,29 +1,63 @@
+let socket = null
 function initWS() {
-    var socket = io.connect('ws://localhost:8080', {
+    socket = io.connect('http://localhost:8080/', {
         transports: ['websocket']
     });
 
     socket.on('connect', function() {
         console.log('connected to websocket');
-        console.log('gopint to ta-chat');
-        clearTAChat();
-        console.log('actually gopint to ta-chat');
-        socket.emit('TA-chat1');
+        socket.emit('ClientTAChat');
+        socket.emit('populateStudentQueue');
     });
 
     socket.on('disconnect', function() {
-        console.log('No longer connected to websocket');
+        console.log('disconnected from websocket');
     });
 
-    socket.on('TA-chat', function(chat) {
-        console.log('in ta chat');
-        console.log('message: ', chat);
+    socket.on('TAChat', function(chat) {
+        clearTAChat();
         addMessageToChat(chat);
     });
 
-    socket.on('connect_error', (error) => {
-        console.log('Connection Error:', error);
+    socket.on('TAChatReceive', function(chat) {
+        addMessageToChat(chat);
     });
+
+    socket.on('studentQueue', function(student) {
+        clearStudentQueue();
+        addStudentToQueue(student);
+    });
+
+    socket.on('connect_error', (error) => {
+        console.log('Connection                                                                                                                                                                                                                                                                                                                                                             Error:', error);
+    });
+
+    const TAChatInput = document.getElementById('TA-chat');
+    TAChatInput.addEventListener("keypress", function (event) {
+        if (event.code === "Enter") {
+            let TAChat = TAChatInput.value;
+            TAChatInput.value = "";
+            socket.emit('ReceiveTAChat', TAChat);
+        }
+    });
+
+    const StudentEnqueue = document.getElementById('student-queue');
+    StudentEnqueue.addEventListener("keypress", function (event) {
+        if (event.code === "Enter") {
+            let Student = StudentEnqueue.value;
+            StudentEnqueue.value = "";
+            socket.emit('StudentQueue', Student);
+        }
+    });
+
+}
+
+function dequeueStudent(id) {
+    socket.emit('StudentDequeue', id);
+}
+
+function dequeueTA(id) {
+    socket.emit('TADequeue', id);
 }
 
 function clearTAChat() {
@@ -31,11 +65,28 @@ function clearTAChat() {
     chatMessages.innerHTML = "";
 }
 
+function clearStudentQueue() {
+    const studentQueue = document.getElementById("student-enqueue");
+    studentQueue.innerHTML = "";
+}
+
 function addMessageToChat(chatJSON) {
     const chatMessages = document.getElementById("TA-Announcements");
-    const username = chatJSON.username;
-    const chatMessage = chatJSON.message;
-    chatMessages.innerHTML += "<b>" + username + "</b>: " + chatMessage;
+    let TA_chat = JSON.parse(chatJSON)
+    for (let i = 0; i < TA_chat.length; i++) {
+        const username = TA_chat[i].split(":")[0];
+        const chatMessage = TA_chat[i].split(":")[1];
+        chatMessages.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueTA(" + i + ")'>X</button><b>" + username + "</b>: " + chatMessage + "</div>";
+    }
+}
+
+function addStudentToQueue(student) {
+    const Queue = document.getElementById("student-enqueue");
+    let students = JSON.parse(student)
+    for (let i = 0; i < students.length; i++) {
+        const username = students[i];
+        Queue.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueStudent(" + i + ")'>X</button><b>" + username + "</b></div>";
+    }
 }
 
 function ta_display(){
@@ -64,27 +115,6 @@ function ta_display(){
         console.log(newArr)
         addNames(newArr)
     }
-}
-
-function dequeue(studentName){//funciton to dequeue student, this is called by onclick button
-    const request = new XMLHttpRequest();
-    const name = studentName
-    console.log(name)
-    const body = JSON.stringify({student_name: name});
-    console.log(body)
-    request.open("POST", "/dequeue_student");
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    request.send(body);
-}
-
-function dequeueChat(chatMessage){//funciton to dequeue student, this is called by onclick button
-    const request = new XMLHttpRequest();
-    console.log(chatMessage)
-    const body = JSON.stringify({chat: chatMessage});
-    console.log(body)
-    request.open("POST", "/remove_TA_chat");
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    request.send(body);
 }
 
 function addNames(taNames){

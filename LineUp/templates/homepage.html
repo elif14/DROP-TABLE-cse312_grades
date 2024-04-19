@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <title>Line Up</title>
     <link rel="stylesheet" type="text/css" href="/static/homepage.css"/>
-    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 </head>
 
 <body onload="ta_display()">
-    <script src="/static/functions.js"></script>
     {% if username %}
         <h1> Time to work! {{ username }} </h1>
     {% else %}
@@ -24,36 +23,28 @@
         <button onclick="submit">On Duty</button>
     </form>
     <br>
-    <form action="/dequeue" method="post">
-        <button onclick="submit">Off Duty</button>
-    </form>
+    <label>
+        Student Queue:
+        <input id="student-queue" type="text" name="student-queue">
+    </label>
     <br>
-    <form action="/student" method="POST">
-        <label>
-            Student:
-            <input id="student" type="text" name="Name">
-        </label>
-    </form>
-    <br>
-    <form action="/TA-chat" method="POST">
-        <label>
-            TA Announcements:
-            <input id="TA-chat" type="text" name="TA-chat">
-        </label>
-    </form>
+    <label>
+        TA Announcements:
+        <input id="TA-chat" type="text" name="TA-chat">
+    </label>
     <h2 id="student_names"></h2>
 
 
-    <h3> Queue: </h3>
-    {% for student in studentQ %}
-        <p><button id="{{ student }}" onclick="dequeue('{{ student }}')">X</button> {{ student }}</p>
-    {% endfor %}
+    <h4> Queue </h4>
+    <div id="student-enqueue">
+
+    </div>
 
     <h4> TA Announcements </h4>
     <div id="TA-Announcements">
 
     </div>
 
-
+    <script src="/static/functions.js"></script>
 </body>
 </html>
