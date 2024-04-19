@@ -1,6 +1,14 @@
 from flask import Flask
 from logging.config import dictConfig 
 
+import sys
+
+from twisted.python import log
+from twisted.internet import reactor
+log.startLogging(sys.stdout)
+
+from autobahn.twisted.websocket import WebSocketServerFactory
+
 dictConfig({
     'version': 1,
     'formatters': {'default': {
@@ -44,5 +52,12 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(student_bp)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    
+
+   factory = WebSocketServerFactory()
+   factory.protocol = MyServerProtocol
+
+   reactor.listenTCP(9000, factory)
+   reactor.run()
+    #app.run(host='0.0.0.0', port=8080, debug=True)
     # socketio.run(app, allow_unsafe_werkzeug=True, host='0.0.0.0', port=8080)
