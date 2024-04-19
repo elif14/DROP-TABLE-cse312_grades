@@ -17,7 +17,7 @@ def image_upload():
         filename = request.files["upload"].filename
         new_image = ""
         if "jpg" in filename:
-            filename = "new_image" + str(random.randint(0, 100)) + ".jpg"
+            filename = "LineUp/static/new_image" + str(random.randint(0, 100)) + ".jpg"
             new_image = "<img src=" + filename + ">"
         curr_auth = request.cookies.get("auth_token")
         if curr_auth is not None:
@@ -34,5 +34,5 @@ def image_upload():
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
 
-@image_bp.route('/LineUp/profile-images', methods=["GET"])
-def serve_image():
+# @image_bp.route('/LineUp/profile-images', methods=["GET"])
+# def serve_image():
