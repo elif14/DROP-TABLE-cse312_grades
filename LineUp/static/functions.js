@@ -1,5 +1,5 @@
 function initWS() {
-    var socket = io.connect('https://wonwoojeong.com/', {
+    var socket = io.connect('http://localhost:8080/', {
         transports: ['websocket']
     });
 
