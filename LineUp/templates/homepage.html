@@ -50,8 +50,7 @@
 
     <h4> TA Announcements </h4>
     {% for chat in TA_chat %}
-        <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
-        <img src="LineUp/static/{{ username }}.jpg" alt="TA_profile" type="image/jpeg">
+        <img src="LineUp/static/{{ username }}.jpg" class="image" alt="TA_profile" type="image/jpeg"> <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
     {% endfor %}
 
 
