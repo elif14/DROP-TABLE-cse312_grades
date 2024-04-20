@@ -101,7 +101,7 @@ def TA_dequeue(id):
                 idFinder = 0
                 for TAMessage in TAChats:
                     TAMessage.pop("_id")
-                    TAUsername = TAMessage.split(":")[0]
+                    TAUsername = TAMessage.get("chat").split(":")[0]
                     GivenUsername = id.split["?"][0]
                     Givenid = id.split["?"][1]
                     if idFinder == int(Givenid) and GivenUsername == TAUsername:
