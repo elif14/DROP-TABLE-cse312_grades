@@ -95,6 +95,7 @@ def TA_dequeue(id):
         hash_token = hash_obj.hexdigest()
         if TA_collection.find_one({"auth_token": hash_token}) is not None:
             TA_info = TA_collection.find({"auth_token": hash_token})[0]
+            TAWhoClickedButton = TA_info.get("username")
             if TA_info is not None:
                 TAChats = TA_chat_collection.find({})
                 TAChat = []
@@ -104,10 +105,7 @@ def TA_dequeue(id):
                     TAUsername = TAMessage.get("chat").split(":")[0]
                     GivenUsername = id.split("?")[0]
                     Givenid = id.split("?")[1]
-                    app.logger.info(Givenid)
-                    app.logger.info(GivenUsername)
-                    app.logger.info(TAUsername)
-                    if idFinder == int(Givenid) and GivenUsername == TAUsername:
+                    if idFinder == int(Givenid) and TAWhoClickedButton == GivenUsername:
                         TA_chat_collection.delete_one({"chat": TAMessage.get("chat")})
                     else:
                         TAChat.append(TAMessage.get("chat"))
