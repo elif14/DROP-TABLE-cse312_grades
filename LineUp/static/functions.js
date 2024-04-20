@@ -57,13 +57,26 @@ function addNames(taNames){
     const currElem = document.getElementById("ta_names")
     for (const name of taNames){
         let newArr = name.split('(')
-        const newImage = new Image ()
+        const newDiv = document.createElement("div");
+        newDiv.className = "container";
+
+        const newImageDiv = document.createElement("div");
+        newImageDiv.className = "image";
+        const newImage = new Image ();
+        newImage.src = "LineUp/static/" + newArr[0] + ".jpg"
+        newImageDiv.appendChild(newImage);
+        
+        const newTextDiv = document.createElement("div");
+        newTextDiv.className = "text";
         const newElem = document.createElement("h3")
         const newName = document.createTextNode(name)
-        newImage.src = "LineUp/static/" + newArr[0] + ".jpg"
         newElem.appendChild(newName)
-        document.body.insertBefore(newImage, currElem)
-        document.body.insertBefore(newElem, newImage)
+        newTextDiv.appendChild(newElem);
+        
+        newDiv.append(newImageDiv, newTextDiv);
+
+        document.body.insertBefore(newDiv, currElem);
+        //document.body.insertBefore(newElem, newImage)
     }
 }
 

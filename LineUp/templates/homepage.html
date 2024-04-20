@@ -16,6 +16,7 @@
     <h1> TAs On Duty: </h1>
     <h2 id="ta_names"></h2>
     <h6 id="ta-pics"></h6>
+    <div>
     <form action="/user" method="get">
         <button onclick="submit">Register/Login</button>
     </form>
@@ -52,7 +53,7 @@
     {% for chat in TA_chat %}
         <img src="LineUp/static/{{ username }}.jpg" class="image" alt="TA_profile" type="image/jpeg"> <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
     {% endfor %}
-
+    </div>
 
 </body>
 </html>
