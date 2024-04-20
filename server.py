@@ -53,7 +53,7 @@ def student_enqueue(studentName):
     if studentName.isalnum():
         studentName = html.escape(studentName + " " + str(datetime.now() - timedelta(days=1) + timedelta(hours=20)))
         if student_queue.find_one({"student": studentName}) is None:
-            student_queue.insert_one({"student": studentName, "dequeued": False, "id": str(id_number)})
+            student_queue.insert_one({"student": studentName, "dequeued": False})
             student = [studentName]
             student = json.dumps(student)
             emit('studentQueue2', student, broadcast=True)
@@ -100,7 +100,10 @@ def TA_dequeue(id):
                 TAChat = []
                 idFinder = 0
                 for TAMessage in TAChats:
-                    if idFinder == int(id) and TAMessage.get("id") == id:
+                    TAUsername = TAMessage.split(":")[0]
+                    GivenUsername = id.split["?"][0]
+                    Givenid = id.split["?"][1]
+                    if idFinder == Givenid and GivenUsername == TAUsername:
                         TA_chat_collection.delete_one({"chat": TAMessage.get("chat")})
                     else:
                         TAMessage.pop("_id")
@@ -121,16 +124,8 @@ def receive_TA_annoucement(chat):
             if TA_collection.find_one({"auth_token": hash_token}) is not None:
                 TA_info = TA_collection.find({"auth_token": hash_token})[0]
                 if TA_info is not None:
-                    if incrementer.find_one({}) is not None:
-                        updated_id = int(incrementer.find_one({}).get("id")) + 1
-                        incrementer.update_one({}, {"$set": {"id": updated_id}})
-
-                    elif incrementer.find_one({}) is None:
-                        incrementer.insert_one({"id": 0})
-
-                    id_number = json.loads(str(incrementer.find_one({}).get("id")))
                     TA_chat_collection.insert_one({"chat": str(TA_info["username"]) + ": " + str(html.escape(chat)),
-                                                   "removed": str(False), "id": str(id_number)})
+                                                   "removed": str(False)})
                     TA_chat = [str(TA_info["username"]) + ":" + str(html.escape(chat))]
                     TA_chat = json.dumps(TA_chat)
                     emit('TAChatReceive', TA_chat, broadcast=True)

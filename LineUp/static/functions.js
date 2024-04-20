@@ -86,7 +86,7 @@ function addMessageToChat(chatJSON) {
     for (let i = 0; i < TA_chat.length; i++) {
         const username = TA_chat[i].split(":")[0];
         const chatMessage = TA_chat[i].split(":")[1];
-        chatMessages.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueTA(" + i + ")'>X</button><b>" + username + "</b>: " + chatMessage + "</div>";
+        chatMessages.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueTA(" + username + "?" + i + ")'>X</button><b>" + username + "</b>: " + chatMessage + "</div>";
     }
 }
 
