@@ -53,14 +53,6 @@ def student_enqueue(studentName):
     if studentName.isalnum():
         studentName = html.escape(studentName + " " + str(datetime.now() - timedelta(days=1) + timedelta(hours=20)))
         if student_queue.find_one({"student": studentName}) is None:
-            if incrementer.find_one({}) is not None:
-                updated_id = int(incrementer.find_one({}).get("id")) + 1
-                incrementer.update_one({}, {"$set": {"id": updated_id}})
-
-            elif incrementer.find_one({}) is None:
-                incrementer.insert_one({"id": 1})
-
-            id_number = json.loads(str(incrementer.find_one({}).get("id")))
             student_queue.insert_one({"student": studentName, "dequeued": False, "id": str(id_number)})
             student = [studentName]
             student = json.dumps(student)
@@ -81,7 +73,7 @@ def student_dequeue(id):
                 allStudents = student_queue.find({})
                 idFinder = 0
                 for student in allStudents:
-                    if student.get("id") == id:
+                    if idFinder == int(id):
                         student_queue.delete_one({"student": student.get("student")})
                     idFinder += 1
                 Queue = []
@@ -108,7 +100,7 @@ def TA_dequeue(id):
                 TAChat = []
                 idFinder = 0
                 for TAMessage in TAChats:
-                    if idFinder == int(id):
+                    if idFinder == int(id) and idFinder == TAMessage.get("id"):
                         TA_chat_collection.delete_one({"chat": TAMessage.get("chat")})
                     else:
                         TAMessage.pop("_id")
@@ -129,8 +121,16 @@ def receive_TA_annoucement(chat):
             if TA_collection.find_one({"auth_token": hash_token}) is not None:
                 TA_info = TA_collection.find({"auth_token": hash_token})[0]
                 if TA_info is not None:
+                    if incrementer.find_one({}) is not None:
+                        updated_id = int(incrementer.find_one({}).get("id")) + 1
+                        incrementer.update_one({}, {"$set": {"id": updated_id}})
+
+                    elif incrementer.find_one({}) is None:
+                        incrementer.insert_one({"id": 1})
+
+                    id_number = json.loads(str(incrementer.find_one({}).get("id")))
                     TA_chat_collection.insert_one({"chat": str(TA_info["username"]) + ": " + str(html.escape(chat)),
-                                                   "removed": str(False)})
+                                                   "removed": str(False), "id": str(id_number)})
                     TA_chat = [str(TA_info["username"]) + ":" + str(html.escape(chat))]
                     TA_chat = json.dumps(TA_chat)
                     emit('TAChatReceive', TA_chat, broadcast=True)
