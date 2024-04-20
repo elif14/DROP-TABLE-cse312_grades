@@ -55,7 +55,9 @@
     <h4> TA Announcements </h4>
 
     {% for chat in TA_chat %}
-        <img src="LineUp/static/{{ username }}.jpg" class="image" alt="TA_profile" type="image/jpeg"> <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
+        <div onchange="display_ta('{{ chat }}', {{ tas }})">
+            <img src="" class="image" alt="TA_profile" type="image/jpeg" id="{{ chat }}"> <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
+        </div>
     {% endfor %}
 
     <div id="TA-Announcements">
@@ -64,4 +66,5 @@
 
     <script src="/static/functions.js"></script>
 </body>
+
 </html>

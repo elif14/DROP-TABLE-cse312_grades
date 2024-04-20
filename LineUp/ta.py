@@ -30,7 +30,9 @@ def queue_page():
     username = "Guest"
     lstOfAllStudents = []
     lstOfAllTAChats = []
+    list_TAs =[]
     allStudents = student_queue.find({})
+    allTAs = student_queue.find({})
     for eachStudent in allStudents:
         if eachStudent["dequeued"] == False:
             lstOfAllStudents.append(eachStudent["student"])
@@ -41,11 +43,13 @@ def queue_page():
         if each_chat.get("removed") is False:
             lstOfAllTAChats.append(each_chat.get("chat"))
     # current_app.logger.info(lstOfAllStudents)
+    for single_TA in allTAs:
+        list_TAs.append(single_TA["username"])
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
         if user_exist(auth_token):
             username = login.get_username(auth_token)
-    response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents, TA_chat=lstOfAllTAChats)
+    response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents, TA_chat=lstOfAllTAChats, tas=list_TAs)
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
