@@ -116,6 +116,7 @@ function addNames(taNames){
         newDiv.className = "container";
 
         const newImageDiv = document.createElement("div");
+        newImageDiv.className = "image";
         const newImage = new Image ();
         newImage.src = "LineUp/static/" + newArr[0] + ".jpg"
         newImageDiv.appendChild(newImage);
