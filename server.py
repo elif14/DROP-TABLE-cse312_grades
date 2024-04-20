@@ -3,8 +3,10 @@ import os
 import json
 import html
 from datetime import datetime, timedelta
-
-from flask import Flask
+from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
+    url_for, Flask
+from pymongo import MongoClient
+from flask_socketio import SocketIO, emit
 from logging.config import dictConfig
 
 dictConfig({
@@ -27,14 +29,7 @@ from LineUp.user import user_bp
 from LineUp.register import register_bp
 from LineUp.login import login_bp
 from LineUp.ta import ta_bp
-
-from LineUp.student import student_bp
 from LineUp.image import image_bp
-
-from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
-    url_for, Flask
-from pymongo import MongoClient
-from flask_socketio import SocketIO, emit
 
 
 app = Flask(__name__)
@@ -51,8 +46,6 @@ app.register_blueprint(user_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
-
-app.register_blueprint(student_bp)
 app.register_blueprint(image_bp)
 
 
