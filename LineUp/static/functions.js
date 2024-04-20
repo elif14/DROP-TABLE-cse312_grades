@@ -35,6 +35,7 @@ function initWS() {
     socket.on('TAOnDutyReceive', function(TAOnDutyList) {
         clearOnDutyTAList();
         TAsOnDuty(TAOnDutyList);
+        addNames(TAOnDutyList)
     });
 
     socket.on('connect_error', (error) => {
