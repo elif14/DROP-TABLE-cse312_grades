@@ -100,7 +100,7 @@ def TA_dequeue(id):
                 TAChat = []
                 idFinder = 0
                 for TAMessage in TAChats:
-                    if idFinder == int(id) and idFinder == TAMessage.get("id"):
+                    if idFinder == int(id) and TAMessage.get("id") == id:
                         TA_chat_collection.delete_one({"chat": TAMessage.get("chat")})
                     else:
                         TAMessage.pop("_id")
@@ -126,7 +126,7 @@ def receive_TA_annoucement(chat):
                         incrementer.update_one({}, {"$set": {"id": updated_id}})
 
                     elif incrementer.find_one({}) is None:
-                        incrementer.insert_one({"id": 1})
+                        incrementer.insert_one({"id": 0})
 
                     id_number = json.loads(str(incrementer.find_one({}).get("id")))
                     TA_chat_collection.insert_one({"chat": str(TA_info["username"]) + ": " + str(html.escape(chat)),
