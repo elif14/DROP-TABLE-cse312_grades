@@ -103,6 +103,7 @@ def TA_dequeue(id):
                     TAMessage.pop("_id")
                     TAUsername = TAMessage.get("chat").split(":")[0]
                     GivenUsername = id.split("?")[0]
+                    //tet
                     Givenid = id.split("?")[1]
                     if idFinder == int(Givenid) and GivenUsername == TAUsername:
                         TA_chat_collection.delete_one({"chat": TAMessage.get("chat")})
