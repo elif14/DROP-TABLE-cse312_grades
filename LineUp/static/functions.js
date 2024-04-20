@@ -1,6 +1,6 @@
 let socket = null
 function initWS() {
-    socket = io.connect('http://localhost:8080', {
+    socket = io.connect('https://wonwoojeong.com', {
         transports: ['websocket']
     });
 
@@ -87,7 +87,7 @@ function addMessageToChat(chatJSON) {
         const username = TA_chat[i].split(":")[0];
         const username2 = TA_chat[i].split(":")[0] + "?" + String(i);
         const chatMessage = TA_chat[i].split(":")[1];
-        chatMessages.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueTA(" + username2 + ")'>X</button><b>" + username + "</b>: " + chatMessage + "</div>";
+        chatMessages.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueTA(\"" + username2 + "\")'>X</button><b>" + username + "</b>: " + chatMessage + "</div>";
     }
 }
 
