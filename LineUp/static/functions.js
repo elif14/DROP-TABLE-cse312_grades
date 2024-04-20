@@ -83,8 +83,7 @@ function randInt(min, max) {
 function addMessageToChat(chatJSON) {
     const chatMessages = document.getElementById("TA-Announcements");
     let TA_chat = JSON.parse(chatJSON)
-    rand = randInt(0, 100000)
-    for (let i = rand; i < TA_chat.length; i++) {
+    for (let i = 0; i < TA_chat.length; i++) {
         const username = TA_chat[i].split(":")[0];
         const chatMessage = TA_chat[i].split(":")[1];
         chatMessages.innerHTML += "<div style='margin-top: 7px'><button onclick='dequeueTA(" + i + ")'>X</button><b>" + username + "</b>: " + chatMessage + "</div>";
