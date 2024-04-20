@@ -40,6 +40,7 @@ on_duty = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
+incrementer = db['incrementer']
 socketio = SocketIO(app, cors_allowed_origins="*", transports=['websocket'], async_mode='threading')
 
 app.register_blueprint(user_bp)
@@ -52,7 +53,15 @@ def student_enqueue(studentName):
     if studentName.isalnum():
         studentName = html.escape(studentName + " " + str(datetime.now() - timedelta(days=1) + timedelta(hours=20)))
         if student_queue.find_one({"student": studentName}) is None:
-            student_queue.insert_one({"student": studentName, "dequeued": False})
+            if incrementer.find_one({}) is not None:
+                updated_id = int(incrementer.find_one({}).get("id")) + 1
+                incrementer.update_one({}, {"$set": {"id": updated_id}})
+
+            elif incrementer.find_one({}) is None:
+                incrementer.insert_one({"id": 1})
+
+            id_number = json.loads(str(incrementer.find_one({}).get("id")))
+            student_queue.insert_one({"student": studentName, "dequeued": False, "id": str(id_number)})
             student = [studentName]
             student = json.dumps(student)
             emit('studentQueue2', student, broadcast=True)
@@ -72,7 +81,7 @@ def student_dequeue(id):
                 allStudents = student_queue.find({})
                 idFinder = 0
                 for student in allStudents:
-                    if idFinder == int(id):
+                    if student.get("id") == id:
                         student_queue.delete_one({"student": student.get("student")})
                     idFinder += 1
                 Queue = []
