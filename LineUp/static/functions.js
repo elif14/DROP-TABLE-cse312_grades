@@ -33,8 +33,6 @@ function initWS() {
     });
 
     socket.on('TAOnDutyReceive', function(TAOnDutyList) {
-        console.log(TAOnDutyList);
-        console.log("test");
         clearOnDutyTAList();
         TAsOnDuty(TAOnDutyList);
     });
