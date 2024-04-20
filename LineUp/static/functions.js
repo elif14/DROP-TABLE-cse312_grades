@@ -51,8 +51,6 @@ function dequeueChat(chatMessage){//funciton to dequeue student, this is called 
             ta += singleChar;
         }
     }
-    const profile_img = document.getElementById(ta);
-    profile_img.src = "LineUp/static/"+ ta + ".jpg";
 }
 
 function addNames(taNames){
@@ -69,3 +67,10 @@ function addNames(taNames){
     }
 }
 
+function display_ta(taName) {
+    const profile_img = document.getElementById(taName + "ta_profile");
+    let newName = taName.split(':')
+    console.log(newName)
+    let newerName = newName[0].split('[')[1]
+    profile_img.src = "LineUp/static/"+ newerName + ".jpg";
+}

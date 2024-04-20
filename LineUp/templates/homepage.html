@@ -5,7 +5,7 @@
     <title>Line Up</title>
     <link rel="stylesheet" type="text/css" href="/static/homepage.css"/>
 </head>
-<body onload="ta_display(); ta_pic_display({{ TA_chat }})">
+<body onload="ta_display()">
     <script src="/static/functions.js"></script>
     {% if username %}
         <h1> Time to work! {{ username }} </h1>
@@ -51,7 +51,7 @@
     <h4> TA Announcements </h4>
     {% for chat in TA_chat %}
         <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
-        <img src="LineUp/static/{{chat}}.jpg" alt="TA_profile" type="image/jpeg">
+        <img src="LineUp/static/{{ username }}.jpg" alt="TA_profile" type="image/jpeg">
     {% endfor %}
 
 
