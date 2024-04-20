@@ -120,4 +120,24 @@ app.register_blueprint(example_bp)
     - [x] Interaction must be made on a per-post basis
 > [!WARNING]
 > - Verify that HTML is escaped in all user supplied strings.
+## Part 2
+### Objective 1: Multimedia Uploads
+- [ ] Logged in user can upload multimedia (image)
+- [ ] Other users can consume multimedia that has been uploaded
+
+### Objective 2: WebSocket Interactions
+- [ ] Logged in user can interact with other users using WebSockets
+    - [ ] Interaction can be both sent and recived via Websockets
+- [ ] Other users can see the interaction immediately without refreshing the page
+- [ ] WebSocket interaction must be authenticated if the user is logged in and this authentication must matter to other users of your app
+    - [ ] If **guests** can use Websocket feature, they must interact as a **guest**
+    - [ ] If user is logged in, their identity must be taken into account in **all** their websocket interatction and displayed to other users
+- [ ] Must authenticate the Websocket connections
+
+### Objective 3: Deployment and Encryption
+- [ ] Use WSS protocol for Websocket connection
+- [x] Certification must be valid
+- [x] Any HTTP request must be redirected to use HTTPS
+- [ ] Verify Websocket connection is encypted using WSS
+- [ ] Do not map port 27017:27017 in docker-compose file
 
