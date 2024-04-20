@@ -36,17 +36,68 @@ app = Flask(__name__)
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
-on_duty = db['on_duty']
+TAOnDuty_collection = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
-incrementer = db['incrementer']
 socketio = SocketIO(app, cors_allowed_origins="*", transports=['websocket'], async_mode='threading')
 
 app.register_blueprint(user_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
+
+
+@socketio.on('TAOnDuty')
+def on_duty():
+    curr_auth = request.cookies.get("auth_token")
+    if curr_auth is not None:
+        hash_obj = hashlib.sha256()
+        hash_obj.update(curr_auth.encode())
+        hash_obj.digest()
+        hash_token = hash_obj.hexdigest()
+        if TA_collection.find_one({"auth_token": hash_token}) is not None:
+            TA_info = TA_collection.find({"auth_token": hash_token})[0]
+            if TA_info is not None:
+                if TAOnDuty_collection.find_one({"TA": TA_info.get("username")}) is None:
+                    TAOnDuty_collection.insert_one({"TA": TA_info.get("username")})
+                    TAOnDutyList = []
+                    for TA in TAOnDuty_collection.find({}):
+                        TAOnDutyList.append(TA.get("TA"))
+                    TAOnDutyList = json.dumps(TAOnDutyList)
+                    emit('TAOnDutyReceive', TAOnDutyList, broadcast=True)
+
+
+@socketio.on('populateOnDuty')
+def populate_queue():
+    TAOnDutyList = []
+    for TA in TAOnDuty_collection.find({}):
+        TA.pop("_id")
+        TAOnDutyList.append(TA.get("TA"))
+    TAOnDutyList = json.dumps(TAOnDutyList)
+    emit('TAOnDutyReceive', TAOnDutyList, broadcast=True)
+
+
+@socketio.on('TAOffDuty')
+def off_duty():
+    curr_auth = request.cookies.get("auth_token")
+    if curr_auth is not None:
+        hash_obj = hashlib.sha256()
+        hash_obj.update(curr_auth.encode())
+        hash_obj.digest()
+        hash_token = hash_obj.hexdigest()
+        if TA_collection.find_one({"auth_token": hash_token}) is not None:
+            TA_info = TA_collection.find({"auth_token": hash_token})[0]
+            if TA_info is not None:
+                TaInCollection = TAOnDuty_collection.find_one({"TA": TA_info.get("username")})
+                if TaInCollection is not None:
+                    TAOnDuty_collection.delete_one({"TA": TA_info.get("username")})
+                    TAOnDutyList = []
+                    for TA in TAOnDuty_collection.find({}):
+                        TAOnDutyList.append(TA.get("username"))
+                    TAOnDutyList = json.dumps(TAOnDutyList)
+                    emit('TAOnDutyReceive', TAOnDutyList, broadcast=True)
+
 
 @socketio.on('StudentQueue')
 def student_enqueue(studentName):
@@ -102,7 +153,6 @@ def TA_dequeue(id):
                 idFinder = 0
                 for TAMessage in TAChats:
                     TAMessage.pop("_id")
-                    TAUsername = TAMessage.get("chat").split(":")[0]
                     GivenUsername = id.split("?")[0]
                     Givenid = id.split("?")[1]
                     if idFinder == int(Givenid) and TAWhoClickedButton == GivenUsername:
@@ -112,6 +162,7 @@ def TA_dequeue(id):
                     idFinder += 1
                 TAChatJSON = json.dumps(TAChat)
                 emit('TAChat', TAChatJSON, broadcast=True)
+
 
 @socketio.on('ReceiveTAChat')
 def receive_TA_annoucement(chat):
@@ -154,8 +205,6 @@ def populate_TA_chat():
     emit('TAChat', chatJSON, broadcast=True)
 
 
-
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=8080, debug=True)
     socketio.run(app, host='0.0.0.0', port=8080, debug=True)
-

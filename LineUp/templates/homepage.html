@@ -7,7 +7,7 @@
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 </head>
 
-<body onload="ta_display()">
+<body onload="onLoadFunction()">
     {% if username %}
         <h1> Time to work! {{ username }} </h1>
     {% else %}
@@ -19,9 +19,19 @@
     <form action="/user" method="get">
         <button onclick="submit">Register/Login</button>
     </form>
-    <form action="/queue" method="post">
-        <button onclick="submit">On Duty</button>
-    </form>
+
+    <div id="on-duty-container">
+    <label>
+        <button id="on-duty-button">On Duty</button>
+    </label>
+    </div>
+
+    <div id="off-duty-container">
+    <label>
+        <button id="off-duty-button">Off Duty</button>
+    </label>
+    </div>
+
     <br>
     <label>
         Student Queue:
