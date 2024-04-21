@@ -30,6 +30,7 @@ from LineUp.register import register_bp
 from LineUp.login import login_bp
 from LineUp.ta import ta_bp
 from LineUp.image import image_bp
+from LineUp.ta_page import ta_page
 
 
 app = Flask(__name__)
@@ -47,6 +48,7 @@ app.register_blueprint(register_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
+app.register_blueprint(ta_page)
 
 
 
