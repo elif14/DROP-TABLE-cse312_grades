@@ -98,7 +98,7 @@ def off_duty():
                     TAOnDuty_collection.delete_one({"TA": TA_info.get("username")})
                     TAOnDutyList = []
                     for TA in TAOnDuty_collection.find({}):
-                        TAOnDutyList.append(TA.get("username"))
+                        TAOnDutyList.append(TA.get("TA"))
                     TAOnDutyList = json.dumps(TAOnDutyList)
                     emit('TAOnDutyReceive', TAOnDutyList, broadcast=True)
 
