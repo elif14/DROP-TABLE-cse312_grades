@@ -103,13 +103,12 @@ def off_duty():
 
 @socketio.on('StudentQueue')
 def student_enqueue(studentName):
-    if studentName.isalnum():
-        studentName = html.escape(studentName + " " + str(datetime.now() - timedelta(days=1) + timedelta(hours=20)))
-        if student_queue.find_one({"student": studentName}) is None:
-            student_queue.insert_one({"student": studentName, "dequeued": False})
-            student = [studentName]
-            student = json.dumps(student)
-            emit('studentQueue2', student, broadcast=True)
+    studentName = html.escape(studentName + " " + str(datetime.now() - timedelta(days=1) + timedelta(hours=20)))
+    if student_queue.find_one({"student": studentName}) is None:
+        student_queue.insert_one({"student": studentName, "dequeued": False})
+        student = [studentName]
+        student = json.dumps(student)
+        emit('studentQueue2', student, broadcast=True)
 
 
 @socketio.on('StudentDequeue')
