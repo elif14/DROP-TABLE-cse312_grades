@@ -1,11 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>TA List:</title>
-        <link rel="stylesheet" type="text/css" href="/static/user.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/ta.css"/>
     </head>
     <body>
     {% for ta in list_of_TAs %}
-        <img src="LineUp/static/{{ ta }}.jpg" alt="Camera Shy" type="image/jpeg"/>
+        <img src="LineUp/static/{{ ta }}.jpg" alt="Camera Shy" type="image/jpeg" class=""/>
         <p>{{ ta }}</p>
     {% endfor %}
     </body>
