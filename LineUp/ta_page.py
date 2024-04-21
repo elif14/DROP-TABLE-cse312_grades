@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, make_response
+from flask import Blueprint, render_template, make_response, send_file
 from pymongo import MongoClient
 
 client = MongoClient("mongo")
@@ -21,3 +21,11 @@ def ta_page():
     response = make_response(response)
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
+
+@ta_page_bp.route('/static/ta.css')
+def ta_css():
+    response = send_file('LineUp/static/ta.css', mimetype='text/css')
+    response = make_response(response)
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    return response
+
