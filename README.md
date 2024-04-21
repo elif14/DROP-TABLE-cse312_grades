@@ -122,8 +122,9 @@ app.register_blueprint(example_bp)
 > - Verify that HTML is escaped in all user supplied strings.
 ## Part 2
 ### Objective 1: Multimedia Uploads
-- [ ] Logged in user can upload multimedia (image)
-- [ ] Other users can consume multimedia that has been uploaded
+- [*] Logged in user can upload multimedia (image)
+- [*] Other users can consume multimedia that has been uploaded
+- [*] Uploaded Images display after *docker compose restart*
 
 ### Objective 2: WebSocket Interactions
 - [ ] Logged in user can interact with other users using WebSockets
