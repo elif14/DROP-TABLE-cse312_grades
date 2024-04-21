@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>TA List:</title>
+        <link rel="stylesheet" type="text/css" href="/static/user.css"/>
+    </head>
+    <body>
+    {% for ta in tas %}
+        <img src="LineUp/static/{{ ta }}.jpg" alt="Camera Shy" type="image/jpeg"/>
+        <p>{{ ta }}</p>
+    {% endfor %}
+    </body>
+</html>
