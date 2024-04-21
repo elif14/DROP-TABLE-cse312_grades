@@ -6,7 +6,14 @@
     </head>
     <body>
     <h1>Here are all the TAs</h1>
-
+    <br>
+    <form action="/" method="get">
+        <button onclick="submit">Homepage</button>
+    </form>
+    <form action="/user" method="get">
+        <button onclick="submit">Register/Login</button>
+    </form>
+    <br><br>
     {% for ta in list_of_TAs %}
         <img src="LineUp/static/{{ ta }}.jpg" alt="Camera Shy" type="image/jpeg" class=""/>
         <p>{{ ta }}</p>
