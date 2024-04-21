@@ -139,5 +139,5 @@ app.register_blueprint(example_bp)
 - [x] Certification must be valid
 - [x] Any HTTP request must be redirected to use HTTPS
 - [ ] Verify Websocket connection is encypted using WSS
-- [ ] Do not map port 27017:27017 in docker-compose file
+- [x] Do not map port 27017:27017 in docker-compose file
 
