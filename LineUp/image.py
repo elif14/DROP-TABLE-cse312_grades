@@ -37,6 +37,7 @@ def image_upload():
 @image_bp.route('/LineUp/static/<file_name>')
 def serve_profile_image(file_name):
     current_app.logger.info("server_profile_image called")
+    file_name = file_name.replace("/", "")
     response = send_file('LineUp/static/'+file_name, mimetype='image/jpeg')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
