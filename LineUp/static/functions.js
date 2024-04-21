@@ -35,7 +35,7 @@ function initWS() {
     socket.on('TAOnDutyReceive', function(TAOnDutyList) {
         clearOnDutyTAList();
         TAsOnDuty(TAOnDutyList);
-        addNames(TAOnDutyList)
+        addNames(TAOnDutyList);
     });
 
     socket.on('connect_error', (error) => {
@@ -111,14 +111,15 @@ function dequeueChat(chatMessage){//funciton to dequeue student, this is called 
 
 function addNames(taNames){
     const currElem = document.getElementById("ta_names")
-    for (const name of taNames){
+    for (let i = 0; i < taNames.length ; i++ ){
+        const currTA = taNames[i];
         let newArr = name.split('(')
         const newDiv = document.createElement("div");
         newDiv.className = "container";
 
         const newImageDiv = document.createElement("div");
         const newImage = new Image ();
-        newImage.src = "LineUp/static/" + newArr[0] + ".jpg"
+        newImage.src = "LineUp/static/" + currTA + ".jpg"
         newImageDiv.appendChild(newImage);
         
         const newTextDiv = document.createElement("div");
