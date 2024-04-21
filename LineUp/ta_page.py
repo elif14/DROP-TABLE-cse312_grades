@@ -12,8 +12,10 @@ ta_page = Blueprint('ta_page', __name__,
 
 @ta_page.route('/ta')
 def ta_page():
-    list_of_TAs = TA_collection.find({})
-
+    list_of_TAs = []
+    all_tas = TA_collection.find({})
+    for ta in all_tas:
+        list_of_TAs.append(ta["username"])
 
     response = render_template('ta.html', list_of_TAs = list_of_TAs)
     response = make_response(response)
