@@ -35,6 +35,7 @@ function initWS() {
     socket.on('TAOnDutyReceive', function(TAOnDutyList) {
         clearOnDutyTAList();
         TAsOnDuty(TAOnDutyList);
+        addNames(TAOnDutyList)
     });
 
     socket.on('connect_error', (error) => {
@@ -78,7 +79,6 @@ function TAsOnDuty(TAOnDutyList) {
         const TA = TAsOnDuty[i];
         TAsOnDutyHTML.innerHTML += "<div style='margin-top: 7px'><b>" + TA + "</div>";
     }
-
 }
 
 
@@ -109,27 +109,30 @@ function dequeueChat(chatMessage){//funciton to dequeue student, this is called 
     }
 }
 
-function addNames(taName){
-    const currTA = taName;
-    const newDiv = document.createElement("div");
-    newDiv.className = "container";
+function addNames(taNames){
+    const currElem = document.getElementById("ta_names")
+    for (const name of taNames){
+        let newArr = name.split('(')
+        const newDiv = document.createElement("div");
+        newDiv.className = "container";
 
-    const newImageDiv = document.createElement("div");
-    const newImage = new Image ();
-    newImage.src = "LineUp/static/" + currTA + ".jpg"
-    newImageDiv.appendChild(newImage);
+        const newImageDiv = document.createElement("div");
+        const newImage = new Image ();
+        newImage.src = "LineUp/static/" + newArr[0] + ".jpg"
+        newImageDiv.appendChild(newImage);
 
-    const newTextDiv = document.createElement("div");
-    newTextDiv.className = "text";
-    const newElem = document.createElement("h3")
-    const newName = document.createTextNode(name)
-    newElem.appendChild(newName)
-    newTextDiv.appendChild(newElem);
+        const newTextDiv = document.createElement("div");
+        newTextDiv.className = "text";
+        const newElem = document.createElement("h3")
+        const newName = document.createTextNode(name)
+        newElem.appendChild(newName)
+        newTextDiv.appendChild(newElem);
 
-    newDiv.append(newImageDiv, newTextDiv);
+        newDiv.append(newImageDiv, newTextDiv);
 
-    document.body.insertBefore(newDiv, currElem);
-    //document.body.insertBefore(newElem, newImage)
+        document.body.insertBefore(newDiv, currElem);
+        //document.body.insertBefore(newElem, newImage)
+    }
 }
 
 function display_ta(taName) {
