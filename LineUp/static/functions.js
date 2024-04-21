@@ -77,7 +77,6 @@ function TAsOnDuty(TAOnDutyList) {
     for (let i = 0; i < TAsOnDuty.length; i++) {
         const TA = TAsOnDuty[i];
         TAsOnDutyHTML.innerHTML += "<div style='margin-top: 7px'><b>" + TA + "</div>";
-        addNames(TA);
     }
 
 }
