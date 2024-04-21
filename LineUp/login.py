@@ -9,15 +9,14 @@ import string
 import html
 import random
 
-
 login_bp = Blueprint('login_bp', __name__,
-    template_folder='templates',
-    static_folder='static')
-
+                     template_folder='templates',
+                     static_folder='static')
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
 TA_collection = db['TA_collection']
+
 
 @login_bp.route('/login', methods=["POST"])
 def login():
@@ -26,7 +25,7 @@ def login():
     if user_exist(username) and correct_password(username, password):
         auth_token = create_auth_token(username)
         response = make_response(redirect('/', code=302))
-        response.set_cookie("auth_token", value=auth_token, max_age=3600, httponly=True)
+        response.set_cookie("auth_token", value=auth_token, max_age=3600, httponly=True, secure=True)
         response.headers["X-Content-Type-Options"] = "no-sniff"
         return response
     else:
@@ -34,6 +33,7 @@ def login():
         response = make_response(redirect('/user', code=302))
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
+
 
 @login_bp.route('/logout', methods=["POST"])
 def logout():
@@ -53,6 +53,7 @@ def logout():
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
 
+
 def user_exist(username: str):
     if TA_collection.find_one({"username": username}):
         current_app.logger.info("USER EXIST")
@@ -60,6 +61,8 @@ def user_exist(username: str):
     else:
         current_app.logger.info("USER DOES NOT EXIST")
         return False
+
+
 def correct_password(username, password):
     user = TA_collection.find({"username": username})[0]
     hashed_password = bcrypt.hashpw(password.encode(), user["salt"])
@@ -68,11 +71,13 @@ def correct_password(username, password):
     else:
         return False
 
+
 def get_username(auth_token):
     hashed_auth_token = hashlib.sha256(auth_token.encode()).hexdigest()
     user = TA_collection.find({"auth_token": hashed_auth_token})[0]
     if hashed_auth_token == user["auth_token"]:
         return user["username"]
+
 
 def create_auth_token(username):
     auth_token = secrets.token_urlsafe(80)
@@ -81,6 +86,7 @@ def create_auth_token(username):
     needed_token = hash_obj.hexdigest()
     TA_collection.update_one({"username": username}, {"$set": {"auth_token": needed_token}})
     return auth_token
+
 
 def htmlescape(word):
     word = word.replace('&', '&amp')
