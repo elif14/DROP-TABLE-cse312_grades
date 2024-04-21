@@ -8,6 +8,12 @@
 </head>
 
 <body onload="onLoadFunction()">
+    <form action="/user" method="get">
+        <button onclick="submit">Register/Login</button>
+    </form>
+    <form action="/ta" method="get">
+        <button onclick="submit">TA Page</button>
+    </form>
     {% if username %}
         <h1> Time to work! {{ username }} </h1>
     {% else %}
@@ -16,9 +22,7 @@
     <img src="/static/picture.jpg" alt="testing image" type="image/jpeg"/>
     <h1> TAs On Duty: </h1>
     <h2 id="ta_names"></h2>
-    <form action="/user" method="get">
-        <button onclick="submit">Register/Login</button>
-    </form>
+    
 
     <div id="on-duty-container">
     <label>
