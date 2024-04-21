@@ -16,48 +16,41 @@
     <img src="/static/picture.jpg" alt="testing image" type="image/jpeg"/>
     <h1> TAs On Duty: </h1>
     <h2 id="ta_names"></h2>
-    <h6 id="ta-pics"></h6>
-    <div>
-      <form action="/user" method="get">
-          <button onclick="submit">Register/Login</button>
-      </form>
+    <form action="/user" method="get">
+        <button onclick="submit">Register/Login</button>
+    </form>
 
-      <div id="on-duty-container">
-        <label>
-            <button id="on-duty-button">On Duty</button>
-        </label>
-      </div>
+    <div id="on-duty-container">
+    <label>
+        <button id="on-duty-button">On Duty</button>
+    </label>
+    </div>
 
-      <div id="off-duty-container">
-        <label>
-            <button id="off-duty-button">Off Duty</button>
-        </label>
-      </div>
+    <div id="off-duty-container">
+    <label>
+        <button id="off-duty-button">Off Duty</button>
+    </label>
+    </div>
 
-      <br>
-      <label>
-          Student Queue:
-          <input id="student-queue" type="text" name="student-queue">
-      </label>
-      <br>
-      <label>
-          TA Announcements:
-          <input id="TA-chat" type="text" name="TA-chat">
-      </label>
-      <h2 id="student_names"></h2>
+    <br>
+    <label>
+        Student Queue:
+        <input id="student-queue" type="text" name="student-queue">
+    </label>
+    <br>
+    <label>
+        TA Announcements:
+        <input id="TA-chat" type="text" name="TA-chat">
+    </label>
+    <h2 id="student_names"></h2>
 
 
-      <h4> Queue </h4>
-      <div id="student-enqueue">
+    <h4> Queue </h4>
+    <div id="student-enqueue">
 
     </div>
 
     <h4> TA Announcements </h4>
-
-    {% for chat in TA_chat %}
-        <img src="LineUp/static/{{ username }}.jpg" class="image" alt="TA_profile" type="image/jpeg"> <p> <button id="{{ chat }}" onclick="dequeueChat('{{ chat }}')">X</button>{{ chat }} </p>
-    {% endfor %}
-
     <div id="TA-Announcements">
 
     </div>
