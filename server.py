@@ -32,7 +32,6 @@ from LineUp.ta import ta_bp
 from LineUp.image import image_bp
 from LineUp.ta_page import ta_page_bp
 
-
 app = Flask(__name__)
 
 client = MongoClient("mongo")
@@ -49,7 +48,6 @@ app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
-
 
 
 @socketio.on('TAOnDuty')
@@ -170,21 +168,20 @@ def TA_dequeue(id):
 
 @socketio.on('ReceiveTAChat')
 def receive_TA_annoucement(chat):
-    if chat.isalnum():
-        curr_auth = request.cookies.get("auth_token")
-        if curr_auth is not None:
-            hash_obj = hashlib.sha256()
-            hash_obj.update(curr_auth.encode())
-            hash_obj.digest()
-            hash_token = hash_obj.hexdigest()
-            if TA_collection.find_one({"auth_token": hash_token}) is not None:
-                TA_info = TA_collection.find({"auth_token": hash_token})[0]
-                if TA_info is not None:
-                    TA_chat_collection.insert_one({"chat": str(TA_info["username"]) + ": " + str(html.escape(chat)),
-                                                   "removed": str(False)})
-                    TA_chat = [str(TA_info["username"]) + ":" + str(html.escape(chat))]
-                    TA_chat = json.dumps(TA_chat)
-                    emit('TAChatReceive', TA_chat, broadcast=True)
+    curr_auth = request.cookies.get("auth_token")
+    if curr_auth is not None:
+        hash_obj = hashlib.sha256()
+        hash_obj.update(curr_auth.encode())
+        hash_obj.digest()
+        hash_token = hash_obj.hexdigest()
+        if TA_collection.find_one({"auth_token": hash_token}) is not None:
+            TA_info = TA_collection.find({"auth_token": hash_token})[0]
+            if TA_info is not None:
+                TA_chat_collection.insert_one({"chat": str(TA_info["username"]) + ": " + str(html.escape(chat)),
+                                               "removed": str(False)})
+                TA_chat = [str(TA_info["username"]) + ":" + str(html.escape(chat))]
+                TA_chat = json.dumps(TA_chat)
+                emit('TAChatReceive', TA_chat, broadcast=True)
 
 
 @socketio.on('populateStudentQueue')
