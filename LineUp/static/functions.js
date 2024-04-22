@@ -8,7 +8,7 @@ function initWS() {
         console.log('connected to websocket');
         socket.emit('ClientTAChat');
         socket.emit('populateOnDuty');
-        socket.emit('studentQueue');
+        socket.emit('populateQueue');
     });
 
     socket.on('disconnect', function() {

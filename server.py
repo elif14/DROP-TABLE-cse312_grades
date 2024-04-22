@@ -183,7 +183,7 @@ def receive_TA_annoucement(chat):
                 emit('TAChatReceive', TA_chat, broadcast=True)
 
 
-@socketio.on('populateStudentQueue')
+@socketio.on('populateQueue')
 def populate_queue():
     Queue = []
     allStudentsInQueue = student_queue.find({})
