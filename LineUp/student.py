@@ -1,14 +1,10 @@
+import html
 import json
 import queue
-
-import flask
-from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
-    request, url_for
+from datetime import datetime, timedelta
+from flask import Blueprint, request, redirect, request, url_for
 from pymongo import MongoClient
-from LineUp import login
-import html
-
-from LineUp.ta import ta_bp, queue_page
+import datetime
 
 listDictOfStudents = []
 
@@ -23,15 +19,19 @@ student_queue = db['student_queue']
 
 @student_bp.route('/student', methods=["GET", "POST"])
 def student_enqueue():
-
-    if flask.request.method == 'POST':
-        studentName = request.form.get("Name")
-        if student_queue.find_one({"student": studentName}) is None:
-            student = {"student": studentName, "dequeued": False}
-            student_queue.insert_one(student)
+    if request.method == 'POST':
+        if (request.form.get("Name").isalnum()):
+            studentName = htmlescape(request.form.get("Name")) + " " + str(datetime.datetime.now() - timedelta(days=1) + timedelta(hours=20))
+            if student_queue.find_one({"student": studentName}) is None:
+                student = {"student": studentName, "dequeued": False}
+                student_queue.insert_one(student)
         return redirect(url_for('ta_bp.queue_page'))
 
-
+def htmlescape(word):
+    word = word.replace('&', '&amp')
+    word = word.replace('<', '&lt')
+    word = word.replace('>', '&gt')
+    return word
 
 # MEMO to Alex and Chris
 # student_queue table should have at least 2 fields

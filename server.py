@@ -17,7 +17,7 @@ dictConfig({
     }
 })
 
-from LineUp.homepage import homepage_bp
+from LineUp.user import user_bp
 from LineUp.register import register_bp
 from LineUp.login import login_bp
 from LineUp.ta import ta_bp
@@ -25,11 +25,11 @@ from LineUp.student import student_bp
 
 app = Flask(__name__)
 
-app.register_blueprint(homepage_bp)
+app.register_blueprint(user_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
 app.register_blueprint(student_bp)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True, TEMPLATES_AUTO_RELOAD=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)

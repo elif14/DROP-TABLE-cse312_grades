@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Line Up</title>
-    <link rel="stylesheet" type="text/css" href="/static/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/homepage.css"/>
 </head>
 <body onload="ta_display()">
     <script src="/static/functions.js"></script>
@@ -12,8 +12,12 @@
     {% else %}
         <h1> Welcome! Students </h1>
     {% endif %}
+    <img src="/static/picture.jpg" alt="testing image" type="image/jpeg"/>
     <h1> TAs On Duty: </h1>
     <h2 id="ta_names"></h2>
+    <form action="/user" method="get">
+        <button onclick="submit">Register/Login</button>
+    </form>
     <form action="/queue" method="post">
         <button onclick="submit">On Duty</button>
     </form>
@@ -32,8 +36,8 @@
 
 
     <h3> Queue: </h3>
-    {% for item in studentQ %}
-        <p><button id="{{ item }}" onclick=dequeue({{ item }})>X</button>{{ item }}</p>
+    {% for student in studentQ %}
+        <p><button id="{{ student }}" onclick="dequeue('{{ student }}')">X</button> {{ student }}</p>
     {% endfor %}
 
 

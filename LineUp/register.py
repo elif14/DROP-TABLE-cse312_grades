@@ -3,6 +3,7 @@ from flask import Blueprint, request, redirect
 from pymongo import MongoClient
 import bcrypt
 
+
 register_bp = Blueprint('register_bp', __name__,
     template_folder='templates',
     static_folder='static')
@@ -12,22 +13,20 @@ client = MongoClient("mongo")
 db = client["cse312-project"]
 TA_collection = db['TA_collection']
 
-homepage = '/'
-
 
 @register_bp.route('/register', methods=["POST"])
 def register():
     # get the form data
-    username = request.form.get("username")
-    password = request.form.get("password")
-    confirmPassword = request.form.get("confirmPassword")
+    username = htmlescape(request.form.get("username"))
+    password = htmlescape(request.form.get("password"))
+    confirmPassword = htmlescape(request.form.get("confirmPassword"))
     # check if the password match
     # if not password_check(password):
     #     return "password must be of length 10 with at least 1 number, lowercase letter, and uppercase letter."
     if password != confirmPassword:
-        return redirect(homepage, code=302)
+        return redirect('/user', code=302)
     if TA_collection.find_one({"username": username}) is not None:
-        return redirect(homepage, code=302)
+        return redirect('/user', code=302)
     # salt/hash password, and store in DB
     salt = bcrypt.gensalt()
     password = bcrypt.hashpw(password.encode(), salt)
@@ -35,9 +34,13 @@ def register():
             "salt": salt, 
             "hashed_password": password}
     TA_collection.insert_one(user)
-    # return back to homepage
-    return redirect(homepage, code=302)
+    return redirect('/user', code=302)
 
+def htmlescape(word):
+    word = word.replace('&', '&amp')
+    word = word.replace('<', '&lt')
+    word = word.replace('>', '&gt')
+    return word
 
 def password_check(password: str):
     if len(password) < 10:

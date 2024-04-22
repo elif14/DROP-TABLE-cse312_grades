@@ -1,20 +1,25 @@
+import html
 import json
-
+from datetime import datetime, timedelta
 from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app
 from pymongo import MongoClient
 from LineUp import login
+import hashlib
+import datetime
+
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
 on_duty = db['on_duty']
 student_queue = db['student_queue']
+TA_collection = db['TA_collection']
 
 ta_bp = Blueprint('ta_bp', __name__,
     template_folder='templates',
     static_folder='static')
 
 
-@ta_bp.route('/queue')
+@ta_bp.route('/')
 def queue_page():
     username = "Guest"
     lstOfAllStudents = []
@@ -24,17 +29,18 @@ def queue_page():
             lstOfAllStudents.append(eachStudent["student"])
         elif eachStudent["dequeued"] == True:
             lstOfAllStudents.append(eachStudent["student"] + " has been helped")
-    current_app.logger.info(lstOfAllStudents)
+    #current_app.logger.info(lstOfAllStudents)
     if 'auth_token' in request.cookies:
         auth_token = request.cookies.get("auth_token")
-        username = login.get_username(auth_token)
-    response = render_template('queue.html', username=username, studentQ=lstOfAllStudents)
+        if user_exist(auth_token):
+            username = login.get_username(auth_token)
+    response = render_template('homepage.html', username=username, studentQ=lstOfAllStudents)
     return response
 
 
-@ta_bp.route('/static/queue.css')
+@ta_bp.route('/static/homepage.css')
 def queue_style():
-    response = send_file('LineUp/static/queue.css', mimetype='text/css')
+    response = send_file('LineUp/static/homepage.css', mimetype='text/css')
     response = make_response(response)
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
@@ -44,11 +50,12 @@ def queue_style():
 def ta_enqueue():
     if 'auth_token' in request.cookies:
         auth_token = request.cookies["auth_token"]
-        username = login.get_username(auth_token)
-        if on_duty.find_one({"username": username}) is None:
-            TA = {"username": username}
-            on_duty.insert_one(TA)
-    return redirect('/queue', code=302)
+        if user_exist(auth_token):
+            username = login.get_username(auth_token)
+            if on_duty.find_one({"username": username}) is None:
+                TA = {"username": username}
+                on_duty.insert_one(TA)
+    return redirect('/', code=302)
 
 
 @ta_bp.route('/ta_display', methods=["GET"])
@@ -56,7 +63,7 @@ def ta_display():
     tas = on_duty.find({}, {'_id': 0})
     all_tas = []
     for single_ta in tas:
-        all_tas.append(single_ta["username"])
+        all_tas.append(single_ta["username"] + "(" + str(datetime.date.today() - timedelta(days=1)) + ")")
     needed_data = json.dumps(all_tas)
     return jsonify(needed_data)
 
@@ -70,13 +77,26 @@ def ta_display():
 def ta_dequeue():
     if 'auth_token' in request.cookies:
         auth_token = request.cookies["auth_token"]
-        username = login.get_username(auth_token)
-        on_duty.delete_one({"username": username})
-    return redirect('/queue', code=302)
+        if user_exist(auth_token):
+            username = login.get_username(auth_token)
+            on_duty.delete_one({"username": username})
+    return redirect('/', code=302)
 
 @ta_bp.route('/dequeue_student', methods=["POST"])#not sure how to approach this. i have the studnet name at teh end of the so its like /dequeue_student/"name" prob regx so thats a later prob
 def student_dequeue():
     name = request.json['student_name']
-    current_app.logger.info(name)
-    student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
-    return redirect('/queue', code=302)
+    if 'auth_token' in request.cookies:
+        auth_token = request.cookies["auth_token"]
+        if user_exist(auth_token):
+            student_queue.update_one({"student": name}, {'$set': {"dequeued": True}})
+    return redirect('/', code=302)
+
+
+def user_exist(auth_token):
+    hash_obj = hashlib.sha256()
+    hash_obj.update(auth_token.encode())
+    needed_token = hash_obj.hexdigest()
+    if TA_collection.find_one({"auth_token": needed_token}):
+        return True
+    else:
+        return False

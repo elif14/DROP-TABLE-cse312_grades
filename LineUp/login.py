@@ -1,32 +1,34 @@
 from flask import Blueprint, request, redirect, current_app
 from pymongo import MongoClient
+
 import bcrypt
 import hashlib
 import string
 import random
 
+
 login_bp = Blueprint('login_bp', __name__,
     template_folder='templates',
     static_folder='static')
 
- 
+
 client = MongoClient("mongo")
 db = client["cse312-project"]
 TA_collection = db['TA_collection']
 
 @login_bp.route('/login', methods=["POST"])
 def login():
-    username = request.form.get("login_username")
-    password = request.form.get("login_password")
+    username = htmlescape(request.form.get("login_username"))
+    password = htmlescape(request.form.get("login_password"))
     if user_exist(username) and correct_password(username, password):
         auth_token = create_auth_token(username)
-        response = redirect('/queue', code=302)
+        response = redirect('/', code=302)
         response.set_cookie("auth_token", value=auth_token, max_age=3600, httponly=True)
         response.headers["X-Content-Type-Options"] = "no-sniff"
         return response
     else:
         # maybe redirect them to wrong password or error page
-        return redirect('/', code=302)
+        return redirect('/user', code=302)
 
 @login_bp.route('/logout', methods=["POST"])
 def logout():
@@ -47,11 +49,13 @@ def logout():
     return response
 
 def user_exist(username: str):
-    if TA_collection.find({"username": username}) is not None:
+    if TA_collection.find_one({"username": username}):
+        current_app.logger.info("USER EXIST")
         return True
     else:
+        current_app.logger.info("USER DOES NOT EXIST")
         return False
-    
+
 def correct_password(username, password):
     user = TA_collection.find({"username": username})[0]
     hashed_password = bcrypt.hashpw(password.encode(), user["salt"])
@@ -59,7 +63,7 @@ def correct_password(username, password):
         return True
     else:
         return False
-    
+
 def get_username(auth_token):
     hashed_auth_token = hashlib.sha256(auth_token.encode()).hexdigest()
     current_app.logger.info(hashed_auth_token)
@@ -74,3 +78,9 @@ def create_auth_token(username):
     needed_token = hash_obj.hexdigest()
     TA_collection.update_one({"username": username}, {"$set": {"auth_token": needed_token}})
     return auth_token
+
+def htmlescape(word):
+    word = word.replace('&', '&amp')
+    word = word.replace('<', '&lt')
+    word = word.replace('>', '&gt')
+    return word
