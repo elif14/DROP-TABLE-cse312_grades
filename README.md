@@ -1,3 +1,7 @@
+# [Line Up](wonwoojeong.com)
+> [!IMPORTANT]
+> Click the link and enjoy world best office hour queue system.
+
 # How to print in Flask
 Normal print() **does not** work in flask.
 Using standard error or flush in print() also **does not** work.
@@ -136,9 +140,9 @@ app.register_blueprint(example_bp)
 - [ ] Must authenticate the Websocket connections
 
 ### Objective 3: Deployment and Encryption
-- [ ] Use WSS protocol for Websocket connection
+- [x] Use WSS protocol for Websocket connection
 - [x] Certification must be valid
 - [x] Any HTTP request must be redirected to use HTTPS
-- [ ] Verify Websocket connection is encypted using WSS
+- [x] Verify Websocket connection is encypted using WSS
 - [x] Do not map port 27017:27017 in docker-compose file
 
