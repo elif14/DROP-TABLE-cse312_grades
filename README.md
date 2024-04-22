@@ -1,4 +1,4 @@
-# [Line Up](wonwoojeong.com)
+# [Line Up](https://wonwoojeong.com)
 > [!IMPORTANT]
 > Click the link and enjoy world best office hour queue system.
 
