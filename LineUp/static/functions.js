@@ -1,6 +1,6 @@
 let socket = null
 function initWS() {
-    socket = io.connect('https://wonwoojeong.com/', {
+    socket = io.connect('wss://wonwoojeong.com/', {
         transports: ['websocket']
     });
 
@@ -77,10 +77,10 @@ function initWS() {
 function startTimer() {
     const timerHTML = document.getElementById("timer");
     let cooldown = 10;
-    timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue again.";
+    timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
     const timer = setInterval(function() {
         cooldown -= 1;
-        timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue again.";
+        timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
         if (cooldown === 0) {
             timerHTML.innerText = "";
             clearInterval(timer);

@@ -112,7 +112,7 @@ def student_enqueue(studentName):
     ID = request.sid
     queueCooldown = timedelta(seconds=10)
 
-    if ID in cooldownDict:
+    for ID in cooldownDict.keys():
         timeLeft = cooldownDict[ID]
         if (datetime.now() - timeLeft) < queueCooldown:
             return
@@ -124,7 +124,8 @@ def student_enqueue(studentName):
         student = json.dumps(student)
         emit('studentQueue2', student, broadcast=True)
 
-    cooldownDict[ID] = datetime.now()
+    for ID in cooldownDict.keys():
+        cooldownDict[ID] = datetime.now()
 
 
 @socketio.on('StudentDequeue')
