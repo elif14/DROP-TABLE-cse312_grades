@@ -49,6 +49,12 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
+cooldownDict = {}
+
+@socketio.on('connect')
+def connect():
+    client_id = request.sid
+    cooldownDict[client_id] = datetime.min
 
 @socketio.on('TAOnDuty')
 def on_duty():
@@ -103,12 +109,23 @@ def off_duty():
 
 @socketio.on('StudentQueue')
 def student_enqueue(studentName):
+    ID = request.sid
+    queueCooldown = timedelta(seconds=10)
+
+    for ID in cooldownDict.keys():
+        timeLeft = cooldownDict[ID]
+        if (datetime.now() - timeLeft) < queueCooldown:
+            return
+
     studentName = html.escape(studentName + " " + str(datetime.now() - timedelta(days=1) + timedelta(hours=20)))
     if student_queue.find_one({"student": studentName}) is None:
         student_queue.insert_one({"student": studentName, "dequeued": False})
         student = [studentName]
         student = json.dumps(student)
         emit('studentQueue2', student, broadcast=True)
+
+    for ID in cooldownDict.keys():
+        cooldownDict[ID] = datetime.now()
 
 
 @socketio.on('StudentDequeue')
@@ -164,7 +181,7 @@ def TA_dequeue(id):
                 TAChatJSON = json.dumps(TAChat)
                 emit('TAChat', TAChatJSON, broadcast=True)
 
-
+cooldown_duration = timedelta(seconds=10)
 @socketio.on('ReceiveTAChat')
 def receive_TA_annoucement(chat):
     curr_auth = request.cookies.get("auth_token")
