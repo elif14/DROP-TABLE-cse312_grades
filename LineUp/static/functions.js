@@ -1,6 +1,6 @@
 let socket = null
 function initWS() {
-    socket = io.connect('https://wonwoojeong.com/', {
+    socket = io.connect('http://localhost:8080/', {
         transports: ['websocket']
     });
 
@@ -31,6 +31,7 @@ function initWS() {
 
     socket.on('studentQueue2', function(student) {
         addStudentToQueue(student);
+        startTimer();
     });
 
     socket.on('TAOnDutyReceive', function(TAOnDutyList) {
@@ -70,6 +71,21 @@ function initWS() {
         socket.emit('TAOffDuty');
     });
 
+}
+
+
+function startTimer() {
+    const timerHTML = document.getElementById("timer");
+    let cooldown = 10;
+    timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue again.";
+    const timer = setInterval(function() {
+        cooldown -= 1;
+        timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue again.";
+        if (cooldown === 0) {
+            timerHTML.innerText = "";
+            clearInterval(timer);
+        }
+    }, 1000);
 }
 
 function TAsOnDuty(TAOnDutyList) {
