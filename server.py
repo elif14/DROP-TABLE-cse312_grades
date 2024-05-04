@@ -5,6 +5,8 @@ import html
 from datetime import datetime, timedelta
 from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
     url_for, Flask
+import flask_limiter
+from flask_limiter import Limiter
 from pymongo import MongoClient
 from flask_socketio import SocketIO, emit
 from logging.config import dictConfig
@@ -49,12 +51,21 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
+ip = ""
+
+def get_real_ip() -> str:
+    return ip
+
+limiter = Limiter(
+    get_real_ip, 
+    app = app,
+    default_limits = ["1 per second"]
+)
+
 @app.before_request
 def print_ip():
-    ip = request.environ.get('REMOTE_ADDR')
-    headers = request.headers['X-Real-IP']
+    ip = request.headers['X-Real-IP']
     current_app.logger.info(ip)
-    current_app.logger.info(headers)
 
 cooldownDict = {}
 
