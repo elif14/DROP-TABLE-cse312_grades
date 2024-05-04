@@ -60,7 +60,7 @@ def get_real_ip() -> str:
 limiter = Limiter(
     get_real_ip, 
     app = app,
-    default_limits = ["1 per second"]
+    default_limits = ["1 per 5 second"]
 )
 
 @app.before_request
