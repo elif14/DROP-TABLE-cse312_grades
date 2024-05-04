@@ -52,7 +52,9 @@ app.register_blueprint(ta_page_bp)
 @app.before_request
 def print_ip():
     ip = request.environ.get('REMOTE_ADDR')
+    headers = dict(request.headers)
     current_app.logger.info(ip)
+    current_app.logger.info(headers)
 
 cooldownDict = {}
 
