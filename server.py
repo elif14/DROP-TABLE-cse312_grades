@@ -51,9 +51,10 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
-ip = ""
+# ip = ""
 
 def get_real_ip() -> str:
+    ip = request.headers['X-Real-IP']
     return ip
 
 limiter = Limiter(
