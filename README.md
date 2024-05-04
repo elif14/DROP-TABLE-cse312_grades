@@ -66,7 +66,8 @@ from LineUp.new import example_bp
 app.register_blueprint(example_bp)
 ```
 
-## [Rate limiting all routes in a Blueprint] (https://flask-limiter.readthedocs.io/en/stable/recipes.html#rate-limiting-all-routes-in-a-blueprint)
+## Rate limiting all routes in a Blueprint 
+[DOS](https://flask-limiter.readthedocs.io/en/stable/recipes.html#rate-limiting-all-routes-in-a-blueprint)
 
 # Feature
 > [!NOTE]
