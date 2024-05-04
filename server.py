@@ -49,6 +49,11 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
+@app.before_request
+def print_ip():
+    ip = request.environ.get('REMOTE_ADDR')
+    current_app.logger.info(ip)
+
 cooldownDict = {}
 
 @socketio.on('connect')
