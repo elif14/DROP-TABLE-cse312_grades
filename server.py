@@ -66,7 +66,7 @@ def DOS_prevention():
     ip = request.headers['X-Real-IP']
     current_app.logger.info(ip)
     ip_found = find_ip_user(ip)
-    current_time = datetime.now().timetuple()
+    current_time = int(round(datetime.now().timestamp()))
     current_app.logger.info(current_time)
     if not ip_found:
         ip_collection.insert_one({"ip": ip, "count": 1, "time": current_time})
