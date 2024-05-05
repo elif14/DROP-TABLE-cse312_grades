@@ -32,13 +32,13 @@ def DOS_prevention():
         banned = not count
         if not banned:
             if user["count"] >= 50 and (current_time - user["time"]) <= 10:
-                current_app.logger.info("   time gap", current_time - user["time"])
+                current_app.logger.info("   time gap" + current_time - user["time"])
                 ip_collection.update_one({"ip": ip}, {"$set": {"count": 0}})
                 ip_collection.update_one({"ip": ip}, {"$set": {"time": current_time}})
                 current_app.logger.info("BANNED!!!")
                 return too_many_request()
             elif user["count"] < 50 and (current_time - user["time"]) > 10:
-                current_app.logger.info("   time gap", current_time - user["time"])
+                current_app.logger.info("   time gap" + current_time - user["time"])
                 ip_collection.delete_one({"ip": ip})
                 current_app.logger.info("RECORD DELETED")
             else:
