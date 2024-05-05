@@ -10,6 +10,8 @@ from LineUp import login
 import hashlib
 import datetime
 from flask_socketio import SocketIO, emit
+import flask_limiter
+from flask_limiter import Limiter
 
 app = Flask(__name__)
 
@@ -26,6 +28,7 @@ ta_bp = Blueprint('ta_bp', __name__,
                   static_folder='static')
 
 @ta_bp.route('/')
+@limiter.limit("50 per 10 second", 7)
 def queue_page():
     username = "Guest"
     lstOfAllStudents = []

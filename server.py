@@ -51,8 +51,6 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
-# ip = ""
-
 def get_real_ip() -> str:
     ip = request.headers['X-Real-IP']
     return ip
@@ -60,13 +58,8 @@ def get_real_ip() -> str:
 limiter = Limiter(
     get_real_ip, 
     app = app,
-    default_limits = ["5 per 10 second"]
+    default_limits = ["500 per 10 second"]
 )
-
-@app.before_request
-def print_ip():
-    ip = request.headers['X-Real-IP']
-    current_app.logger.info(ip)
 
 cooldownDict = {}
 
