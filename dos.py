@@ -24,24 +24,27 @@ def too_many_request():
 
 def DOS_prevention(cost):
     ip = request.headers['X-Real-IP']
-    current_app.logger.info("IP ADDRESS:")
-    current_app.logger.info(ip)
     ip_found = find_ip_user(ip)
-    current_app.logger.info("Time Duration:")
     current_time = int(round(datetime.now().timestamp()))
     if not ip_found:
-        current_app.logger.info("Requests Called: ")
+        current_app.logger.info("IP ADDRESS:")
+        current_app.logger.info(ip)
+        current_app.logger.info("Requests Called when created: ")
         current_app.logger.info(cost)
+        current_app.logger("Time Duration:")
+        current_app.logger.info(current_time)
         ip_collection.insert_one({"ip": ip, "count": cost, "time": current_time})
-        # current_app.logger.info("RECORD CREATED")
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]
         count = user["count"]
-        current_app.logger.info("Requests Called: ")
+        current_app.logger.info("IP ADDRESS:")
+        current_app.logger.info(ip)
+        current_app.logger.info("Requests Called if ip found: ")
         current_app.logger.info(count)
+        current_app.logger("Time Duration:")
+        current_app.logger.info(current_time - user["time"])
         banned = not count
         if not banned:
-            current_app.logger.info(current_time - user["time"])
             if user["count"] >= 50 and (current_time - user["time"]) <= 10:
                 ip_collection.update_one({"ip": ip}, {"$set": {"count": 0}})
                 ip_collection.update_one({"ip": ip}, {"$set": {"time": current_time}})
