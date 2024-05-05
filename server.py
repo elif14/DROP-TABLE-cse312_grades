@@ -56,12 +56,12 @@ def get_real_ip() -> str:
     return ip
 
 def cost_ta_page() -> int:
-    ta_users = TAOnDuty_collection.find({})
+    ta_users = TA_collection.find({})
     users = 0
     for single_ta in ta_users:
         users += 1
     current_app.logger.info(users)
-    return users
+    return users + 2
 
 limiter = Limiter(
     get_real_ip, 
