@@ -31,11 +31,11 @@ def cost_ta_page() -> int:
 def DOS_prevention():
     cost = 0
     if request.path == '/':
-        cost = 20
+        cost = 16
     if request.path == '/user':
-        cost = 5
+        cost = 1
     if request.path == '/ta':
-        cost = cost_ta_page() + 3
+        cost = cost_ta_page() + 2
     ip = request.headers['X-Real-IP']
     ip_found = find_ip_user(ip)
     current_time = int(round(datetime.now().timestamp()))
