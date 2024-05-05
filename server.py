@@ -64,11 +64,12 @@ def too_many_request():
 @app.before_request
 def DOS_prevention():
     ip = request.headers['X-Real-IP']
-    ip_found = find_ip_user(ip)
     current_app.logger.info(ip)
+    ip_found = find_ip_user(ip)
     current_time = datetime.now().timetuple()
+    current_app.logger.info(current_time)
     if not ip_found:
-         ip_collection.insert_one({"ip": ip, "count": 1, "time": current_time})
+        ip_collection.insert_one({"ip": ip, "count": 1, "time": current_time})
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]
         count = user["count"]
