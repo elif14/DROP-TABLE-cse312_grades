@@ -70,9 +70,11 @@ def DOS_prevention():
     current_app.logger.info(current_time)
     if not ip_found:
         ip_collection.insert_one({"ip": ip, "count": 1, "time": current_time})
+        current_app.logger.info("RECORD CREATED")
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]
         count = user["count"]
+        current_app.logger.info(count)
         banned = not count
         if not banned:
             if user["count"] >= 50 and (current_time - user["time"]) <= 10:
