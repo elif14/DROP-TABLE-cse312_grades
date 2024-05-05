@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, make_response, send_file, request
 from pymongo import MongoClient
 from LineUp import login
 from LineUp import ta
-import dos as DOS
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
@@ -11,10 +10,6 @@ TA_collection = db['TA_collection']
 user_bp = Blueprint('user_bp', __name__,
     template_folder='templates',
     static_folder='static')
-
-@user_bp.before_request
-def something():
-    return DOS.DOS_prevention(5)
 
 @user_bp.route('/user')
 def home():

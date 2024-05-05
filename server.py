@@ -8,6 +8,7 @@ from flask import Blueprint, render_template, send_file, make_response, request,
 from pymongo import MongoClient
 from flask_socketio import SocketIO, emit
 from logging.config import dictConfig
+import dos as DOS
 
 dictConfig({
     'version': 1,
@@ -56,6 +57,10 @@ cooldownDict = {}
 def connect():
     client_id = request.sid
     cooldownDict[client_id] = datetime.now
+
+@app.before_request
+def something():
+    return DOS.DOS_prevention()
 
 @socketio.on('TAOnDuty')
 def on_duty():

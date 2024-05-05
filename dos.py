@@ -6,7 +6,7 @@ from pymongo import MongoClient
 client = MongoClient("mongo")
 db = client["cse312-project"]
 ip_collection = db['ip_collection']
-
+TA_collection = db['TA_collection']
 
 def find_ip_user(ip_address):
     if ip_collection.find_one({"ip": ip_address}) is not None:
@@ -21,8 +21,21 @@ def too_many_request():
     response.content_type = "text/plain"
     return response
 
+def cost_ta_page() -> int:
+    ta_users = TA_collection.find({})
+    users = 0
+    for single_ta in ta_users:
+        users += 1
+    return users
 
-def DOS_prevention(cost):
+def DOS_prevention():
+    cost = 0
+    if request.path == '/':
+        cost = 20
+    if request.path == '/user':
+        cost = 5
+    if request.path == '/ta':
+        cost = cost_ta_page() + 3
     ip = request.headers['X-Real-IP']
     ip_found = find_ip_user(ip)
     current_time = int(round(datetime.now().timestamp()))
