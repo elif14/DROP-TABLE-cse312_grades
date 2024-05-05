@@ -121,3 +121,7 @@ app.register_blueprint(example_bp)
 > [!WARNING]
 > - Verify that HTML is escaped in all user supplied strings.
 
+PROJECT 3 LO3:
+By integrating a Lofi YouTube video into our Office Hours Lineup page, we creatde a more inviting environment for students who might be experiencing extra long wait times. This not only optimizes their waiting experience but also supports their academic performance by providing a relaxing backdrop that can enhance focus and calmness. Although simple, this has fulfilled the requirements of this objective and increases the UX of our site.
+
+**Thanks to all the TAs thats graded our work for the past semesters and guided us in OH and recitation. we really appriciate yall. Have a good summer!**
