@@ -60,6 +60,8 @@ limiter = Limiter(
     app = app,
     default_limits = ["500 per 10 second"]
 )
+limiter.limit("5 per 10 second", cost = 5)(user_bp)
+limiter.limit("25 per 10 second", cost = 7)(ta_bp)
 
 cooldownDict = {}
 

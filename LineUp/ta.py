@@ -10,8 +10,6 @@ from LineUp import login
 import hashlib
 import datetime
 from flask_socketio import SocketIO, emit
-import flask_limiter
-from flask_limiter import Limiter
 
 app = Flask(__name__)
 
@@ -27,18 +25,7 @@ ta_bp = Blueprint('ta_bp', __name__,
                   template_folder='templates',
                   static_folder='static')
 
-def get_real_ip() -> str:
-    ip = request.headers['X-Real-IP']
-    return ip
-
-limiter = Limiter(
-    get_real_ip, 
-    app = app,
-    default_limits = ["500 per 10 second"]
-)
-
 @ta_bp.route('/')
-@limiter.limit("50 per 10 second", cost=10)
 def queue_page():
     username = "Guest"
     lstOfAllStudents = []
