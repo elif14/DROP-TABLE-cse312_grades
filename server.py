@@ -56,7 +56,7 @@ def find_ip_user(ip_address):
     else:
         return False
 
-def too_many_response():
+def too_many_request():
     response = make_response()
     response.status_code = 429
     return response
@@ -80,7 +80,7 @@ def DOS_prevention():
     #             update_record
         if banned:
             if (current_time - user["time"]) < 30:
-                return too_many_response()
+                return too_many_request()
             if (current_time - user["time"]) >= 30:
                 ip_collection.delete_one({"ip": ip})
         
