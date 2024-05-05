@@ -40,6 +40,7 @@ TAOnDuty_collection = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
+Banned_list = db['Banned_list']
 socketio = SocketIO(app, cors_allowed_origins="*", transports=['websocket'], async_mode='threading')
 
 app.register_blueprint(user_bp)
