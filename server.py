@@ -65,7 +65,7 @@ def cost_ta_page() -> int:
 limiter = Limiter(
     get_real_ip, 
     app = app,
-    default_limits = ["500 per 10 second"]
+    default_limits = ["500 per 30 second"]
 )
 limiter.limit("50 per 30 second", cost = 5)(user_bp)
 limiter.limit("50 per 30 second", cost = 7)(ta_bp)
