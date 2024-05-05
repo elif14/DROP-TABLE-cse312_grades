@@ -24,6 +24,7 @@ def too_many_request():
 
 def DOS_prevention(cost):
     ip = request.headers['X-Real-IP']
+    current_app.logger.info(ip)
     ip_found = find_ip_user(ip)
     current_time = int(round(datetime.now().timestamp()))
     if not ip_found:
@@ -32,11 +33,11 @@ def DOS_prevention(cost):
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]
         count = user["count"]
-        # current_app.logger.info(count)
+        current_app.logger.info(count)
         banned = not count
         if not banned:
             if user["count"] >= 50 and (current_time - user["time"]) <= 10:
-                # current_app.logger.info(current_time - user["time"])
+                current_app.logger.info(current_time - user["time"])
                 ip_collection.update_one({"ip": ip}, {"$set": {"count": 0}})
                 ip_collection.update_one({"ip": ip}, {"$set": {"time": current_time}})
                 # current_app.logger.info("BANNED!!!")
