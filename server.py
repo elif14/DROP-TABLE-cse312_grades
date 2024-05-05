@@ -60,8 +60,7 @@ def cost_ta_page() -> int:
     users = 0
     for single_ta in ta_users:
         users += 1
-    current_app.logger.info(users)
-    return users + 2
+    return users
 
 limiter = Limiter(
     get_real_ip, 
@@ -70,7 +69,7 @@ limiter = Limiter(
 )
 limiter.limit("50 per 10 second", cost = 5)(user_bp)
 limiter.limit("50 per 10 second", cost = 7)(ta_bp)
-limiter.limit("5 per 10 second", cost=cost_ta_page)(ta_page_bp)
+limiter.limit("50 per 10 second", cost=cost_ta_page)(ta_page_bp)
 
 cooldownDict = {}
 
