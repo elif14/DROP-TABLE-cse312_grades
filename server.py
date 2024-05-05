@@ -72,8 +72,8 @@ def DOS_prevention():
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]
         banned = not user["count"]
-    if not banned:
-        if user["count"] >= 50 and (time - user["time"]) <= 10:
+        if not banned:
+            if user["count"] >= 50 and (current_time - user["time"]) <= 10:
     #             ban # count = -1 and time is resetted
     #             respond 429
     #        else:
