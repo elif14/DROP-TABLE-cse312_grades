@@ -60,6 +60,7 @@ def cost_ta_page() -> int:
     users = 0
     for single_ta in ta_users:
         users += 1
+    current_app.logger.info(users)
     return users
 
 limiter = Limiter(
