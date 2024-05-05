@@ -62,7 +62,7 @@ def too_many_request():
     response.content_type = "text/plain"
     return response
 
-@app.before_app_request
+@ta_bp.before_app_request
 def DOS_prevention():
     ip = request.headers['X-Real-IP']
     current_app.logger.info(ip)
