@@ -50,20 +50,27 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
+def find_ip_user(ip_address):
+    if ip_collection.find_one({"ip": ip_address}) is not None:
+        return True
+    else:
+        return False
+
 @app.before_request
 def DOS_prevention():
     ip = request.headers['X-Real-IP']
-    # ip_found = do some database
+    ip_found = find_ip_user(ip)
     current_app.logger.info(ip)
-    # if not ip_found:
-    #     create_record
+    if not ip_found:
+         unix_time = datetime.now().timetuple()
+         ip_collection.insert_one({"ip": ip, "count": 1, "time": unix_time})
     # if ip_found:
     #     banned = 
     #     if not banned:
     #         if count >= 50 and time <= 10:
     #             ban # count = -1 and time is resetted
     #             respond 429
-    #         else:
+    #        else:
     #             update_record
     #     if banned:
     #         if time < 30:
@@ -72,7 +79,7 @@ def DOS_prevention():
     #             delete
         
 
-            
+
 
 
 cooldownDict = {}
@@ -80,7 +87,7 @@ cooldownDict = {}
 @socketio.on('connect')
 def connect():
     client_id = request.sid
-    cooldownDict[client_id] = datetime.min
+    cooldownDict[client_id] = datetime.now
 
 @socketio.on('TAOnDuty')
 def on_duty():
