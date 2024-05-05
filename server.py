@@ -61,7 +61,7 @@ def too_many_request():
     response.status_code = 429
     return response
 
-@app.before_request
+@app.before_app_request
 def DOS_prevention():
     ip = request.headers['X-Real-IP']
     current_app.logger.info(ip)
