@@ -50,12 +50,10 @@ def DOS_prevention(cost):
                 ip_collection.update_one({"ip": ip}, {"$set": {"time": current_time}})
                 # current_app.logger.info("BANNED!!!")
                 return too_many_request()
-            elif user["count"] < 50 and (current_time - user["time"]) > 10:
-                # current_app.logger.info(current_time - user["time"])
-                ip_collection.delete_one({"ip": ip})
-                # current_app.logger.info("RECORD DELETED")
-            else:
+            elif user["count"] < 50 and (current_time - user["time"]) < 10:
                 ip_collection.update_one({"ip": ip}, {"$set": {"count": count + cost}})
+            else:
+                ip_collection.delete_one({"ip": ip})
         if banned:
             if (current_time - user["time"]) < 30:
                 return too_many_request()
