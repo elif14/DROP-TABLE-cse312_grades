@@ -64,8 +64,9 @@ def DOS_prevention():
     if not ip_found:
          unix_time = datetime.now().timetuple()
          ip_collection.insert_one({"ip": ip, "count": 1, "time": unix_time})
-    # if ip_found:
-    #     banned = 
+    if ip_found:
+        user = ip_collection.find({"ip": ip})[0]
+        banned = not(user["count"])
     #     if not banned:
     #         if count >= 50 and time <= 10:
     #             ban # count = -1 and time is resetted
