@@ -57,8 +57,9 @@ def find_ip_user(ip_address):
         return False
 
 def too_many_request():
-    response = make_response()
+    response = make_response("Too many requests")
     response.status_code = 429
+    response.content_type = "text/plain"
     return response
 
 @ta_bp.before_app_request
