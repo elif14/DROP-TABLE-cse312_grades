@@ -81,6 +81,8 @@ def DOS_prevention():
                 ip_collection.update_one({"ip": ip}, {"$set": {"count": 0}})
                 ip_collection.update_one({"ip": ip}, {"$set": {"time": current_time}})
                 return too_many_request()
+            elif user["count"] < 50 and (current_time - user["time"]) > 10:
+                ip_collection.delete_one({"ip": ip})
             else:
                 ip_collection.update_one({"ip": ip}, {"$set": {"count": count + 1}})
         if banned:
