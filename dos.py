@@ -31,7 +31,7 @@ def cost_ta_page() -> int:
 def DOS_prevention():
     cost = 0
     if request.path == '/':
-        cost = 16
+        cost = 2
     if request.path == '/user':
         cost = 1
     if request.path == '/ta':
