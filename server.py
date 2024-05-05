@@ -56,6 +56,11 @@ def find_ip_user(ip_address):
     else:
         return False
 
+def too_many_response():
+    response = make_response()
+    response.status_code = 429
+    return response
+
 @app.before_request
 def DOS_prevention():
     ip = request.headers['X-Real-IP']
@@ -73,11 +78,11 @@ def DOS_prevention():
     #             respond 429
     #        else:
     #             update_record
-    #     if banned:
-    #         if time < 30:
-    #             respond 429
-    #         if time >= 30:
-    #             delete
+        if banned:
+            if (current_time - user["time"]) < 30:
+                return too_many_response()
+            if (current_time - user["time"]) >= 30:
+                ip_collection.delete_one({"ip": ip})
         
 
 
