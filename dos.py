@@ -22,7 +22,6 @@ def DOS_prevention():
     ip = request.headers['X-Real-IP']
     ip_found = find_ip_user(ip)
     current_time = int(round(datetime.now().timestamp()))
-    current_app.logger.info(current_time)
     if not ip_found:
         ip_collection.insert_one({"ip": ip, "count": 1, "time": current_time})
         current_app.logger.info("RECORD CREATED")
@@ -33,13 +32,13 @@ def DOS_prevention():
         banned = not count
         if not banned:
             if user["count"] >= 50 and (current_time - user["time"]) <= 10:
-                current_app.logger.info(current_time - user["time"])
+                current_app.logger.info("   time gap", current_time - user["time"])
                 ip_collection.update_one({"ip": ip}, {"$set": {"count": 0}})
                 ip_collection.update_one({"ip": ip}, {"$set": {"time": current_time}})
                 current_app.logger.info("BANNED!!!")
                 return too_many_request()
             elif user["count"] < 50 and (current_time - user["time"]) > 10:
-                current_app.logger.info(current_time - user["time"])
+                current_app.logger.info("   time gap", current_time - user["time"])
                 ip_collection.delete_one({"ip": ip})
                 current_app.logger.info("RECORD DELETED")
             else:
