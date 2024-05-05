@@ -24,15 +24,20 @@ def too_many_request():
 
 def DOS_prevention(cost):
     ip = request.headers['X-Real-IP']
+    current_app.logger.info("IP ADDRESS:")
     current_app.logger.info(ip)
     ip_found = find_ip_user(ip)
+    current_app.logger.info("Time Duration:")
     current_time = int(round(datetime.now().timestamp()))
     if not ip_found:
+        current_app.logger.info("Requests Called: ")
+        current_app.logger.info(cost)
         ip_collection.insert_one({"ip": ip, "count": cost, "time": current_time})
         # current_app.logger.info("RECORD CREATED")
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]
         count = user["count"]
+        current_app.logger.info("Requests Called: ")
         current_app.logger.info(count)
         banned = not count
         if not banned:
