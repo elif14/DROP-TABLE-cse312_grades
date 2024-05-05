@@ -31,7 +31,7 @@ def DOS_prevention(cost):
         current_app.logger.info(ip)
         current_app.logger.info("Requests Called when created: ")
         current_app.logger.info(cost)
-        current_app.logger("Time Duration:")
+        current_app.logger.info("Time Duration:")
         current_app.logger.info(current_time)
         ip_collection.insert_one({"ip": ip, "count": cost, "time": current_time})
     if ip_found:
@@ -41,7 +41,7 @@ def DOS_prevention(cost):
         current_app.logger.info(ip)
         current_app.logger.info("Requests Called if ip found: ")
         current_app.logger.info(count)
-        current_app.logger("Time Duration:")
+        current_app.logger.info("Time Duration:")
         current_app.logger.info(current_time - user["time"])
         banned = not count
         if not banned:
