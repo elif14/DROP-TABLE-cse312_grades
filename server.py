@@ -51,26 +51,6 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
-def get_real_ip() -> str:
-    ip = request.headers['X-Real-IP']
-    return ip
-
-def cost_ta_page() -> int:
-    ta_users = TA_collection.find({})
-    users = 0
-    for single_ta in ta_users:
-        users += 1
-    return users
-
-limiter = Limiter(
-    get_real_ip, 
-    app = app,
-    default_limits = ["500 per 30 second"]
-)
-limiter.limit("50 per 30 second", cost = 5)(user_bp)
-limiter.limit("50 per 30 second", cost = 7)(ta_bp)
-limiter.limit("50 per 30 second", cost=cost_ta_page)(ta_page_bp)
-
 cooldownDict = {}
 
 @socketio.on('connect')
