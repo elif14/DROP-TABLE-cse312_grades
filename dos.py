@@ -29,11 +29,11 @@ def cost_ta_page() -> int:
     return users
 
 def DOS_prevention():
-    cost = 0
+    cost = 1
     if request.path == '/':
-        cost = 2
+        cost = 14
     if request.path == '/user':
-        cost = 1
+        cost = 4
     if request.path == '/ta':
         cost = cost_ta_page() + 2
     ip = request.headers['X-Real-IP']
