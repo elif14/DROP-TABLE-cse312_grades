@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, make_response, send_file, request
 from pymongo import MongoClient
 from LineUp import login
 from LineUp import ta
+import flask_limiter
+from flask_limiter import Limiter
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
@@ -11,7 +13,14 @@ user_bp = Blueprint('user_bp', __name__,
     template_folder='templates',
     static_folder='static')
 
+def get_real_ip() -> str:
+    ip = request.headers['X-Real-IP']
+    return ip
 
+limiter = Limiter(
+    get_real_ip, 
+    default_limits = ["1 per 10 second"]
+)
 
 @user_bp.route('/user')
 def home():
