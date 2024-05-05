@@ -49,6 +49,31 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
+@app.before_request
+def DOS_prevention():
+    ip = request.headers['X-Real-IP']
+    # ip_found = do some database
+    current_app.logger.info(ip)
+    # if not ip_found:
+    #     create_record
+    # if ip_found:
+    #     banned = 
+    #     if not banned:
+    #         if count >= 50 and time <= 10:
+    #             ban # count = -1 and time is resetted
+    #             respond 429
+    #         else:
+    #             update_record
+    #     if banned:
+    #         if time < 30:
+    #             respond 429
+    #         if time >= 30:
+    #             delete
+        
+
+            
+
+
 cooldownDict = {}
 
 @socketio.on('connect')
