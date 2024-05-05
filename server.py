@@ -55,20 +55,20 @@ def find_ip_user(ip_address):
         return True
     else:
         return False
-
+    
 @app.before_request
 def DOS_prevention():
     ip = request.headers['X-Real-IP']
     ip_found = find_ip_user(ip)
     current_app.logger.info(ip)
     if not ip_found:
-         unix_time = datetime.now().timetuple()
-         ip_collection.insert_one({"ip": ip, "count": 1, "time": unix_time})
+        unix_time = datetime.now().timetuple()
+        ip_collection.insert_one({"ip": ip, "count": 1, "time": unix_time})
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]
-        banned = not(user["count"])
-    #     if not banned:
-    #         if count >= 50 and time <= 10:
+        banned = not user["count"]
+        if not banned:
+            if user["count"] >= 50 and (time - user["time"]) <= 10:
     #             ban # count = -1 and time is resetted
     #             respond 429
     #        else:
