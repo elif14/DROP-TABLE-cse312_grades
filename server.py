@@ -56,34 +56,27 @@ def find_ip_user(ip_address):
     else:
         return False
 
-def too_many_response():
-    response = make_response()
-    response.status_code = 429
-    return response
-
 @app.before_request
 def DOS_prevention():
     ip = request.headers['X-Real-IP']
     ip_found = find_ip_user(ip)
-    current_time = datetime.now().timetuple()
     current_app.logger.info(ip)
     if not ip_found:
-         ip_collection.insert_one({"ip": ip, "count": 1, "time": current_time})
-    if ip_found:
-        time = ip_collection.find_one({"ip": ip})[0]["time"]
-    #     banned =
+         unix_time = datetime.now().timetuple()
+         ip_collection.insert_one({"ip": ip, "count": 1, "time": unix_time})
+    # if ip_found:
+    #     banned = 
     #     if not banned:
     #         if count >= 50 and time <= 10:
     #             ban # count = -1 and time is resetted
     #             respond 429
     #        else:
     #             update_record
-         if banned:
-            if (current_time - time) < 30:
-                return too_many_response()
-            if (current_time - time) >= 30:
-                ip_collection.delete_one({"ip": ip})
-
+    #     if banned:
+    #         if time < 30:
+    #             respond 429
+    #         if time >= 30:
+    #             delete
         
 
 
