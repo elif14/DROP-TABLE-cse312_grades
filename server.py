@@ -4,9 +4,7 @@ import json
 import html
 from datetime import datetime, timedelta
 from flask import Blueprint, render_template, send_file, make_response, request, redirect, jsonify, current_app, \
-    url_for, Flask
-import flask_limiter
-from flask_limiter import Limiter
+    url_for, Flask\
 from pymongo import MongoClient
 from flask_socketio import SocketIO, emit
 from logging.config import dictConfig
