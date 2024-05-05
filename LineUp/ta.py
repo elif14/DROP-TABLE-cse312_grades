@@ -10,6 +10,7 @@ from LineUp import login
 import hashlib
 import datetime
 from flask_socketio import SocketIO, emit
+import dos as DOS
 
 app = Flask(__name__)
 
@@ -24,6 +25,10 @@ socketio = SocketIO(app, cors_allowed_origins="*", message_queue=os.environ.get(
 ta_bp = Blueprint('ta_bp', __name__,
                   template_folder='templates',
                   static_folder='static')
+
+@ta_bp.before_request
+def something():
+    return DOS.DOS_prevention()
 
 @ta_bp.route('/')
 def queue_page():
