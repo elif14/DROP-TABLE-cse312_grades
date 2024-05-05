@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, make_response, send_file
 from pymongo import MongoClient
+import dos as DOS
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
@@ -9,6 +10,9 @@ ta_page_bp = Blueprint('ta_page_bp', __name__,
                     template_folder = 'templates', 
                     static_folder = 'static')
 
+@ta_page_bp.before_request
+def something():
+    return DOS.DOS_prevention(3)
 
 @ta_page_bp.route('/ta')
 def ta_page():

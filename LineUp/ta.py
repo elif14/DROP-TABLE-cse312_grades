@@ -28,7 +28,7 @@ ta_bp = Blueprint('ta_bp', __name__,
 
 @ta_bp.before_request
 def something():
-    return DOS.DOS_prevention()
+    return DOS.DOS_prevention(20)
 
 @ta_bp.route('/')
 def queue_page():
