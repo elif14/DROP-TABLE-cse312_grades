@@ -71,13 +71,15 @@ def DOS_prevention():
          ip_collection.insert_one({"ip": ip, "count": 1, "time": current_time})
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]
-        banned = not user["count"]
+        count = user["count"]
+        banned = not count
         if not banned:
             if user["count"] >= 50 and (current_time - user["time"]) <= 10:
-    #             ban # count = -1 and time is resetted
-    #             respond 429
-    #        else:
-    #             update_record
+                ip_collection.update_one({"ip": ip}, {"$set": {"count": 0}})
+                ip_collection.update_one({"ip": ip}, {"$set": {"time": current_time}})
+                return too_many_request()
+            else:
+                ip_collection.update_one({"ip": ip}, {"$set": {"count": count + 1}})
         if banned:
             if (current_time - user["time"]) < 30:
                 return too_many_request()
