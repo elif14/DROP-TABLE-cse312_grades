@@ -19,10 +19,11 @@ def get_real_ip() -> str:
 
 limiter = Limiter(
     get_real_ip, 
-    default_limits = ["1 per 10 second"]
+    default_limits = ["500 per 10 second"]
 )
 
 @user_bp.route('/user')
+@limiter.limit("50 per 10 second", cost=5)
 def home():
     username = "Student"
     if 'auth_token' in request.cookies:
