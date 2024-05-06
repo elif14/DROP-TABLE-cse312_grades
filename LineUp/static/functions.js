@@ -80,7 +80,7 @@ function initWS() {
 
 function initialTimer() {
     const timerHTML = document.getElementById("timer");
-    let cooldown = 4;
+    let cooldown = 3;
 
     timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
     const timer = setInterval(function() {
@@ -100,7 +100,7 @@ function startTimer() {
         cooldown = localStorage.getItem("timer");
     }
     else{
-        cooldown = 4;
+        cooldown = 3;
     }
     timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
     const timer = setInterval(function() {
@@ -176,8 +176,5 @@ function addStudentToQueue(student) {
 }
 
 function onLoadFunction(){
-    if (localStorage.getItem("timer")){
-        startTimer();
-    }
     initWS();
 }
