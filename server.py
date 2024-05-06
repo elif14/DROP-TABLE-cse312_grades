@@ -53,6 +53,10 @@ app.register_blueprint(ta_page_bp)
 
 cooldownDict = {}
 
+@app.before_request
+def something():
+    return DOS.DOS_prevention()
+
 @socketio.on('connect')
 def connect():
     client_id = request.sid
@@ -222,10 +226,6 @@ def populate_TA_chat():
         chatList.append(chat.get("chat"))
     chatJSON = json.dumps(chatList)
     emit('TAChat', chatJSON, broadcast=True)
-
-# @app.before_request
-# def something():
-#     return DOS.DOS_prevention()
 
 
 if __name__ == '__main__':
