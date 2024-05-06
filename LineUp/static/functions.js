@@ -5,6 +5,7 @@ function initWS() {
     });
 
     socket.on('connect', function() {
+        initialTimer();
         console.log('connected to websocket');
         socket.emit('ClientTAChat');
         socket.emit('populateOnDuty');
@@ -73,16 +74,45 @@ function initWS() {
 
 }
 
+function initialTimer() {
+    const timerHTML = document.getElementById("timer");
+    let cooldown;
+    if (localStorage.getItem("timer2")){
+        cooldown = localStorage.getItem("timer2");
+    }
+    else{
+        cooldown = 4;
+    }
+    timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
+    const timer = setInterval(function() {
+        cooldown -= 1;
+        localStorage.setItem("timer2", cooldown);
+        timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
+        if (cooldown === 0) {
+            timerHTML.innerText = "";
+            localStorage.removeItem("timer2");
+            clearInterval(timer);
+        }
+    }, 1000);
+}
 
 function startTimer() {
     const timerHTML = document.getElementById("timer");
-    let cooldown = 10;
+    let cooldown;
+    if (localStorage.getItem("timer")){
+        cooldown = localStorage.getItem("timer");
+    }
+    else{
+        cooldown = 4;
+    }
     timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
     const timer = setInterval(function() {
         cooldown -= 1;
+        localStorage.setItem("timer", cooldown);
         timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
         if (cooldown === 0) {
             timerHTML.innerText = "";
+            localStorage.removeItem("timer");
             clearInterval(timer);
         }
     }, 1000);
@@ -149,5 +179,11 @@ function addStudentToQueue(student) {
 }
 
 function onLoadFunction(){
+    if (localStorage.getItem("timer")){
+        startTimer();
+    }
+    if (localStorage.getItem("timer2")){
+        initialTimer();
+    }
     initWS();
 }
