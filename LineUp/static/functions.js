@@ -76,21 +76,14 @@ function initWS() {
 
 function initialTimer() {
     const timerHTML = document.getElementById("timer");
-    let cooldown;
-    if (localStorage.getItem("timer2")){
-        cooldown = localStorage.getItem("timer2");
-    }
-    else{
-        cooldown = 4;
-    }
+    let cooldown = 4;
+
     timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
     const timer = setInterval(function() {
         cooldown -= 1;
-        localStorage.setItem("timer2", cooldown);
         timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
         if (cooldown === 0) {
             timerHTML.innerText = "";
-            localStorage.removeItem("timer2");
             clearInterval(timer);
         }
     }, 1000);
