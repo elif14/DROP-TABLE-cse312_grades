@@ -16,6 +16,10 @@ function initWS() {
         console.log('disconnected from websocket');
     });
 
+    socket.on('timer', function() {
+        initialTimer();
+    });
+
     socket.on('TAChat', function(chat) {
         clearTAChat();
         addMessageToChat(chat);

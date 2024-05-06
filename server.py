@@ -61,6 +61,7 @@ cooldownDict = {}
 def connect():
     client_id = request.sid
     cooldownDict[client_id] = datetime.now()
+    emit('timer', broadcast=True)
 
 @socketio.on('TAOnDuty')
 def on_duty():
