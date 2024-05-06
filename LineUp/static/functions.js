@@ -1,4 +1,5 @@
 let socket = null
+let stopper = 0
 function initWS() {
     socket = io.connect('wss://wonwoojeong.com/', {
         transports: ['websocket']
@@ -81,13 +82,14 @@ function initWS() {
 function initialTimer() {
     const timerHTML = document.getElementById("timer");
     let cooldown = 3;
-
+    stopper = 1;
     timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
     const timer = setInterval(function() {
         cooldown -= 1;
         timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
         if (cooldown === 0) {
             timerHTML.innerText = "";
+            stopper = 0;
             clearInterval(timer);
         }
     }, 1000);
@@ -96,6 +98,9 @@ function initialTimer() {
 function startTimer() {
     const timerHTML = document.getElementById("timer");
     let cooldown;
+    if (stopper === 1){
+        return;
+    }
     if (localStorage.getItem("timer")){
         cooldown = localStorage.getItem("timer");
     }
@@ -104,6 +109,11 @@ function startTimer() {
     }
     timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
     const timer = setInterval(function() {
+        if (stopper === 1){
+            localStorage.removeItem("timer");
+            clearInterval(timer);
+            return;
+        }
         cooldown -= 1;
         localStorage.setItem("timer", cooldown);
         timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
