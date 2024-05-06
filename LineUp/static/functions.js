@@ -179,11 +179,6 @@ function addStudentToQueue(student) {
 }
 
 function onLoadFunction(){
-    if (localStorage.getItem("timer2")){
-        initialTimer();
-    }
-    else if (localStorage.getItem("timer")){
-        startTimer();
-    }
+    initialTimer();
     initWS();
 }
