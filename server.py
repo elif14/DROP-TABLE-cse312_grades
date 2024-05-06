@@ -8,6 +8,7 @@ from flask import Blueprint, render_template, send_file, make_response, request,
 from pymongo import MongoClient
 from flask_socketio import SocketIO, emit
 from logging.config import dictConfig
+import dos as DOS
 
 dictConfig({
     'version': 1,
@@ -49,6 +50,10 @@ app.register_blueprint(login_bp)
 app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
+
+@app.before_request
+def dos():
+    return DOS.DOS_prevention()
 
 cooldownDict = {}
 
