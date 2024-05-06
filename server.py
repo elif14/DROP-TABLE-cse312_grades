@@ -8,6 +8,7 @@ from flask import Blueprint, render_template, send_file, make_response, request,
 from pymongo import MongoClient
 from flask_socketio import SocketIO, emit
 from logging.config import dictConfig
+import dos as DOS
 
 dictConfig({
     'version': 1,
@@ -40,6 +41,7 @@ TAOnDuty_collection = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
+ip_collection = db['ip_collection']
 socketio = SocketIO(app, cors_allowed_origins="*", transports=['websocket'], async_mode='threading')
 
 app.register_blueprint(user_bp)
@@ -49,12 +51,17 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
+@app.before_request
+def dos():
+    return DOS.DOS_prevention()
+
 cooldownDict = {}
 
 @socketio.on('connect')
 def connect():
     client_id = request.sid
-    cooldownDict[client_id] = datetime.min
+    cooldownDict[client_id] = datetime.now()
+    emit('timer', broadcast=True)
 
 @socketio.on('TAOnDuty')
 def on_duty():
@@ -110,7 +117,7 @@ def off_duty():
 @socketio.on('StudentQueue')
 def student_enqueue(studentName):
     ID = request.sid
-    queueCooldown = timedelta(seconds=10)
+    queueCooldown = timedelta(seconds=3)
 
     for ID in cooldownDict.keys():
         timeLeft = cooldownDict[ID]

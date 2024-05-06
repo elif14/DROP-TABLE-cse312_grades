@@ -65,6 +65,7 @@ from LineUp.new import example_bp
 ```
 app.register_blueprint(example_bp)
 ```
+
 # Feature
 > [!NOTE]
 > - If you finished a feature in the checklist, **test throughly** and mark it off
@@ -126,18 +127,18 @@ app.register_blueprint(example_bp)
 > - Verify that HTML is escaped in all user supplied strings.
 ## Part 2
 ### Objective 1: Multimedia Uploads
-- [*] Logged in user can upload multimedia (image)
-- [*] Other users can consume multimedia that has been uploaded
-- [*] Uploaded Images display after *docker compose restart*
+- [x] Logged in user can upload multimedia (image)
+- [x] Other users can consume multimedia that has been uploaded
+- [x] Uploaded Images display after *docker compose restart*
 
 ### Objective 2: WebSocket Interactions
-- [ ] Logged in user can interact with other users using WebSockets
-    - [ ] Interaction can be both sent and recived via Websockets
-- [ ] Other users can see the interaction immediately without refreshing the page
-- [ ] WebSocket interaction must be authenticated if the user is logged in and this authentication must matter to other users of your app
-    - [ ] If **guests** can use Websocket feature, they must interact as a **guest**
-    - [ ] If user is logged in, their identity must be taken into account in **all** their websocket interatction and displayed to other users
-- [ ] Must authenticate the Websocket connections
+- [x] Logged in user can interact with other users using WebSockets
+    - [x] Interaction can be both sent and recived via Websockets
+- [x] Other users can see the interaction immediately without refreshing the page
+- [x] WebSocket interaction must be authenticated if the user is logged in and this authentication must matter to other users of your app
+    - [x] If **guests** can use Websocket feature, they must interact as a **guest**
+    - [x] If user is logged in, their identity must be taken into account in **all** their websocket interatction and displayed to other users
+- [x] Must authenticate the Websocket connections
 
 ### Objective 3: Deployment and Encryption
 - [x] Use WSS protocol for Websocket connection

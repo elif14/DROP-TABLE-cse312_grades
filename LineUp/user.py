@@ -11,8 +11,6 @@ user_bp = Blueprint('user_bp', __name__,
     template_folder='templates',
     static_folder='static')
 
-
-
 @user_bp.route('/user')
 def home():
     username = "Student"

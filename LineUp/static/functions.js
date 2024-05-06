@@ -1,10 +1,12 @@
 let socket = null
+let stopper = 0
 function initWS() {
     socket = io.connect('wss://wonwoojeong.com/', {
         transports: ['websocket']
     });
 
     socket.on('connect', function() {
+        initialTimer();
         console.log('connected to websocket');
         socket.emit('ClientTAChat');
         socket.emit('populateOnDuty');
@@ -13,6 +15,10 @@ function initWS() {
 
     socket.on('disconnect', function() {
         console.log('disconnected from websocket');
+    });
+
+    socket.on('timer', function() {
+        initialTimer();
     });
 
     socket.on('TAChat', function(chat) {
@@ -73,16 +79,47 @@ function initWS() {
 
 }
 
+function initialTimer() {
+    const timerHTML = document.getElementById("timer");
+    let cooldown = 3;
+    stopper = 1;
+    timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
+    const timer = setInterval(function() {
+        cooldown -= 1;
+        timerHTML.innerText = "Please wait " + String(cooldown) + " seconds before joining the queue";
+        if (cooldown === 0) {
+            timerHTML.innerText = "";
+            stopper = 0;
+            clearInterval(timer);
+        }
+    }, 1000);
+}
 
 function startTimer() {
     const timerHTML = document.getElementById("timer");
-    let cooldown = 10;
+    let cooldown;
+    if (stopper === 1){
+        return;
+    }
+    if (localStorage.getItem("timer")){
+        cooldown = localStorage.getItem("timer");
+    }
+    else{
+        cooldown = 3;
+    }
     timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
     const timer = setInterval(function() {
+        if (stopper === 1){
+            localStorage.removeItem("timer");
+            clearInterval(timer);
+            return;
+        }
         cooldown -= 1;
+        localStorage.setItem("timer", cooldown);
         timerHTML.innerText = "A student has just joined the queue. Please wait " + String(cooldown) + " seconds.";
         if (cooldown === 0) {
             timerHTML.innerText = "";
+            localStorage.removeItem("timer");
             clearInterval(timer);
         }
     }, 1000);

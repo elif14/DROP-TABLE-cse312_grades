@@ -9,7 +9,6 @@ ta_page_bp = Blueprint('ta_page_bp', __name__,
                     template_folder = 'templates', 
                     static_folder = 'static')
 
-
 @ta_page_bp.route('/ta')
 def ta_page():
     list_of_TAs = []
