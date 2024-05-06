@@ -10,8 +10,13 @@ from LineUp import login
 import hashlib
 import datetime
 from flask_socketio import SocketIO, emit
+import dos as DOS
 
 app = Flask(__name__)
+
+@app.before_request
+def something():
+    return DOS.DOS_prevention()
 
 client = MongoClient("mongo")
 db = client["cse312-project"]
