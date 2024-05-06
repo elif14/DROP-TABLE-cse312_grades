@@ -223,9 +223,9 @@ def populate_TA_chat():
     chatJSON = json.dumps(chatList)
     emit('TAChat', chatJSON, broadcast=True)
 
-@app.before_request
-def something():
-    return DOS.DOS_prevention()
+# @app.before_request
+# def something():
+#     return DOS.DOS_prevention()
 
 
 if __name__ == '__main__':
