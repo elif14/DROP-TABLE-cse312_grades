@@ -117,7 +117,7 @@ def off_duty():
 @socketio.on('StudentQueue')
 def student_enqueue(studentName):
     ID = request.sid
-    queueCooldown = timedelta(seconds=2)
+    queueCooldown = timedelta(seconds=4)
 
     for ID in cooldownDict.keys():
         timeLeft = cooldownDict[ID]
