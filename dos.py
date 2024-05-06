@@ -30,11 +30,11 @@ def cost_ta_page() -> int:
 
 def DOS_prevention():
     cost = 1
-    if request.path == '/':
+    if request.path == "/":
         cost = 14
-    if request.path == '/user':
+    if request.path == "/user":
         cost = 4
-    if request.path == '/ta':
+    if request.path == "/ta":
         cost = cost_ta_page() + 2
     ip = request.headers['X-Real-IP']
     ip_found = find_ip_user(ip)
@@ -45,7 +45,7 @@ def DOS_prevention():
         current_app.logger.info("Requests Called when created: ")
         current_app.logger.info(cost)
         current_app.logger.info("Time Duration:")
-        current_app.logger.info(current_time)
+        current_app.logger.info(0)
         ip_collection.insert_one({"ip": ip, "count": cost, "time": current_time})
     if ip_found:
         user = ip_collection.find({"ip": ip})[0]

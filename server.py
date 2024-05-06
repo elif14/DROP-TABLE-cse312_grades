@@ -58,10 +58,6 @@ def connect():
     client_id = request.sid
     cooldownDict[client_id] = datetime.now
 
-@app.before_request
-def something():
-    return DOS.DOS_prevention()
-
 @socketio.on('TAOnDuty')
 def on_duty():
     curr_auth = request.cookies.get("auth_token")
@@ -226,6 +222,10 @@ def populate_TA_chat():
         chatList.append(chat.get("chat"))
     chatJSON = json.dumps(chatList)
     emit('TAChat', chatJSON, broadcast=True)
+
+@app.before_request
+def something():
+    return DOS.DOS_prevention()
 
 
 if __name__ == '__main__':
