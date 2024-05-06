@@ -51,11 +51,11 @@ app.register_blueprint(ta_bp)
 app.register_blueprint(image_bp)
 app.register_blueprint(ta_page_bp)
 
-cooldownDict = {}
-
 @app.before_request
 def something():
     return DOS.DOS_prevention()
+
+cooldownDict = {}
 
 @socketio.on('connect')
 def connect():
