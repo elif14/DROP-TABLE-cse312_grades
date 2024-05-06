@@ -10,7 +10,6 @@ from LineUp import login
 import hashlib
 import datetime
 from flask_socketio import SocketIO, emit
-import dos as DOS
 
 app = Flask(__name__)
 
