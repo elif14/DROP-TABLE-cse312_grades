@@ -40,7 +40,6 @@ TAOnDuty_collection = db['on_duty']
 student_queue = db['student_queue']
 TA_collection = db['TA_collection']
 TA_chat_collection = db['TA_chat_collection']
-ip_collection = db['ip_collection']
 socketio = SocketIO(app, cors_allowed_origins="*", transports=['websocket'], async_mode='threading')
 
 app.register_blueprint(user_bp)
@@ -55,7 +54,7 @@ cooldownDict = {}
 @socketio.on('connect')
 def connect():
     client_id = request.sid
-    cooldownDict[client_id] = datetime.now()
+    cooldownDict[client_id] = datetime.min
 
 @socketio.on('TAOnDuty')
 def on_duty():
