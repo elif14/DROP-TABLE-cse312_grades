@@ -172,6 +172,5 @@ function addStudentToQueue(student) {
 }
 
 function onLoadFunction(){
-    initialTimer();
     initWS();
 }
